@@ -17,9 +17,9 @@ class Day1Solution : public Solution {
     std::vector<int> leftList, rightList;
 
     void splitList(const vector<string> & inputList, vector<int> & leftList, vector<int> & rightList);
-    int twoStarsMap(const vector<int> & leftList, const vector<int> & rightList);
-    int twoStarsPreSortedLists(const vector<int> & leftList, const vector<int> & rightList);
-    int twoStarsUnorderedMap(const vector<int> & leftList, const vector<int> & rightList);
+    int twoStarsMap();
+    int twoStarsPreSortedLists();
+    int twoStarsUnorderedMap();
 public:
     Day1Solution(const std::vector<std::string> & puzzleInput);
     std::string getTitle() const override;

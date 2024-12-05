@@ -36,7 +36,7 @@ void Day1Solution::splitList(const vector<string> & inputList, vector<int> & lef
 
 
 int Day1Solution::twoStarSolution() {
-    return twoStarsUnorderedMap(leftList, rightList);
+    return twoStarsUnorderedMap();
 }
 
 
@@ -52,7 +52,7 @@ std::string Day1Solution::getTitle() const {
  * @param rightList
  * @return Returns the similarity score for the two lists.
  */
-int Day1Solution::twoStarsMap(const vector<int> & leftList, const vector<int> & rightList)
+int Day1Solution::twoStarsMap()
 {
     int similarityScore {0};
     // For a location ID in the right list(key), count the number of times it appears in the list (value)
@@ -82,7 +82,7 @@ int Day1Solution::twoStarsMap(const vector<int> & leftList, const vector<int> & 
  * @param rightList
  * @return
  */
-int Day1Solution::twoStarsPreSortedLists(const vector<int> & leftList, const vector<int> & rightList)
+int Day1Solution::twoStarsPreSortedLists()
 {
     int similarityScore {0};
 
@@ -116,7 +116,7 @@ int Day1Solution::twoStarsPreSortedLists(const vector<int> & leftList, const vec
  * @param rightList
  * @return
  */
-int Day1Solution::twoStarsUnorderedMap(const vector<int> & leftList, const vector<int> & rightList)
+int Day1Solution::twoStarsUnorderedMap()
 {
     int similarityScore {0};
     // For a location ID in the right list(key), count the number of times it appears in the list (value)
