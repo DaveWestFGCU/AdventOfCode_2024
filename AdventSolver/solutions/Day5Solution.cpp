@@ -5,7 +5,10 @@
 
 #include "Day5Solution.h"
 
-
+/**
+ * Constructor for the day 5 solution.
+ * @param puzzleInput Day 5 puzzle input from AdventOfCode.com.
+ */
 Day5Solution::Day5Solution(const std::vector<std::string> & puzzleInput)
 {
     title = "--- Day 5: Print Queue ---";
@@ -13,6 +16,10 @@ Day5Solution::Day5Solution(const std::vector<std::string> & puzzleInput)
 }
 
 
+/**
+ * Parses the puzzle text and loads beforeList, afterList, and updates member variables.
+ * @param puzzleInput Day 5 puzzle input from AdventOfCode.com.
+ */
 void Day5Solution::parsePuzzleInput(const std::vector<std::string> & puzzleInput)
 {
     bool pageRules = true;
@@ -47,6 +54,11 @@ void Day5Solution::parsePuzzleInput(const std::vector<std::string> & puzzleInput
 }   //  end parsePuzzleInput
 
 
+/**
+ * Breaks down a page rule into two numbers and returns them in an ordered pair.
+ * @param unparsedPageRule A page rule in the form of "num1|num2"
+ * @return Returns the numbers parsed in an ordered pair {firstNum, lastNum}.
+ */
 Day5Solution::PageRule Day5Solution::parsePageOrderingRule(const std::string & unparsedPageRule)
 {
     int pipeIndex;
@@ -62,6 +74,11 @@ Day5Solution::PageRule Day5Solution::parsePageOrderingRule(const std::string & u
 }
 
 
+/**
+ * Parses an update into its pages.
+ * @param unparsedUpdate A string with a series of page numbers delimited by a comma with no whitespace.
+ * @return Returns the pages (integers) from the update.
+ */
 vector<int> Day5Solution::parseUpdate(const std::string & unparsedUpdate)
 {
     vector<int> update;
@@ -85,6 +102,11 @@ vector<int> Day5Solution::parseUpdate(const std::string & unparsedUpdate)
 }
 
 
+/**
+ * Checks if a character is a digit (0-9).
+ * @param character Character to check.
+ * @return True if character is '0' to '9'.
+ */
 bool Day5Solution::isDigit(const char & character)
 {
     if (0 <= character - '0' && character - '0' <= 9)
@@ -94,6 +116,10 @@ bool Day5Solution::isDigit(const char & character)
 }
 
 
+/**
+ * Solution to the one-star problem.
+ * @return The sum of the middle page number from ordered updates.
+ */
 int Day5Solution::oneStarSolution()
 {
     size_t answer {0};
@@ -110,6 +136,11 @@ int Day5Solution::oneStarSolution()
 }
 
 
+/**
+ * Checks if the update obeys the page ordering rules.
+ * @param update An update (consisting of page numbers) to check.
+ * @return True if the update obeys page ordering rules.
+ */
 bool Day5Solution::isUpdateInOrder(vector<int> update)
 {
     for (int pageIndex = 0; pageIndex < update.size(); pageIndex++)
@@ -139,6 +170,10 @@ bool Day5Solution::isUpdateInOrder(vector<int> update)
 }
 
 
+/**
+ * Solution to the two-star problem.
+ * @return The sum of the middle page number of unordered updates, after being ordered.
+ */
 int Day5Solution::twoStarSolution()
 {
     size_t answer {0};
@@ -158,6 +193,11 @@ int Day5Solution::twoStarSolution()
 }
 
 
+/**
+ * Takes an unordered update and orders it according to the page ordering rules.
+ * @param update An unordered update.
+ * @return An ordered update.
+ */
 vector<int> Day5Solution::reorderUpdate(const vector<int> & update)
 {
     vector<int> reorderedUpdate;

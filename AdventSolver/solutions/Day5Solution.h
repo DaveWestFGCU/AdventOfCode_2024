@@ -16,21 +16,21 @@ using std::vector, std::string;
 
 class Day5Solution : public Solution {
     string title;
-    struct PageRule { size_t before, after; };
-    vector<int> beforeList[100];
-    vector<int> afterList[100];
-    vector<vector<int>> updates;
+    struct PageRule { size_t before, after; };  // Ordered pair from the ordering page rules. before is a page that comes before after.
+    vector<int> beforeList[100];                // Page numbers coming before the number at the index.
+    vector<int> afterList[100];                 // Page numbers coming after the number at the index.
+    vector<vector<int>> updates;                // Pages in an update.
 
-    // Input Parsing Methods
+    // Input Parsing
     void parsePuzzleInput(const vector<string> & puzzleInput);
     PageRule parsePageOrderingRule(const std::string & unparsedPageRule);
     vector<int> parseUpdate(const std::string & unparsedUpdate);
     bool isDigit(const char & character);
 
-    // One-Star Solution Methods
+    // Used in One-Star Solution
     bool isUpdateInOrder(vector<int> update);
 
-    // Two-Star Solution Methods
+    // Used in Two-Star Solution
     vector<int> reorderUpdate(const vector<int> & update);
     
 public:
@@ -41,6 +41,9 @@ public:
 };
 
 
+/**
+ * Creator class for the day 5 solution.
+ */
 class Day5Creator : public AdventSolver {
 public:
     std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
