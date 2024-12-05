@@ -1,6 +1,7 @@
 /*  Dev: Dave West
  * Date: December 4, 2024
  * Desc: Main program hub for my AoC 2024 solutions.
+ *  Log: 12/4/24 - Added days 1-4 into current project.
  */
 
 #include <memory>
@@ -9,10 +10,11 @@
 
 int main() {
     size_t today = 4;
-    std::string inputFilepath;
+    bool seeAll = true;
 
-    for (size_t day = 1; day <= today; day++)
+    for (size_t day = seeAll ? 1 : today; day <= today; day++)
     {
+        std::string inputFilepath;
         std::unique_ptr<AdventSolver> aocSolver;
         switch(day)
         {
@@ -34,6 +36,11 @@ int main() {
             case 4:
                 inputFilepath = "../puzzle_inputs/day4_puzzle_input.txt";
                 aocSolver = std::make_unique<Day4Creator>();
+                break;
+
+            case 5:
+                inputFilepath = "../puzzle_inputs/example/day5_example.txt";
+                aocSolver = std::make_unique<Day5Creator>();
                 break;
 
             default:
