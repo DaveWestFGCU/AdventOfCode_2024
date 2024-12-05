@@ -33,4 +33,4 @@ public:
     }
 };
 
-#endif //DAY1SOLUTION_H
+#endif //DAY2SOLUTION_H

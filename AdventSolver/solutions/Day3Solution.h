@@ -29,4 +29,4 @@ public:
     }
 };
 
-#endif //DAY1SOLUTION_H
+#endif //DAY3SOLUTION_H
