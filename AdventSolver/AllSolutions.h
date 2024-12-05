@@ -3,5 +3,6 @@
 
 #include "./solutions/Day1Solution.h"
 #include "./solutions/Day2Solution.h"
+#include "./solutions/Day3Solution.h"
 
 #endif //ALLSOLUTIONS_H

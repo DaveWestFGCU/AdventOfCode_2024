@@ -9,11 +9,12 @@
 // Abstract Product class
 class Solution {
     enum difficulty {oneStar, twoStars};
+
 public:
     virtual ~Solution() = default;
     virtual std::string getTitle() const = 0;
-    virtual int oneStarSolution(std::vector<std::string> puzzleInput) = 0;
-    virtual int twoStarSolution(std::vector<std::string> puzzleInput) = 0;
+    virtual int oneStarSolution() = 0;
+    virtual int twoStarSolution() = 0;
 };
 
 #endif //SOLUTION_H

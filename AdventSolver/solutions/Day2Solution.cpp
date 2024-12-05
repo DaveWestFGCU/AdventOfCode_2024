@@ -3,7 +3,7 @@
 #include "Day2Solution.h"
 
 
-Day2Solution::Day2Solution(std::vector<std::string> puzzleInput) {
+Day2Solution::Day2Solution(const std::vector<std::string> & puzzleInput) {
     title = "--- Day 2: Red-Nosed Reports ---";
     reports = parseStringToIntegers(puzzleInput);
 }
@@ -34,7 +34,7 @@ vector<vector<int>> Day2Solution::parseStringToIntegers(const vector<string> & i
 }
 
 
-int Day2Solution::oneStarSolution(std::vector<std::string> puzzleInput) {
+int Day2Solution::oneStarSolution() {
     int safeCount {0};
     for (const auto & levels : reports)
     {
@@ -89,7 +89,7 @@ bool Day2Solution::changeIsSafe(const vector<int> & levels)
 }
 
 
-int Day2Solution::twoStarSolution(std::vector<std::string> puzzleInput) {
+int Day2Solution::twoStarSolution() {
     int safeCount {0};
     for (const auto & levels : reports)
     {

@@ -19,17 +19,17 @@ class Day2Solution : public Solution {
     bool changeIsSafe(const vector<int> & levels);
 
 public:
-    Day2Solution(std::vector<std::string>puzzleInput);
+    Day2Solution(const std::vector<std::string> & puzzleInput);
     std::string getTitle() const override { return title; }
-    int oneStarSolution(std::vector<std::string> puzzleInput) override;
-    int twoStarSolution(std::vector<std::string> puzzleInput) override;
+    int oneStarSolution() override;
+    int twoStarSolution() override;
 };
 
 
 class Day2Creator : public AdventSolver {
 public:
-    std::unique_ptr<Solution> create_solution(std::vector<std::string> puzzleInput) const override {
-        return std::make_unique<Day2Solution>(puzzleInput);  // Return Day 1's solution
+    std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
+        return std::make_unique<Day2Solution>(puzzleInput);
     }
 };
 

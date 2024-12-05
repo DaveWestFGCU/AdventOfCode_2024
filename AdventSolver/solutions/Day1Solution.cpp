@@ -3,7 +3,7 @@
 #include "Day1Solution.h"
 
 
-Day1Solution::Day1Solution(std::vector<std::string> puzzleInput) {
+Day1Solution::Day1Solution(const std::vector<std::string> & puzzleInput) {
     title = "--- Day 1: Historian Hysteria ---";
 
     splitList(puzzleInput, leftList, rightList);
@@ -12,7 +12,7 @@ Day1Solution::Day1Solution(std::vector<std::string> puzzleInput) {
 }
 
 
-int Day1Solution::oneStarSolution(std::vector<std::string> puzzleInput) {
+int Day1Solution::oneStarSolution() {
     // Calculate total distance
     int answer {0};
     for (size_t i = 0; i < leftList.size(); i++)
@@ -35,7 +35,7 @@ void Day1Solution::splitList(const vector<string> & inputList, vector<int> & lef
 }
 
 
-int Day1Solution::twoStarSolution(std::vector<std::string> puzzleInput) {
+int Day1Solution::twoStarSolution() {
     return twoStarsUnorderedMap(leftList, rightList);
 }
 

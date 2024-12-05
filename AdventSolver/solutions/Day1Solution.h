@@ -21,17 +21,17 @@ class Day1Solution : public Solution {
     int twoStarsPreSortedLists(const vector<int> & leftList, const vector<int> & rightList);
     int twoStarsUnorderedMap(const vector<int> & leftList, const vector<int> & rightList);
 public:
-    Day1Solution(std::vector<std::string>puzzleInput);
+    Day1Solution(const std::vector<std::string> & puzzleInput);
     std::string getTitle() const override;
-    int oneStarSolution(std::vector<std::string> puzzleInput) override;
-    int twoStarSolution(std::vector<std::string> puzzleInput) override;
+    int oneStarSolution() override;
+    int twoStarSolution() override;
 };
 
 
 class Day1Creator : public AdventSolver {
 public:
-    std::unique_ptr<Solution> create_solution(std::vector<std::string> puzzleInput) const override {
-        return std::make_unique<Day1Solution>(puzzleInput);  // Return Day 1's solution
+    std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
+        return std::make_unique<Day1Solution>(puzzleInput);
     }
 };
 
