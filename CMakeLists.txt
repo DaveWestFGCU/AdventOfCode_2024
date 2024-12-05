@@ -10,4 +10,6 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/Day1Solution.h
         AdventSolver/AllSolutions.h
         AoCHelper.h
+        AdventSolver/solutions/Day2Solution.cpp
+        AdventSolver/solutions/Day2Solution.h
 )
