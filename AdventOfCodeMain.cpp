@@ -8,7 +8,7 @@
 #include "AdventSolver/AllSolutions.h"
 
 int main() {
-    size_t today = 3;
+    size_t today = 4;
     std::string inputFilepath;
 
     for (size_t day = 1; day <= today; day++)
@@ -32,6 +32,8 @@ int main() {
                 break;
 
             case 4:
+                inputFilepath = "../puzzle_inputs/day4_puzzle_input.txt";
+                aocSolver = std::make_unique<Day4Creator>();
                 break;
 
             default:
@@ -41,12 +43,11 @@ int main() {
         std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath);
         auto solution = aocSolver->create_solution(puzzleInput);
 
-        std::cout << solution->getTitle() << std::endl;
-        std::cout << "  * Answer: " << solution->oneStarSolution() << std::endl;
-        std::cout << " ** Answer: " << solution->twoStarSolution() << std::endl;
-        std::cout << std::endl;
+        std::cout << std::endl
+                  << solution->getTitle() << std::endl
+                  << "  * Answer: " << solution->oneStarSolution() << std::endl
+                  << " ** Answer: " << solution->twoStarSolution() << std::endl;
     }
-
 
     return 0;
 }
