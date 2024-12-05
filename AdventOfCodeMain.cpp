@@ -2,6 +2,7 @@
  * Date: December 4, 2024
  * Desc: Main program hub for my AoC 2024 solutions.
  *  Log: 12/4/24 - Added days 1-4 into current project.
+ *  Log: 12/5/24 - Added day 5 solution.
  */
 
 #include <memory>
