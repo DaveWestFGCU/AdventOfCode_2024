@@ -48,8 +48,6 @@ std::string Day1Solution::getTitle() const {
 /**
  * Implementation for the two-stars difficulty problem using a map.
  * O(n*m) to create rightListCounts, O(n log m) to calculate similarity score.
- * @param leftList
- * @param rightList
  * @return Returns the similarity score for the two lists.
  */
 int Day1Solution::twoStarsMap()
@@ -78,8 +76,6 @@ int Day1Solution::twoStarsMap()
 /**
  * Implementation for the two-stars problem using pre-sorted lists.
  * O(m+n) -> Iterates through both lists once
- * @param leftList
- * @param rightList
  * @return
  */
 int Day1Solution::twoStarsPreSortedLists()
@@ -112,8 +108,6 @@ int Day1Solution::twoStarsPreSortedLists()
 /**
  * Implementation for the two-stars problem using an unordered map.
  * O(n*m) to create rightListCounts, O(n) to calculate similarity score (assuming no collisions)
- * @param leftList
- * @param rightList
  * @return
  */
 int Day1Solution::twoStarsUnorderedMap()
