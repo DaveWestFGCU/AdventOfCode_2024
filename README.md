@@ -7,12 +7,16 @@ Solutions are geared towards praticing tools and patterns that I want to learn o
 Concepts/Tools I have implemented thus far include:
 
 - Factory method design pattern (AoCSolver being the concrete creator and each day's solutions being the concrete products).
+  
 - Regular Expressions (Whenver possible. I just think they're neat!)
+  
 - Maps/Unordered Maps (Day 1 Star Two Solution)
 
 Notes:
-- C++'s regex library is well known to be cumbersome and slows compilation significantly. Google has a regex library, RE2, which is supposed to be a much better implementaiton and I may implement it later.
-- Day 1's Two Star solution has 3 solutions. It is coded to use an unordered map, as it had the fastest average runtime, but there are also methods for an ordered map and presorted array solution.
+
+- C++'s regex library is well known to be cumbersome and slows compilation significantly. Google has a regex library, RE2, which is supposed to be a much better implementaiton and I may refactor to it later.
+
+- Day 1's two star solution has 3 sub-solutions. It is coded to use an unordered map, as it had the fastest average runtime, but there are also methods for solutions using an ordered map or the arrays sorted for the one star solution as-is.
 
 ## Why won't this run? Where are the puzzle_input files?
 
