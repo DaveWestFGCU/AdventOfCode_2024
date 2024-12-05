@@ -20,4 +20,4 @@ As per the AoC FAQ,
 
 >**Can I copy/redistribute part of Advent of Code?** Please don't. Advent of Code is free to use, not free to copy. If you're posting a code repository somewhere, please don't include parts of Advent of Code like the puzzle text or your inputs.
 
-my puzzle inputs are not included. If you wish to test my solutions, feel free to visit http://adventofcode.com/2024/ and get your own puzzle inputs.
+my puzzle inputs are not included. If you wish to test my solutions, feel free to visit https://adventofcode.com/2024/ and get your own puzzle inputs.
