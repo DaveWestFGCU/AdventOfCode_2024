@@ -6,5 +6,6 @@
 #include "./solutions/Day3Solution.h"
 #include "./solutions/Day4Solution.h"
 #include "./solutions/Day5Solution.h"
+#include "./solutions/Day6Solution.h"
 
 #endif //ALLSOLUTIONS_H

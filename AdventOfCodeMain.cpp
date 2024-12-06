@@ -10,38 +10,43 @@
 #include "AdventSolver/AllSolutions.h"
 
 int main() {
-    size_t today = 5;
-    bool seeAll = true;     // Set to false for solving current puzzle
+    size_t today = 6;
+    bool seeAll = false;     // Set to false for solving current puzzle
 
     for (size_t day = seeAll ? 1 : today; day <= today; day++)
     {
-        std::string inputFilepath;
+        std::string inputFilepath = "../puzzle_inputs/";
         std::unique_ptr<AdventSolver> aocSolver;
         switch(day)
         {
             case 1:
-                inputFilepath = "../puzzle_inputs/day1.txt";
+                inputFilepath += "day1.txt";
                 aocSolver = std::make_unique<Day1Creator>();
                 break;
 
             case 2:
-                inputFilepath = "../puzzle_inputs/day2.txt";
+                inputFilepath += "day2.txt";
                 aocSolver = std::make_unique<Day2Creator>();
                 break;
 
             case 3:
-                inputFilepath = "../puzzle_inputs/day3.txt";
+                inputFilepath += "day3.txt";
                 aocSolver = std::make_unique<Day3Creator>();
                 break;
 
             case 4:
-                inputFilepath = "../puzzle_inputs/day4.txt";
+                inputFilepath += "day4.txt";
                 aocSolver = std::make_unique<Day4Creator>();
                 break;
 
             case 5:
-                inputFilepath = "../puzzle_inputs/day5.txt";
+                inputFilepath += "day5.txt";
                 aocSolver = std::make_unique<Day5Creator>();
+                break;
+
+            case 6:
+                inputFilepath += "day6.txt";
+                aocSolver = std::make_unique<Day6Creator>();
                 break;
 
             default:
