@@ -1,4 +1,11 @@
-
+/*  Dev: Dave West
+ * Date: December 1, 2024
+ * Desc: Method definitions for the AoC 2024 day 1 puzzle.
+ *  Log: 12/1/2024 - Completed solution.
+ *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/7/2024 - Refactored integer to long long or size_t.
+ *                   Refactored puzzle parsing from regex to stringstream.
+ */
 
 #include "Day1Solution.h"
 
@@ -6,7 +13,7 @@
 Day1Solution::Day1Solution(const std::vector<std::string> & puzzleInput) {
     title = "--- Day 1: Historian Hysteria ---";
 
-    splitList(puzzleInput, leftList, rightList);
+    splitList(puzzleInput);
     sort(leftList.begin(),  leftList.end());
     sort(rightList.begin(), rightList.end());
 }
@@ -14,29 +21,32 @@ Day1Solution::Day1Solution(const std::vector<std::string> & puzzleInput) {
 
 long long Day1Solution::oneStarSolution() {
     // Calculate total distance
-    int answer {0};
+    long long answer {0};
     for (size_t i = 0; i < leftList.size(); i++)
-        answer += abs(leftList[i] - rightList[i]);
+        answer += abs(static_cast<int>(leftList[i] - rightList[i]));
     return answer;
 }
 
 
-void Day1Solution::splitList(const vector<string> & inputList, vector<int> & leftList, vector<int> & rightList)
+void Day1Solution::splitList(const vector<string> & inputList)
 {
-    const std::regex pattern(R"(\b\d+\b)");
-
-    for (auto const& line : inputList)
+    for (const auto& line : inputList)
     {
-        std::sregex_iterator matches(line.begin(), line.end(), pattern);
+        std::stringstream ss;
+        ss << line;
 
-        leftList.push_back(stoi(matches->str()));
-        rightList.push_back(stoi((++matches)->str()));
+        size_t number;
+
+        ss >> number;
+        leftList.push_back(number);
+        ss >> number;
+        rightList.push_back(number);
     }
 }
 
 
 long long Day1Solution::twoStarSolution() {
-    return twoStarsUnorderedMap();
+    return static_cast<long long>(twoStarsUnorderedMap());
 }
 
 
@@ -50,11 +60,11 @@ std::string Day1Solution::getTitle() const {
  * O(n*m) to create rightListCounts, O(n log m) to calculate similarity score.
  * @return Returns the similarity score for the two lists.
  */
-int Day1Solution::twoStarsMap()
+size_t Day1Solution::twoStarsMap()
 {
-    int similarityScore {0};
+    size_t similarityScore {0};
     // For a location ID in the right list(key), count the number of times it appears in the list (value)
-    std::map<int,int> rightListCounts;
+    std::map<size_t,size_t> rightListCounts;
     for (auto locationID : rightList)
     {
         if (rightListCounts.contains(locationID))
@@ -78,9 +88,9 @@ int Day1Solution::twoStarsMap()
  * O(m+n) -> Iterates through both lists once
  * @return
  */
-int Day1Solution::twoStarsPreSortedLists()
+size_t Day1Solution::twoStarsPreSortedLists()
 {
-    int similarityScore {0};
+    size_t similarityScore {0};
 
     int i = 0, j = 0;
     while (i < leftList.size() && j < rightList.size())
@@ -110,11 +120,11 @@ int Day1Solution::twoStarsPreSortedLists()
  * O(n*m) to create rightListCounts, O(n) to calculate similarity score (assuming no collisions)
  * @return
  */
-int Day1Solution::twoStarsUnorderedMap()
+size_t Day1Solution::twoStarsUnorderedMap()
 {
-    int similarityScore {0};
+    size_t similarityScore {0};
     // For a location ID in the right list(key), count the number of times it appears in the list (value)
-    std::unordered_map<int,int> rightListCounts;
+    std::unordered_map<size_t,size_t> rightListCounts;
     for (auto locationID : rightList)
     {
         if (rightListCounts.contains(locationID))
