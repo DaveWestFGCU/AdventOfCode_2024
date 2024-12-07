@@ -1,14 +1,24 @@
-
+/*  Dev: Dave West
+ * Date: December 6, 2024
+ * Desc: Method definitions for the AoC 2024 day 6 puzzle.
+ */
 
 #include "Day6Solution.h"
 
-
+/**
+ * Day6Solution Constructor.
+ * @param puzzleInput Day 6 puzzle input from AdventOfCode.com.
+ */
 Day6Solution::Day6Solution(const std::vector<std::string> & puzzleInput) : puzzleInput(puzzleInput), guardBob(Guard(puzzleInput))
 {
     title = "--- Day 6: Guard Gallivant ---";
 }
 
 
+/**
+ * Guard constructor.
+ * @param puzzleInput Day 6 puzzle input from AdventOfCode.com.
+ */
 Day6Solution::Guard::Guard(const vector<string>& puzzleInput) : roomMap(puzzleInput)
 {
     setGuardLocation();
@@ -17,6 +27,9 @@ Day6Solution::Guard::Guard(const vector<string>& puzzleInput) : roomMap(puzzleIn
 }
 
 
+/**
+ * Finds the guard in the puzzle and sets the location and direction he's facing.
+ */
 void Day6Solution::Guard::setGuardLocation()
 {
     for (int row = 0; row < roomMap.size(); row++)
@@ -58,13 +71,16 @@ void Day6Solution::Guard::setGuardLocation()
 }
 
 
+/**
+ * Makes a new, blank visited map.
+ */
 void Day6Solution::Guard::buildVisitedMap()
 {
     vector<vector<bool>> newVisitedMap;
     for (const auto &line : roomMap)
     {
         vector<bool> visitedLine;
-        for (auto character : line)
+        for (int i = 0; i < line.size(); i++)
         {
             visitedLine.push_back(false);
         }
@@ -75,6 +91,10 @@ void Day6Solution::Guard::buildVisitedMap()
 }
 
 
+/**
+ * Prints the puzzle map with 'X' on tiles the guard has visited.
+ * @param patrolMap
+ */
 void Day6Solution::Guard::printMap(const vector<string> & patrolMap)
 {
     vector mergedMap(patrolMap);
@@ -122,10 +142,10 @@ void Day6Solution::Guard::printMap(const vector<string> & patrolMap)
 
 
 /**
- * One step in the guard's patrol pathing.
- * @return Returns true if a cycle has not yet been found.
+ * The guard turns 90deg clockwise until unblocked and walks until blocked again.
+ * @return Returns the guard's status. If still patroling, run again.
  */
-Day6Solution::Guard::GuardStatus Day6Solution::Guard::patrol(vector<string> patrolMap)
+Day6Solution::Guard::GuardStatus Day6Solution::Guard::patrol(const vector<string>& patrolMap)
 {
     while (isBlocked(patrolMap))
     {
@@ -150,6 +170,9 @@ Day6Solution::Guard::GuardStatus Day6Solution::Guard::patrol(vector<string> patr
 }
 
 
+/**
+ * Turns direction of 'facing' 90deg clockwise.
+ */
 void Day6Solution::Guard::turn()
 {
     switch (facing)
@@ -173,6 +196,9 @@ void Day6Solution::Guard::turn()
 }   // end turn
 
 
+/**
+ * Moves the guard one space 'forward', depending on direction facing.
+ */
 void Day6Solution::Guard::move()
 {
     visitedMap[location.y][location.x] = true;
@@ -198,6 +224,11 @@ void Day6Solution::Guard::move()
 }
 
 
+/**
+ * Checks if there is an obstruction in front of the guard, based on direction facing.
+ * @param patrolMap Map of the room.
+ * @return True if there is an obstruction in front of the guard.
+ */
 bool Day6Solution::Guard::isBlocked(const vector<string> & patrolMap)
 {
     switch (facing)
@@ -235,22 +266,26 @@ bool Day6Solution::Guard::isBlocked(const vector<string> & patrolMap)
 }
 
 
-
+/**
+ * Checks if the guard is out of bounds.
+ * @param patrolMap Map of the room.
+ * @return True if guard is out of bounds.
+ */
 bool Day6Solution::Guard::isOutOfBounds(const vector<string>& patrolMap)
 {
-    if (location.y < 0 || patrolMap.size() <= location.y)
-        status = LEFT_AREA;
-
-    else if (location.x < 0 || patrolMap[0].length() <= location.x)
+    if (location.y < 0 || patrolMap.size() <= location.y || location.x < 0 || patrolMap[0].length() <= location.x)
         status = LEFT_AREA;
 
     return status == LEFT_AREA;
 }
 
 
+/**
+ * Solution to the puzzle's first gold star.
+ * @return Returns answer to the one-star puzzle.
+ */
 int Day6Solution::oneStarSolution()
 {
-
         // Loop until Bob's status changes to LEFT_AREA
     while(guardBob.getStatus() == Guard::PATROLING)
         guardBob.patrol();
@@ -259,18 +294,25 @@ int Day6Solution::oneStarSolution()
 }
 
 
-
+/**
+ * Passes forward the number of positions the guard has visited.
+ * @return Returns the number of positions visited by the guard.
+ */
 size_t Day6Solution::countVisitedLocations()
 {
     return guardBob.countVisitedLocations();
 }
 
 
+/**
+ * Counts the number of positions the guard has visited.
+ * @return Returns the number of positions visited by the guard.
+ */
 size_t Day6Solution::Guard::countVisitedLocations()
 {
     size_t visitedLocationCount {0};
-    for (auto row : visitedMap)
-        for (auto visited : row)
+    for (const auto& row : visitedMap)
+        for (const auto& visited : row)
             if (visited)
                 visitedLocationCount++;
 
@@ -278,12 +320,19 @@ size_t Day6Solution::Guard::countVisitedLocations()
 }
 
 
+/**
+ * Solution to the puzzle's second gold star.
+ * @return Returns answer to the two-star puzzle.
+ */
 int Day6Solution::twoStarSolution()
 {
     return static_cast<int>(optimizedTwoStar());
 }
 
 
+/**
+ * Resets the guard to the starting position.
+ */
 void Day6Solution::Guard::reset()
 {
     setGuardLocation();
@@ -293,6 +342,11 @@ void Day6Solution::Guard::reset()
 }
 
 
+/**
+ * Second star solution with a brute-force approach. Checks whether the addition of a new obstacle at every position
+ * would result in a loop.
+ * @return Returns number of positions of obstructions would cause a loop.
+ */
 size_t Day6Solution::bruteForcedTwoStar()
 {
     int loopCount {0};
@@ -321,6 +375,10 @@ size_t Day6Solution::bruteForcedTwoStar()
 }
 
 
+/**
+ * Checks whether the guard is currently in a loop.
+ * @return True if guard has been in this position with this obstacle before.
+ */
 bool Day6Solution::Guard::inLoop()
 {
     string obstructionLocation;
@@ -383,6 +441,11 @@ bool Day6Solution::Guard::inLoop()
 }
 
 
+/**
+ * Optimized solution for the second star problem.
+ * Only checks whether positions the guard occupied in the first problem for new obstacles to cause loops.
+ * @return Number of positions that result in a loop.
+ */
 size_t Day6Solution::optimizedTwoStar()
 {
     int loopCount {0};
@@ -407,6 +470,10 @@ size_t Day6Solution::optimizedTwoStar()
 }
 
 
+/**
+ * Gets the locations visited by the guard in the last problem.
+ * @return Returns (y,x) pairs of locations visited.
+ */
 vector<std::pair<int,int>> Day6Solution::Guard::getVisitedLocations()
 {
     vector<std::pair<int, int>> visitedLocations;
@@ -414,7 +481,7 @@ vector<std::pair<int,int>> Day6Solution::Guard::getVisitedLocations()
     for (int y = 0; y < visitedMap.size(); y++)
         for (int x = 0; x < visitedMap[0].size(); x++)
             if (visitedMap[y][x])
-                visitedLocations.push_back(std::make_pair(y,x));
+                visitedLocations.emplace_back(y,x);
 
     return visitedLocations;
 }
