@@ -5,11 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/AdventSolver.h
+        AdventSolver/AllSolutions.h
         AdventSolver/solutions/Solution.h
         AdventSolver/solutions/Day1Solution.cpp
         AdventSolver/solutions/Day1Solution.h
-        AdventSolver/AllSolutions.h
-        AoCHelper.h
         AdventSolver/solutions/Day2Solution.cpp
         AdventSolver/solutions/Day2Solution.h
         AdventSolver/solutions/Day3Solution.cpp
@@ -22,6 +21,4 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/Day6Solution.h
         AdventSolver/solutions/Day7Solution.cpp
         AdventSolver/solutions/Day7Solution.h
-        AdventSolver/solutions/SolutionSkeleton.cpp
-        AdventSolver/solutions/SolutionSkeleton.h
 )
