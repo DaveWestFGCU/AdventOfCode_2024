@@ -1,4 +1,10 @@
-
+/*  Dev: Dave West
+* Date: December 4, 2024
+ * Desc: Method definitions for the AoC 2024 day 4 puzzle.
+ *  Log: 12/4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/7/2024 - Refactored integer to long long or size_t.
+ *                   Refactored puzzle parsing from regex to stringstream.
+ */
 
 #include "Day4Solution.h"
 

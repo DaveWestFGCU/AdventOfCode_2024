@@ -1,4 +1,9 @@
-
+/*  Dev: Dave West
+ * Date: December 4, 2024
+ * Desc: Class declarations for the AoC 2024 day 4 puzzle solution and solution factory.
+ *  Log: 12/4/24 - Completed solution.
+ *       12/7/24 - Refactored ints to long long or size_t.
+ */
 
 #ifndef DAY4SOLUTION_H
 #define DAY4SOLUTION_H
