@@ -6,7 +6,7 @@ Solutions are geared towards praticing tools and patterns that I want to learn o
 
 Concepts/Tools I have implemented thus far include:
 
-- Factory method design pattern (in order for solutions to be classes).
+- Factory method design pattern (each day is a concrete product with an overloaded method for each solution).
   
 - Regular Expressions (Days 3 & 4)
   
