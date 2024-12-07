@@ -11,7 +11,7 @@
 
 int main() {
     size_t today = 6;
-    bool seeAll = false;     // Set to false for solving current puzzle
+    bool seeAll = true;     // Set to false for solving current puzzle
 
     for (size_t day = seeAll ? 1 : today; day <= today; day++)
     {
