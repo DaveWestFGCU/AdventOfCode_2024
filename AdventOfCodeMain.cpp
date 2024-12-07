@@ -2,7 +2,9 @@
  * Date: December 4, 2024
  * Desc: Main program hub for my AoC 2024 solutions.
  *  Log: 12/4/24 - Added days 1-4 into current project.
- *  Log: 12/5/24 - Added day 5 solution.
+ *       12/5/24 - Added day 5 solution.
+ *       12/6/24 - Added day 6 solution.
+ *       12/7/24 - Added day 7 solution. Added simultaneous display of example output for debugging.
  */
 
 #include <memory>
@@ -10,56 +12,84 @@
 #include "AdventSolver/AllSolutions.h"
 
 int main() {
-    size_t today = 6;
-    bool seeAll = true;     // Set to false for solving current puzzle
+    size_t today = 7;
+    bool debug = true;     // Set to true for solving a single puzzle
 
-    for (size_t day = seeAll ? 1 : today; day <= today; day++)
+    for (size_t day = debug ? today : 1; day <= today; day++)
     {
         std::string inputFilepath = "../puzzle_inputs/";
+        std::string inputFilename;
         std::unique_ptr<AdventSolver> aocSolver;
         switch(day)
         {
             case 1:
-                inputFilepath += "day1.txt";
+                inputFilename = "day1.txt";
                 aocSolver = std::make_unique<Day1Creator>();
                 break;
 
             case 2:
-                inputFilepath += "day2.txt";
+                inputFilename = "day2.txt";
                 aocSolver = std::make_unique<Day2Creator>();
                 break;
 
             case 3:
-                inputFilepath += "day3.txt";
+                inputFilename = "day3.txt";
                 aocSolver = std::make_unique<Day3Creator>();
                 break;
 
             case 4:
-                inputFilepath += "day4.txt";
+                inputFilename = "day4.txt";
                 aocSolver = std::make_unique<Day4Creator>();
                 break;
 
             case 5:
-                inputFilepath += "day5.txt";
+                inputFilename = "day5.txt";
                 aocSolver = std::make_unique<Day5Creator>();
                 break;
 
             case 6:
-                inputFilepath += "day6.txt";
+                inputFilename = "day6.txt";
                 aocSolver = std::make_unique<Day6Creator>();
+                break;
+
+            case 7:
+                inputFilename = "day7.txt";
+                aocSolver = std::make_unique<Day7Creator>();
                 break;
 
             default:
                 std::cout << "No solution available for day " << day << "." << std::endl;
         }
 
-        std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath);
-        auto solution = aocSolver->create_solution(puzzleInput);
+        if (!debug)
+        {       // Only shows answers to "my" puzzle input.
+            std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + inputFilename);
+            auto solution = aocSolver->create_solution(puzzleInput);
 
-        std::cout << std::endl
-                  << solution->getTitle() << std::endl
-                  << "  * Answer: " << solution->oneStarSolution() << std::endl
-                  << " ** Answer: " << solution->twoStarSolution() << std::endl;
+            std::cout << std::endl
+                      << solution->getTitle() << std::endl
+                      << "  * Answer: " << solution->oneStarSolution() << std::endl
+                      << " ** Answer: " << solution->twoStarSolution() << std::endl;
+        }
+        else
+        {       // Debugging Output
+                // Solution on example puzzle
+            std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + "example/" + inputFilename);
+            auto exampleSolution = aocSolver->create_solution(puzzleInput);
+
+            std::cout << std::endl
+                      << exampleSolution->getTitle() << std::endl
+                      << "  * Example Answer: " << exampleSolution->oneStarSolution() << std::endl
+                      << " ** Example Answer: " << exampleSolution->twoStarSolution() << std::endl;
+
+                // Solution on real puzzle
+            puzzleInput = AdventSolver::getInput(inputFilepath + inputFilename);
+            auto solution = aocSolver->create_solution(puzzleInput);
+
+            std::cout << std::endl
+                      << "  * Answer: " << solution->oneStarSolution() << std::endl
+                      << " ** Answer: " << solution->twoStarSolution() << std::endl;
+        }
     }
 
     return 0;
