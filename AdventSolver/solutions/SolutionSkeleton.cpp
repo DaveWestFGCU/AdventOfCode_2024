@@ -1,5 +1,5 @@
 /*  Dev: Dave West
- * Date: December X, 2024
+ * Date: December $, 2024
  * Desc: Method definitions for the AoC 2024 day $ puzzle.
  */
 
