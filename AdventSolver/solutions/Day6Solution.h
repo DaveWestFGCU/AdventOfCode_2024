@@ -1,6 +1,6 @@
 /*  Dev: Dave West
-* Date: December 6, 2024
- * Desc: Method definitions for the AoC 2024 day 6 puzzle.
+ * Date: December 6, 2024
+ * Desc: Class declarations for the AoC 2024 day 6 puzzle solution and solution factory.
  */
 
 #ifndef DAY6SOLUTION_H
