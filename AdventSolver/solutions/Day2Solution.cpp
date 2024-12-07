@@ -1,4 +1,11 @@
-
+/*  Dev: Dave West
+ * Date: December 2, 2024
+ * Desc: Method definitions for the AoC 2024 day 2 puzzle.
+ *  Log: 12/2/2024 - Completed solution.
+ *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/7/2024 - Refactored ints to long long or size_t.
+ *                   Refactored puzzle parsing to stringstream.
+ */
 
 #include "Day2Solution.h"
 
@@ -8,26 +15,19 @@ Day2Solution::Day2Solution(const std::vector<std::string> & puzzleInput) {
     reports = parseStringToIntegers(puzzleInput);
 }
 
-vector<vector<int>> Day2Solution::parseStringToIntegers(const vector<string> & input)
+
+vector<vector<size_t>> Day2Solution::parseStringToIntegers(const vector<string> & input)
 {
-    vector<vector<int>> reports;
-    for (auto level : input)
+    vector<vector<size_t>> reports;
+
+    for (const auto& line : input)
     {
-        vector<int> levels;
-        int num = 0;
-        for (int i = 0; i < level.length(); i++)
-        {
-            if (level[i] != ' ')
-                num = num * 10 + (level[i]-'0');
+        vector<size_t> levels;
+        std::stringstream ss(line);
 
-            if (level[i] == ' ' || i == level.length()-1)
-            {
-                levels.push_back(num);
-                num = 0;
-            }
-        }
-
-        reports.push_back(levels);
+        size_t number;
+        while(ss >> number)
+            levels.push_back(number);
     }
 
     return reports;
@@ -54,7 +54,7 @@ long long Day2Solution::oneStarSolution() {
 }
 
 
-bool Day2Solution::trendIsSafe(const vector<int> & levels)
+bool Day2Solution::trendIsSafe(const vector<size_t> & levels)
 {
     for (int i = 0; i < levels.size()-2; i++)
     {
@@ -74,11 +74,11 @@ bool Day2Solution::trendIsSafe(const vector<int> & levels)
 }
 
 
-bool Day2Solution::changeIsSafe(const vector<int> & levels)
+bool Day2Solution::changeIsSafe(const vector<size_t> & levels)
 {
     for (int i = 0; i < levels.size()-1; i++)
     {
-        int difference = levels[i+1] - levels[i];
+        int difference = static_cast<int>(levels[i+1]) - static_cast<int>(levels[i]);
         if (difference > 3 || difference < -3)
         {   // Unsafe: Reactor increasing or decreasing too quickly
             return false;
@@ -102,7 +102,7 @@ long long Day2Solution::twoStarSolution() {
         // Check if safe with problem dampening
         for (int i = 0; i < levels.size(); i++)
         {
-            vector<int> dampenedLevels = levels;
+            vector<size_t> dampenedLevels = levels;
             dampenedLevels.erase(dampenedLevels.begin()+i);
             if (levelsAreSafe(dampenedLevels))
             {
@@ -116,7 +116,8 @@ long long Day2Solution::twoStarSolution() {
     return safeCount;
 }
 
-bool Day2Solution::levelsAreSafe(vector<int> levels)
+
+bool Day2Solution::levelsAreSafe(vector<size_t> levels)
 {
     // Unsafe: Reactor is not maintaining trend
     if (!trendIsSafe(levels))
