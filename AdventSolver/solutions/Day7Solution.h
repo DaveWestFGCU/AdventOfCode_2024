@@ -21,23 +21,22 @@ class Day7Solution : public Solution {
     enum Feature {ON, OFF};
 
     void addCalibrations(const vector<string>& puzzleInput);
-public:
-        // Setup methods
-    explicit Day7Solution(const std::vector<std::string> & puzzleInput);
-    [[nodiscard]] std::string getTitle() const override { return title; }
-
-        // One-star solution methods
-    long long oneStarSolution() override;
     bool equationSolutionExists(const size_t& result,
                                 const vector<size_t>& numbers,
                                 size_t currentResult,
                                 size_t index,
                                 Feature concatenation = OFF);
-
-        // Two-star solution methods
-    long long twoStarSolution() override;
     static short getDigits(size_t number);
     static inline size_t concatenate(const size_t& num1, const size_t& num2);
+
+public:
+        // Setup methods
+    explicit Day7Solution(const std::vector<std::string> & puzzleInput);
+    [[nodiscard]] std::string getTitle() const override { return title; }
+
+        // Solutions
+    long long oneStarSolution() override;
+    long long twoStarSolution() override;
 };
 
 
