@@ -13,7 +13,7 @@ Day$Solution::Day$Solution(const std::vector<std::string> & puzzleInput)
 }
 
 
-int Day$Solution::oneStarSolution()
+long long Day$Solution::oneStarSolution()
 {
     int result {0};
 
@@ -21,7 +21,7 @@ int Day$Solution::oneStarSolution()
 }
 
 
-int Day$Solution::twoStarSolution()
+long long Day$Solution::twoStarSolution()
 {
     int result {0};
 
