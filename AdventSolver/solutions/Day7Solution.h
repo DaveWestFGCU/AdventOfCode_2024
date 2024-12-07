@@ -6,17 +6,19 @@
 #ifndef DAY7SOLUTION_H
 #define DAY7SOLUTION_H
 
+
 #include "Solution.h"
 #include "../AdventSolver.h"
 #include <vector>
-#include <unordered_map>
 #include <sstream>
+#include <cmath>
 
 using std::vector, std::string;
 
 class Day7Solution : public Solution {
     string title;
-    std::unordered_map<size_t,vector<size_t>> calibrations;
+    vector<std::pair<size_t,vector<size_t>>> calibrations;
+    enum Feature {ON, OFF};
 
     void addCalibrations(const vector<string>& puzzleInput);
 public:
@@ -24,15 +26,18 @@ public:
     explicit Day7Solution(const std::vector<std::string> & puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
 
-
         // One-star solution methods
-    int oneStarSolution() override;
-    bool equationSolutionExists(const size_t& result, const vector<size_t>& numbers);
-    size_t add(const size_t& result, const vector<size_t>& numbers, size_t index, size_t currentResult, bool& bottomReached);
-    size_t multiply(const size_t& result, const vector<size_t>& numbers, size_t index, size_t currentResult, bool& bottomReached);
+    long long oneStarSolution() override;
+    bool equationSolutionExists(const size_t& result,
+                                const vector<size_t>& numbers,
+                                size_t currentResult,
+                                size_t index,
+                                Feature concatenation = OFF);
 
         // Two-star solution methods
-    int twoStarSolution() override;
+    long long twoStarSolution() override;
+    static short getDigits(size_t number);
+    static inline size_t concatenate(const size_t& num1, const size_t& num2);
 };
 
 

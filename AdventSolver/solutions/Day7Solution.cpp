@@ -1,6 +1,13 @@
 /*  Dev: Dave West
  * Date: December 7, 2024
  * Desc: Method definitions for the AoC 2024 day 7 puzzle.
+ *
+ *       Originally used an unordered map to store the calibrations with calibration results as keys, but after
+ *       hours of pulling my hair out I realized I had a single collision that caused my answer to be off
+ *       by that calibration result's amount. Went back to vectors, since I'm just iterating over
+ *       calibrations anyway.
+ *
+ *       Uses recursion to solve whether a calibration can equate to the result.
  */
 
 #include "Day7Solution.h"
@@ -15,7 +22,7 @@ Day7Solution::Day7Solution(const vector<string>& puzzleInput)
 
 void Day7Solution::addCalibrations(const vector<string>& puzzleInput)
 {
-    for (auto line : puzzleInput)
+    for (const auto& line : puzzleInput)
     {
         size_t calibrationResult;
         std::vector<size_t> calibrationNumbers;
@@ -36,92 +43,83 @@ void Day7Solution::addCalibrations(const vector<string>& puzzleInput)
             else
                 calibrationNumbers.push_back(number);
         }
-        calibrations[calibrationResult] = calibrationNumbers;
+        calibrations.emplace_back(calibrationResult,calibrationNumbers);
     }
 }
 
 
-int Day7Solution::oneStarSolution()
+long long Day7Solution::oneStarSolution()
 {
     size_t totalCalibrationResult {0};
 
     for (const auto& [result, numbers] : calibrations)
-        if (equationSolutionExists(result, numbers))
+    {
+        if (equationSolutionExists(result, numbers, numbers[0], 1))
             totalCalibrationResult += result;
-    std::cout << totalCalibrationResult << std::endl;
-    return totalCalibrationResult;
+    }
+
+    return static_cast<long long>(totalCalibrationResult);
 }
 
 
-bool Day7Solution::equationSolutionExists(const size_t& result, const vector<size_t>& numbers)
+bool Day7Solution::equationSolutionExists(const size_t& result, const vector<size_t>& numbers, size_t currentResult, const size_t index, Feature concatenation)
 {
-    bool bottomReached {false};
-    if (add(result, numbers, 0, 0, bottomReached) == result && bottomReached)
+    // Base Case: We ran out of numbers.
+    if (index == numbers.size())
+    {
+        if (currentResult == result)
+            return true;
+
+        return false;
+    }
+
+    size_t addResult = currentResult + numbers[index];
+    if (equationSolutionExists(result, numbers, addResult, index+1, concatenation))
         return true;
-    if (multiply(result, numbers, 0, 0, bottomReached) == result && bottomReached)
+
+    size_t multiplyResult = currentResult * numbers[index];
+    if (equationSolutionExists(result, numbers, multiplyResult, index+1, concatenation))
         return true;
+
+    if (concatenation == ON)
+    {
+        size_t concatenateResult = concatenate(currentResult, numbers[index]);
+        if (equationSolutionExists(result, numbers, concatenateResult, index+1, concatenation))
+            return true;
+    }
 
     return false;
 }
 
 
-size_t Day7Solution::add(const size_t& result, const vector<size_t>& numbers, size_t index, size_t currentResult, bool& bottomReached)
+long long Day7Solution::twoStarSolution()
 {
-        // Early return if we pass the result.
-    if (currentResult > result)
-        return currentResult;
+    size_t totalCalibrationResult {0};
 
-    if (index == numbers.size())
-        return currentResult;
+    for (const auto& [result, numbers] : calibrations)
+    {
+        if (equationSolutionExists(result, numbers, numbers[0], 1, ON))
+            totalCalibrationResult += result;
+    }
 
-        // Equations may work without all numbers.
-    if (index+1 == numbers.size())
-        bottomReached = true;
-
-    currentResult += numbers[index];
-
-    size_t addResult = add(result, numbers, index+1, currentResult, bottomReached);
-    if (addResult == result)
-        return addResult;           // Early return, we only need to find that one equation works.
-
-    size_t multiplyResult = multiply(result, numbers, index+1, currentResult, bottomReached);
-    if (multiplyResult == result)
-        return multiplyResult;      // Early return, we only need to find that one equation works.
-
-    return currentResult;
+    return static_cast<long long>(totalCalibrationResult);
 }
 
 
-size_t Day7Solution::multiply(const size_t& result, const vector<size_t>& numbers, size_t index, size_t currentResult, bool& bottomReached)
+size_t Day7Solution::concatenate(const size_t& num1, const size_t& num2)
 {
-    // Early return if we pass the result.
-    if (currentResult > result)
-        return currentResult;
-
-    if (index == numbers.size())
-        return currentResult;
-
-    // Equations may work without all numbers.
-    if (index+1 == numbers.size())
-        bottomReached = true;
-
-    currentResult *= numbers[index];
-
-    size_t addResult = add(result, numbers, index+1, currentResult, bottomReached);
-    if (addResult == result)
-        return addResult;           // Early return, we only need to find that one equation works.
-
-    size_t multiplyResult = multiply(result, numbers, index+1, currentResult, bottomReached);
-    if (multiplyResult == result)
-        return multiplyResult;      // Early return, we only need to find that one equation works.
-
-    return currentResult;
+    return num1 * static_cast<int>(std::pow(10,getDigits(num2))) + num2;
 }
 
 
-int Day7Solution::twoStarSolution()
+short Day7Solution::getDigits(size_t number)
 {
-    int result {0};
+    short numDigits {0};
+    while (number)
+    {
+        number /= 10;
+        numDigits++;
+    }
 
-    return result;
+    return numDigits;
 }
