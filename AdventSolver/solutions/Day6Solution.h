@@ -1,4 +1,7 @@
-
+/*  Dev: Dave West
+* Date: December 6, 2024
+ * Desc: Method definitions for the AoC 2024 day 6 puzzle.
+ */
 
 #ifndef DAY6SOLUTION_H
 #define DAY6SOLUTION_H
@@ -13,7 +16,7 @@ using std::vector, std::string;
 
 class Day6Solution : public Solution {
 
-    enum Direction {NORTH, EAST, SOUTH, WEST, ERROR = -1};
+    enum Direction {NORTH, EAST, SOUTH, WEST};
     class Guard
     {
     public:
@@ -22,10 +25,10 @@ class Day6Solution : public Solution {
         struct Location {int y, x;};
         std::unordered_map<string, vector<bool>> seenObstructions;
         GuardStatus status;
-        vector<string> roomMap;
+        vector<string> roomMap;     // Puzzle input with or without extra obstacle
         Direction facing;
         Location location{};
-        vector<vector<bool>> visitedMap;
+        vector<vector<bool>> visitedMap;    // Map of locations visited by the guard.
 
 
         void setGuardLocation();
@@ -40,7 +43,7 @@ class Day6Solution : public Solution {
     public:
         explicit Guard(const vector<string>& puzzleInput);
 
-        GuardStatus patrol(vector<string> patrolMap);
+        GuardStatus patrol(const vector<string>& patrolMap);
         GuardStatus patrol() {return patrol(roomMap);}
         void turn();
         void move();
@@ -48,7 +51,7 @@ class Day6Solution : public Solution {
         vector<std::pair<int,int>> getVisitedLocations();
 
         void reset();
-        GuardStatus getStatus() {return status;}
+        GuardStatus getStatus() const {return status;}
     };
 
     string title;
@@ -59,7 +62,6 @@ class Day6Solution : public Solution {
     size_t countVisitedLocations();
 
         // Two-Star Methods
-    void addObstruction(size_t xLoc, size_t yLoc);
     size_t bruteForcedTwoStar();
     size_t optimizedTwoStar();
 
@@ -78,4 +80,4 @@ public:
     }
 };
 
-#endif //DAY3SOLUTION_H
+#endif //DAY6SOLUTION_H
