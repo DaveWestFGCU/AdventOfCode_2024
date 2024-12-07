@@ -1,6 +1,6 @@
 /*  Dev: Dave West
- * Date: December 1, 2024
- * Desc: Class declarations for the AoC 2024 day 1 puzzle solution and solution factory.
+ * Date: December 2, 2024
+ * Desc: Class declarations for the AoC 2024 day 2 puzzle solution and solution factory.
  *  Log: 12/2/2024 - Completed solution.
  *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
  *       12/7/2024 - Refactored ints to long long or size_t.
@@ -27,8 +27,8 @@ class Day2Solution : public Solution {
     bool changeIsSafe(const vector<size_t> & levels);
 
 public:
-    Day2Solution(const std::vector<std::string> & puzzleInput);
-    std::string getTitle() const override { return title; }
+    explicit Day2Solution(const vector<string> & puzzleInput);
+    string getTitle() const override { return title; }
     long long oneStarSolution() override;
     long long twoStarSolution() override;
 };

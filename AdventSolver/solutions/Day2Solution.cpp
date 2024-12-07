@@ -10,24 +10,27 @@
 #include "Day2Solution.h"
 
 
-Day2Solution::Day2Solution(const std::vector<std::string> & puzzleInput) {
+Day2Solution::Day2Solution(const std::vector<std::string>& puzzleInput) {
     title = "--- Day 2: Red-Nosed Reports ---";
     reports = parseStringToIntegers(puzzleInput);
 }
 
 
-vector<vector<size_t>> Day2Solution::parseStringToIntegers(const vector<string> & input)
+vector<vector<size_t>> Day2Solution::parseStringToIntegers(const vector<string>& puzzleInput)
 {
     vector<vector<size_t>> reports;
 
-    for (const auto& line : input)
+    for (const auto& line : puzzleInput)
     {
-        vector<size_t> levels;
+        vector<size_t> report;
+
         std::stringstream ss(line);
 
-        size_t number;
-        while(ss >> number)
-            levels.push_back(number);
+        size_t level;
+        while(ss >> level)
+            report.push_back(level);
+
+        reports.push_back(report);
     }
 
     return reports;
