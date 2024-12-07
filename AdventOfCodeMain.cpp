@@ -13,7 +13,7 @@
 
 int main() {
     size_t today = 7;
-    bool debug = true;     // Set to true for solving a single puzzle
+    bool debug = false;     // Set to true for solving a single puzzle
 
     for (size_t day = debug ? today : 1; day <= today; day++)
     {
