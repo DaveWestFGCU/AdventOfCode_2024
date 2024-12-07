@@ -1,4 +1,11 @@
-
+/*  Dev: Dave West
+ * Date: December 3, 2024
+ * Desc: Method definitions for the AoC 2024 day 3 puzzle.
+ *  Log: 12/3/2024 - Completed solution.
+ *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/7/2024 - Refactored integer to long long or size_t.
+ *                   Refactored puzzle parsing from regex to stringstream.
+ */
 
 #include "Day3Solution.h"
 
@@ -41,7 +48,7 @@ long long Day3Solution::oneStarSolution()
 
 long long Day3Solution::twoStarSolution()
 {
-    int mulResult {0};
+    long long mulResult {0};
 
     // Extract commands from memory (string)
     const std::regex mulPattern(R"(do\(\)|don't\(\)|mul\(\d+,\d+\))");
