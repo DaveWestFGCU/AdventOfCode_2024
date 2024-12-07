@@ -1,6 +1,6 @@
 /*  Dev: Dave West
  * Date: December $, 2024
- * Desc: Method definitions for the AoC 2024 day $ puzzle.
+ * Desc: Class declarations for the AoC 2024 day $ puzzle solution and solution factory.
  */
 
 #ifndef DAY$SOLUTION_H
@@ -8,8 +8,8 @@
 
 #include "Solution.h"
 #include "../AdventSolver.h"
-#include<vector>
-#include<string>
+#include <vector>
+#include <string>
 
 using std::vector, std::string;
 
