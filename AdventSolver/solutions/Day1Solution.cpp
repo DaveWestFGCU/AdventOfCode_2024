@@ -19,21 +19,11 @@ Day1Solution::Day1Solution(const std::vector<std::string> & puzzleInput) {
 }
 
 
-long long Day1Solution::oneStarSolution() {
-    // Calculate total distance
-    long long answer {0};
-    for (size_t i = 0; i < leftList.size(); i++)
-        answer += abs(static_cast<int>(leftList[i] - rightList[i]));
-    return answer;
-}
-
-
 void Day1Solution::splitList(const vector<string> & inputList)
 {
     for (const auto& line : inputList)
     {
-        std::stringstream ss;
-        ss << line;
+        std::stringstream ss(line);
 
         size_t number;
 
@@ -42,6 +32,15 @@ void Day1Solution::splitList(const vector<string> & inputList)
         ss >> number;
         rightList.push_back(number);
     }
+}
+
+
+long long Day1Solution::oneStarSolution() {
+    // Calculate total distance
+    long long answer {0};
+    for (size_t i = 0; i < leftList.size(); i++)
+        answer += abs(static_cast<int>(leftList[i] - rightList[i]));
+    return answer;
 }
 
 

@@ -1,6 +1,10 @@
 /*  Dev: Dave West
  * Date: December 1, 2024
  * Desc: Class declarations for the AoC 2024 day 1 puzzle solution and solution factory.
+ *  Log: 12/1/2024 - Completed solution.
+ *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/7/2024 - Refactored integer to long long or size_t.
+ *                   Refactored puzzle parsing from regex to stringstream.
  */
 
 #ifndef DAY1SOLUTION_H
