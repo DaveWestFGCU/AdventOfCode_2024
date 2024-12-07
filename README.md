@@ -6,11 +6,13 @@ Solutions are geared towards praticing tools and patterns that I want to learn o
 
 Concepts/Tools I have implemented thus far include:
 
-- Factory method design pattern (AoCSolver being the concrete creator and each day's solutions being the concrete products).
+- Factory method design pattern (in order for solutions to be classes).
   
-- Regular Expressions (Whenver possible. I just think they're neat!)
+- Regular Expressions (Days 3 & 4)
   
-- Maps/Unordered Maps (Day 1 Star Two Solution)
+- Maps (Day 1 second-star)
+
+- Recursion (Day 7)
 
 Notes:
 
