@@ -2,7 +2,7 @@
 
 All of my C++ solutions for this year are compiled into this project.
 
-Solutions are geared towards praticing tools and patterns that I want to learn or reinforce, and not necessarily the quickest implementation or most optimal runtime.
+Solutions are my own unless otherwise noted.
 
 Concepts/Tools I have implemented thus far include:
 
