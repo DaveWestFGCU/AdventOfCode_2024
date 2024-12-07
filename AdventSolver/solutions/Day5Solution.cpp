@@ -120,7 +120,7 @@ bool Day5Solution::isDigit(const char & character)
  * Solution to the one-star problem.
  * @return The sum of the middle page number from ordered updates.
  */
-int Day5Solution::oneStarSolution()
+long long Day5Solution::oneStarSolution()
 {
     size_t answer {0};
     for (const auto & update : updates)
@@ -174,7 +174,7 @@ bool Day5Solution::isUpdateInOrder(vector<int> update)
  * Solution to the two-star problem.
  * @return The sum of the middle page number of unordered updates, after being ordered.
  */
-int Day5Solution::twoStarSolution()
+long long Day5Solution::twoStarSolution()
 {
     size_t answer {0};
 

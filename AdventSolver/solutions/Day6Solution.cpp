@@ -284,7 +284,7 @@ bool Day6Solution::Guard::isOutOfBounds(const vector<string>& patrolMap)
  * Solution to the puzzle's first gold star.
  * @return Returns answer to the one-star puzzle.
  */
-int Day6Solution::oneStarSolution()
+long long Day6Solution::oneStarSolution()
 {
         // Loop until Bob's status changes to LEFT_AREA
     while(guardBob.getStatus() == Guard::PATROLING)
@@ -324,7 +324,7 @@ size_t Day6Solution::Guard::countVisitedLocations()
  * Solution to the puzzle's second gold star.
  * @return Returns answer to the two-star puzzle.
  */
-int Day6Solution::twoStarSolution()
+long long Day6Solution::twoStarSolution()
 {
     return static_cast<int>(optimizedTwoStar());
 }

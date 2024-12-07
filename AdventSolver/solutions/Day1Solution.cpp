@@ -12,7 +12,7 @@ Day1Solution::Day1Solution(const std::vector<std::string> & puzzleInput) {
 }
 
 
-int Day1Solution::oneStarSolution() {
+long long Day1Solution::oneStarSolution() {
     // Calculate total distance
     int answer {0};
     for (size_t i = 0; i < leftList.size(); i++)
@@ -35,7 +35,7 @@ void Day1Solution::splitList(const vector<string> & inputList, vector<int> & lef
 }
 
 
-int Day1Solution::twoStarSolution() {
+long long Day1Solution::twoStarSolution() {
     return twoStarsUnorderedMap();
 }
 

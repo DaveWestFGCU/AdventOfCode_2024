@@ -13,8 +13,8 @@ class Solution {
 public:
     virtual ~Solution() = default;
     virtual std::string getTitle() const = 0;
-    virtual int oneStarSolution() = 0;
-    virtual int twoStarSolution() = 0;
+    virtual long long oneStarSolution() = 0;
+    virtual long long twoStarSolution() = 0;
 };
 
 #endif //SOLUTION_H

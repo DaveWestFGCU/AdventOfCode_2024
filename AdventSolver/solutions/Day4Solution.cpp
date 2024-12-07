@@ -10,7 +10,7 @@ Day4Solution::Day4Solution(const std::vector<std::string> & puzzleInput)
 }
 
 
-int Day4Solution::oneStarSolution()
+long long Day4Solution::oneStarSolution()
 {
     size_t xmasCount {0};
     const std::regex xmasPattern(R"(XMAS)");
@@ -177,7 +177,7 @@ size_t Day4Solution::countBackwardDiagonal(const std::regex & pattern)
 }
 
 
-int Day4Solution::twoStarSolution()
+long long Day4Solution::twoStarSolution()
 {
     size_t xmasCount {0};
 

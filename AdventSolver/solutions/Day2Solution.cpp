@@ -34,7 +34,7 @@ vector<vector<int>> Day2Solution::parseStringToIntegers(const vector<string> & i
 }
 
 
-int Day2Solution::oneStarSolution() {
+long long Day2Solution::oneStarSolution() {
     int safeCount {0};
     for (const auto & levels : reports)
     {
@@ -89,7 +89,7 @@ bool Day2Solution::changeIsSafe(const vector<int> & levels)
 }
 
 
-int Day2Solution::twoStarSolution() {
+long long Day2Solution::twoStarSolution() {
     int safeCount {0};
     for (const auto & levels : reports)
     {

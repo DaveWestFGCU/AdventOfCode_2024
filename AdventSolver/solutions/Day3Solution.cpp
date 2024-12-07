@@ -10,7 +10,7 @@ Day3Solution::Day3Solution(const std::vector<std::string> & puzzleInput)
 }
 
 
-int Day3Solution::oneStarSolution()
+long long Day3Solution::oneStarSolution()
 {
     int mulResult {0};
     const std::regex mulPattern(R"(mul\(\d+,\d+\))");
@@ -39,7 +39,7 @@ int Day3Solution::oneStarSolution()
 }
 
 
-int Day3Solution::twoStarSolution()
+long long Day3Solution::twoStarSolution()
 {
     int mulResult {0};
 

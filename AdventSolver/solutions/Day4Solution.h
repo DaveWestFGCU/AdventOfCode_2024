@@ -24,8 +24,8 @@ class Day4Solution : public Solution {
 public:
     Day4Solution(const std::vector<std::string> & puzzleInput);
     std::string getTitle() const override { return title; }
-    int oneStarSolution() override;
-    int twoStarSolution() override;
+    long long oneStarSolution() override;
+    long long twoStarSolution() override;
 };
 
 
