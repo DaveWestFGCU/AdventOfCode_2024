@@ -6,50 +6,50 @@
 #include "Solution.h"
 #include "../AdventSolver.h"
 #include <vector>
-#include <tuple>
+#include <unordered_map>
+#include <utility>
 
 using std::vector, std::string;
 
 class Day6Solution : public Solution {
 
-    enum Direction {NORTH, SOUTH, EAST, WEST, ERROR = -1};
+    enum Direction {NORTH, EAST, SOUTH, WEST, ERROR = -1};
     class Guard
     {
     public:
         enum GuardStatus {PATROLING, LEFT_AREA, LOOPING};
     private:
         struct Location {int y, x;};
-        struct Visited
-        {
-            bool atLeastOnce;
-            bool facingList[4];
-        };
-
+        std::unordered_map<string, vector<bool>> seenObstructions;
         GuardStatus status;
         vector<string> roomMap;
         Direction facing;
         Location location{};
-        vector<vector<Visited>> visitedMap;
+        vector<vector<bool>> visitedMap;
+
 
         void setGuardLocation();
         void buildVisitedMap();
-        void printMap();
+        void printMap(const vector<string> & patrolMap);
 
             // Patrol Methods
-        bool isBlocked(vector<string> patrolMap);
-        bool foundCycle();
+        bool isBlocked(const vector<string>& patrolMap);
+        bool isOutOfBounds(const vector<string>& patrolMap);
+        bool inLoop();
 
     public:
         explicit Guard(const vector<string>& puzzleInput);
 
-        void patrol(vector<string> patrolMap);
-        void patrol() {return patrol(roomMap);}
+        GuardStatus patrol(vector<string> patrolMap);
+        GuardStatus patrol() {return patrol(roomMap);}
+        void turn();
+        void move();
         size_t countVisitedLocations();
+        vector<std::pair<int,int>> getVisitedLocations();
 
         void reset();
         GuardStatus getStatus() {return status;}
     };
-    friend class Guard;
 
     string title;
     vector<string> puzzleInput;

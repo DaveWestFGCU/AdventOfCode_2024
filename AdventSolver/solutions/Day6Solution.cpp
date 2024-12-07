@@ -60,53 +60,64 @@ void Day6Solution::Guard::setGuardLocation()
 
 void Day6Solution::Guard::buildVisitedMap()
 {
-    vector<vector<Visited>> newVisitedMap;
+    vector<vector<bool>> newVisitedMap;
     for (const auto &line : roomMap)
     {
-        vector<Visited> visitedArrayLine;
+        vector<bool> visitedLine;
         for (auto character : line)
         {
-            visitedArrayLine.push_back(Visited{false, {false}});
+            visitedLine.push_back(false);
         }
-        newVisitedMap.push_back(visitedArrayLine);
+        newVisitedMap.push_back(visitedLine);
     }
-
-    newVisitedMap[location.y][location.x].atLeastOnce = true;
-    newVisitedMap[location.y][location.x].facingList[facing] = true;
 
     visitedMap = newVisitedMap;
 }
 
 
-void Day6Solution::Guard::printMap()
+void Day6Solution::Guard::printMap(const vector<string> & patrolMap)
 {
-    char facingChar;
-    switch(facing)
-    {
-        case NORTH:
-            facingChar = '^';
-            break;
-        case EAST:
-            facingChar = '>';
-            break;
-        case SOUTH:
-            facingChar = 'v';
-            break;
-        case WEST:
-            facingChar = '<';
+    vector mergedMap(patrolMap);
 
-        default:
-            facingChar = '?';
+    for (size_t y = 0; y < visitedMap.size(); y++)
+    {
+        for (size_t x = 0; x < visitedMap[0].size(); x++)
+            if (visitedMap[y][x])
+                mergedMap[y][x] = 'X';
     }
 
-    //for (const auto &row : visitedMap)
-    //{
-    //    for (const auto &[atLeastOnce, facingList] : row)
-    //    {
-    //        std::cout << (atLeastOnce ? facingChar : '.');
-    //    }
-    //    std::cout << std::endl;
-    //}
+    if (location.y >= 0 && location.y < patrolMap.size()
+        && location.x >= 0 && location.x < patrolMap[0].length())
+    {
+        switch(facing)
+        {
+            case NORTH:
+                mergedMap[location.y][location.x] = '^';
+            break;
+
+            case EAST:
+                mergedMap[location.y][location.x] = '>';
+            break;
+
+            case SOUTH:
+                mergedMap[location.y][location.x] = 'v';
+            break;
+
+            case WEST:
+                mergedMap[location.y][location.x] = '<';
+            break;
+        }
+    }
+
+    std::cout << std::endl;
+    for (const auto &row : mergedMap)
+    {
+        for (const auto &item : row)
+        {
+            std::cout << item;
+        }
+        std::cout << std::endl;
+    }
 }
 
 
@@ -114,152 +125,132 @@ void Day6Solution::Guard::printMap()
  * One step in the guard's patrol pathing.
  * @return Returns true if a cycle has not yet been found.
  */
-void Day6Solution::Guard::patrol(vector<string> patrolMap)
+Day6Solution::Guard::GuardStatus Day6Solution::Guard::patrol(vector<string> patrolMap)
 {
-    //std::cout << std::endl << "patrolMap" << std::endl;
-    //for (auto line : patrolMap)
-    //{
-    //    for (auto item : line)
-    //        std::cout << item;
-    //    std::cout << std::endl;
-    //}
+    while (isBlocked(patrolMap))
+    {
+        if (inLoop())
+        {
+            return status;
+        }
+        turn();
+    }
+
+    while(!isOutOfBounds(patrolMap) && !isBlocked(patrolMap))
+    {
+        move();
+    }
+
+    if (isOutOfBounds(patrolMap))
+    {
+        return status;
+    }
+
+    return status;
+}
+
+
+void Day6Solution::Guard::turn()
+{
+    switch (facing)
+    {
+        case NORTH:
+            facing = EAST;
+            break;
+
+        case EAST:
+            facing = SOUTH;
+            break;
+
+        case SOUTH:
+            facing = WEST;
+            break;
+
+        case WEST:
+            facing = NORTH;
+            break;
+    }
+}   // end turn
+
+
+void Day6Solution::Guard::move()
+{
+    visitedMap[location.y][location.x] = true;
 
     switch (facing)
     {
         case NORTH:
-            if (isBlocked(patrolMap))
-                facing = EAST;
-            else
-                location.y--;
+            location.y--;
             break;
 
         case EAST:
-            if (isBlocked(patrolMap))
-                facing = SOUTH;
-            else
-                location.x++;
+            location.x++;
             break;
 
         case SOUTH:
-            if (isBlocked(patrolMap))
-                facing = WEST;
-            else
-                location.y++;
+            location.y++;
             break;
 
         case WEST:
-            if (isBlocked(patrolMap))
-                facing = NORTH;
-            else
-                location.x--;
+            location.x--;
             break;
     }
-
-    //std::cout << std::endl << "visitedMap" << std::endl;
-    for (auto row : visitedMap)
-    {
-        for (auto item : row)
-        {
-            char guardDir = '?';
-            switch(facing)
-            {
-                case NORTH:
-                    guardDir = '^';
-                    break;
-                case EAST:
-                    guardDir = '>';
-                    break;
-                case SOUTH:
-                    guardDir = 'v';
-                    break;
-                case WEST:
-                    guardDir = '<';
-                    break;
-            }
-        //    std::cout << (item.atLeastOnce?guardDir:'.');
-        }
-        //std::cout << std::endl;
-    }
-
-    if (location.y < 0 || location.y >= patrolMap.size())
-    {
-        status = LEFT_AREA;
-        return;
-    }
-    if (location.x < 0 || location.x >= patrolMap[0].length())
-    {
-        status = LEFT_AREA;
-        return;
-    }
-    if (foundCycle())
-    {
-        status = LOOPING;
-        return;
-    }
-
-    visitedMap[location.y][location.x].atLeastOnce = true;
-    visitedMap[location.y][location.x].facingList[facing] = true;
 }
 
 
-bool Day6Solution::Guard::isBlocked(vector<string> patrolMap)
+bool Day6Solution::Guard::isBlocked(const vector<string> & patrolMap)
 {
     switch (facing)
     {
         case NORTH:
             if (location.y-1 < 0)
                 return false;
-
-            if (patrolMap[location.y-1][location.x] == '#')
+            if (patrolMap[location.y-1][location.x] == '#' || patrolMap[location.y-1][location.x] == 'O')
                 return true;
-            if (patrolMap[location.y-1][location.x] == 'O')
-                return true;
-        break;
+            break;
 
         case EAST:
             if (location.x+1 >= patrolMap[0].length())
                 return false;
-            if (patrolMap[location.y][location.x+1] == '#')
+            if (patrolMap[location.y][location.x+1] == '#' || patrolMap[location.y][location.x+1] == 'O')
                 return true;
-            if (patrolMap[location.y][location.x+1] == 'O')
-                return true;
-        break;
+            break;
 
         case SOUTH:
             if (location.y+1 >= patrolMap[0].size())
                 return false;
-            if (patrolMap[location.y+1][location.x] == '#')
+            if (patrolMap[location.y+1][location.x] == '#' || patrolMap[location.y+1][location.x] == 'O')
                 return true;
-            if (patrolMap[location.y+1][location.x] == 'O')
-                return true;
-        break;
+            break;
 
         case WEST:
             if (location.x-1 < 0)
                 return false;
-            if (patrolMap[location.y][location.x-1] == '#')
+            if (patrolMap[location.y][location.x-1] == '#' || patrolMap[location.y][location.x-1] == 'O')
                 return true;
-            if (patrolMap[location.y][location.x-1] == 'O')
-                return true;
-        break;
+            break;
         }
 
     return false;
 }
 
 
-bool Day6Solution::Guard::foundCycle()
-{
-    if (visitedMap[location.y][location.x].atLeastOnce)
-        if (visitedMap[location.y][location.x].facingList[facing])
-            return true;
 
-    return false;
+bool Day6Solution::Guard::isOutOfBounds(const vector<string>& patrolMap)
+{
+    if (location.y < 0 || patrolMap.size() <= location.y)
+        status = LEFT_AREA;
+
+    else if (location.x < 0 || patrolMap[0].length() <= location.x)
+        status = LEFT_AREA;
+
+    return status == LEFT_AREA;
 }
 
 
 int Day6Solution::oneStarSolution()
 {
+
         // Loop until Bob's status changes to LEFT_AREA
     while(guardBob.getStatus() == Guard::PATROLING)
         guardBob.patrol();
@@ -280,7 +271,7 @@ size_t Day6Solution::Guard::countVisitedLocations()
     size_t visitedLocationCount {0};
     for (auto row : visitedMap)
         for (auto visited : row)
-            if (visited.atLeastOnce)
+            if (visited)
                 visitedLocationCount++;
 
     return visitedLocationCount;
@@ -289,7 +280,7 @@ size_t Day6Solution::Guard::countVisitedLocations()
 
 int Day6Solution::twoStarSolution()
 {
-    return static_cast<int>(bruteForcedTwoStar());
+    return static_cast<int>(optimizedTwoStar());
 }
 
 
@@ -297,6 +288,7 @@ void Day6Solution::Guard::reset()
 {
     setGuardLocation();
     buildVisitedMap();
+    seenObstructions.clear();
     status = PATROLING;
 }
 
@@ -315,10 +307,9 @@ size_t Day6Solution::bruteForcedTwoStar()
                 tempPuzzleInput[row][col] = 'O';
 
                 guardBob.reset();
+
                 while(guardBob.getStatus() == Guard::PATROLING)
                     guardBob.patrol(tempPuzzleInput);
-
-                std::cout << "[" << row << "][" << col << "] : " << guardBob.getStatus() << std::endl;
 
                 if (guardBob.getStatus() == Guard::LOOPING)
                     loopCount++;
@@ -327,4 +318,103 @@ size_t Day6Solution::bruteForcedTwoStar()
     }
 
     return loopCount;
+}
+
+
+bool Day6Solution::Guard::inLoop()
+{
+    string obstructionLocation;
+    switch(facing)
+    {
+        case NORTH:
+            obstructionLocation = std::to_string(location.y-1) + ',' + std::to_string(location.x);
+            if (seenObstructions.contains(obstructionLocation))
+            {
+                if (seenObstructions[obstructionLocation][NORTH])
+                    status = LOOPING;
+                else
+                    seenObstructions[obstructionLocation][NORTH] = true;
+            }
+            else
+                seenObstructions[obstructionLocation] = {true, false, false, false};
+            break;
+
+        case EAST:
+            obstructionLocation = std::to_string(location.y) + ',' + std::to_string(location.x+1);
+            if (seenObstructions.contains(obstructionLocation))
+            {
+                if (seenObstructions[obstructionLocation][EAST])
+                    status = LOOPING;
+                else
+                    seenObstructions[obstructionLocation][EAST] = true;
+            }
+            else
+                seenObstructions[obstructionLocation] = {false, true, false, false};
+            break;
+
+        case SOUTH:
+            obstructionLocation = std::to_string(location.y+1) + ',' + std::to_string(location.x);
+            if (seenObstructions.contains(obstructionLocation))
+            {
+                if (seenObstructions[obstructionLocation][SOUTH])
+                    status = LOOPING;
+                else
+                    seenObstructions[obstructionLocation][SOUTH] = true;
+            }
+            else
+                seenObstructions[obstructionLocation] = {false, false, true, false};
+            break;
+
+        case WEST:
+            obstructionLocation = std::to_string(location.y) + ',' + std::to_string(location.x-1);
+            if (seenObstructions.contains(obstructionLocation))
+            {
+                if (seenObstructions[obstructionLocation][WEST])
+                    status = LOOPING;
+                else
+                    seenObstructions[obstructionLocation][WEST] = true;
+            }
+            else
+                seenObstructions[obstructionLocation] = {false, false, false, true};
+            break;
+    }
+
+    return status == LOOPING;
+}
+
+
+size_t Day6Solution::optimizedTwoStar()
+{
+    int loopCount {0};
+    vector visitedLocations {guardBob.getVisitedLocations()};
+
+    for (auto [row, col] : visitedLocations)
+    {
+        // Add a new obstruction
+        vector tempPuzzleInput(puzzleInput);
+        tempPuzzleInput[row][col] = 'O';
+
+        guardBob.reset();
+
+        while(guardBob.getStatus() == Guard::PATROLING)
+            guardBob.patrol(tempPuzzleInput);
+
+        if (guardBob.getStatus() == Guard::LOOPING)
+            loopCount++;
+    }
+
+    return loopCount;
+}
+
+
+vector<std::pair<int,int>> Day6Solution::Guard::getVisitedLocations()
+{
+    vector<std::pair<int, int>> visitedLocations;
+
+    for (int y = 0; y < visitedMap.size(); y++)
+        for (int x = 0; x < visitedMap[0].size(); x++)
+            if (visitedMap[y][x])
+                visitedLocations.push_back(std::make_pair(y,x));
+
+    return visitedLocations;
 }
