@@ -18,7 +18,7 @@ class Day$Solution : public Solution {
     vector<string> puzzleInput;
 
 public:
-    explicit Day$Solution(const std::vector<std::string> & puzzleInput);
+    explicit Day$Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
     long long oneStarSolution() override;
     long long twoStarSolution() override;
