@@ -4,18 +4,20 @@
  *  Log: 12/4/24 - Added days 1-4 into current project.
  *       12/5/24 - Added day 5 solution.
  *       12/6/24 - Added day 6 solution.
- *       12/7/24 - Added day 7 solution. Added simultaneous display of example output for debugging.
+ *       12/7/24 - Added day 7 solution. Added simultaneous display of real/example answers for debugging.
+ *       12/8/24 - Added day 8 solution.
  */
 
 #include <memory>
 #include "AdventSolver/AdventSolver.h"
 #include "AdventSolver/AllSolutions.h"
 
-int main() {
-    size_t today = 7;
-    bool debug = false;     // Set to true for solving a single puzzle
+constexpr bool DEBUG = false; // Set to true for solving a single puzzle
+constexpr short TODAY = 8;
 
-    for (size_t day = debug ? today : 1; day <= today; day++)
+int main()
+{
+    for (size_t day = (DEBUG ? TODAY : 1); day <= TODAY; day++)
     {
         std::string inputFilepath = "../puzzle_inputs/";
         std::string inputFilename;
@@ -57,11 +59,16 @@ int main() {
                 aocSolver = std::make_unique<Day7Creator>();
                 break;
 
+            case 8:
+                inputFilename = "day8.txt";
+            aocSolver = std::make_unique<Day8Creator>();
+            break;
+
             default:
                 std::cout << "No solution available for day " << day << "." << std::endl;
         }
 
-        if (!debug)
+        if constexpr (!DEBUG)
         {       // Only shows answers to "my" puzzle input.
             std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + inputFilename);
             auto solution = aocSolver->create_solution(puzzleInput);
