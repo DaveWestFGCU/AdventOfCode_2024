@@ -11,7 +11,6 @@ Day8Solution::Day8Solution(const vector<string> &puzzleInput)
       mapBounds(Pos{static_cast<int>(puzzleInput.size()), static_cast<int>(puzzleInput[0].length())})
 {
     buildAntennaPositionLists(puzzleInput);
-    printFrequencies();
 }
 
 
@@ -48,98 +47,42 @@ void Day8Solution::printFrequencies()
 long long Day8Solution::oneStarSolution()
 {
     for (const auto &[frequency, antennaPositions] : frequencyToAntennaLocations)
-    {
-        findAntinodes(antennaPositions);
-    }
+        findFrequencyAntinodes(antennaPositions);
+
     return static_cast<long long>(antinodeLocations.size());
 }
 
 
-void Day8Solution::findAntinodes(const vector<Pos> &antennaLocations)
+void Day8Solution::findFrequencyAntinodes(const vector<Pos> &antennaLocations, bool includeHarmonics)
 {
     for (auto firstAntenna = antennaLocations.begin(); firstAntenna != antennaLocations.end(); ++firstAntenna)
-        for (auto secondAntenna = firstAntenna+1; secondAntenna != antennaLocations.end(); ++secondAntenna)
+        for (auto secondAntenna = antennaLocations.begin(); secondAntenna != antennaLocations.end(); ++secondAntenna)
         {
-            const int yDifference = abs(firstAntenna->y - secondAntenna->y);
+            if (firstAntenna == secondAntenna)
+                continue;
 
-            const int xDifference = abs(firstAntenna->x - secondAntenna->x);
-
-            if (firstAntenna->isBelow(*secondAntenna) && firstAntenna->isRightOf(*secondAntenna))
-            {
-                Pos antinodePosition(firstAntenna->y + yDifference, firstAntenna->x + xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(firstAntenna->y + yDifference,firstAntenna->x + xDifference));
-                    std::cout << "Antinode: (" << firstAntenna->y + yDifference << ", "
-                    << firstAntenna->x + xDifference << ")" << std::endl;
-                }
-
-                antinodePosition = Pos(secondAntenna->y - yDifference, secondAntenna->x - xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(secondAntenna->y - yDifference, secondAntenna->x - xDifference));
-                    std::cout << "Antinode: (" << secondAntenna->y - yDifference
-                              << ", " << secondAntenna->x - xDifference << ")" << std::endl;
-                }
-            }
-
-            else if (firstAntenna->isBelow(*secondAntenna) && firstAntenna->isLeftOf(*secondAntenna))
-            {
-                Pos antinodePosition(firstAntenna->y + yDifference, firstAntenna->x - xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(firstAntenna->y + yDifference, firstAntenna->x - xDifference));
-                    std::cout << "Antinode: (" << firstAntenna->y + yDifference
-                              << ", " << firstAntenna->x - xDifference << ")" << std::endl;
-                }
-
-                antinodePosition = Pos(secondAntenna->y - yDifference, secondAntenna->x + xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(secondAntenna->y - yDifference, secondAntenna->x + xDifference));
-                    std::cout << "Antinode: (" << secondAntenna->y - yDifference
-                              << ", " << secondAntenna->x + xDifference << ")" << std::endl;
-                }
-            }
-
-            else if (firstAntenna->isAbove(*secondAntenna) && firstAntenna->isRightOf(*secondAntenna))
-            {
-                Pos antinodePosition(firstAntenna->y - yDifference, firstAntenna->x + xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(firstAntenna->y - yDifference, firstAntenna->x + xDifference));
-                    std::cout << "Antinode: (" << firstAntenna->y - yDifference
-                              << ", " << firstAntenna->x + xDifference << ")" << std::endl;
-                }
-
-                antinodePosition = Pos(secondAntenna->y + yDifference, secondAntenna->x - xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(secondAntenna->y + yDifference, secondAntenna->x - xDifference));
-                    std::cout << "Antinode: (" << secondAntenna->y + yDifference
-                              << ", " << secondAntenna->x - xDifference << ")" << std::endl;
-                }
-            }
-
+            if (includeHarmonics)
+                findAntennaAntinodes(*firstAntenna, *secondAntenna, includeHarmonics);
             else
-            {   //  First antenna above-left of second antenna
-                Pos antinodePosition(firstAntenna->y - yDifference, firstAntenna->x - xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(firstAntenna->y - yDifference, firstAntenna->x - xDifference));
-                    std::cout << "Antinode: (" << firstAntenna->y - yDifference
-                              << ", " << firstAntenna->x - xDifference << ")" << std::endl;
-                }
-
-                antinodePosition = Pos(secondAntenna->y + yDifference, secondAntenna->x + xDifference);
-                if (isInBounds(antinodePosition))
-                {
-                    antinodeLocations.insert(Pos(secondAntenna->y + yDifference, secondAntenna->x + xDifference));
-                    std::cout << "Antinode: (" << secondAntenna->y + yDifference
-                              << ", " << secondAntenna->x + xDifference << ")" << std::endl;
-                }
-            }
+                findAntennaAntinodes(*firstAntenna, *secondAntenna);
         }
+}
+
+
+void Day8Solution::findAntennaAntinodes(const Pos &firstAntenna, const Pos &secondAntenna, const bool findHarmonics, const size_t harmonicNumber)
+{
+    // Get the x and y coordinates for a point on a line with antenna 1 and 2, but with a scalar applied to the distance
+    const int antinodeX = static_cast<int>(secondAntenna.x + harmonicNumber * (secondAntenna.x - firstAntenna.x));
+    const int antinodeY = static_cast<int>(secondAntenna.y + harmonicNumber * (secondAntenna.y - firstAntenna.y));
+
+    Pos antinode(antinodeY, antinodeX);
+    if (isInBounds(antinode))
+    {
+        antinodeLocations.insert(antinode);
+
+        if (findHarmonics)
+            findAntennaAntinodes(firstAntenna, secondAntenna, findHarmonics, harmonicNumber+1);
+    }
 }
 
 
@@ -155,8 +98,19 @@ bool Day8Solution::isInBounds(Pos antinodePosition) const
 
 long long Day8Solution::twoStarSolution()
 {
-    int result {0};
+    for (const auto &[frequency, antennaPositions] : frequencyToAntennaLocations)
+        findFrequencyAntinodes(antennaPositions, true);
 
-    return result;
+        // Include antinodes on top of every antenna
+    addAntennaAntinodes();
+
+    return static_cast<long long>(antinodeLocations.size());
 }
 
+
+void Day8Solution::addAntennaAntinodes()
+{
+    for (const auto &[frequency, antennaPositions] : frequencyToAntennaLocations)
+        for (const auto &[y,x] : antennaPositions)
+            antinodeLocations.emplace(y,x);
+}

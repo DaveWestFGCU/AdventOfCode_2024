@@ -49,11 +49,14 @@ class Day8Solution : public Solution {
     void printFrequencies();
 
 
-        // One Star Methods
-    void findAntinodes(const vector<Pos> &antennaLocations);
+        // One-Star Methods
+    void findFrequencyAntinodes(const vector<Pos> &antennaLocations, bool includeHarmonics = false);
+    void findAntennaAntinodes(const Pos &firstAntenna, const Pos &secondAntenna, bool findHarmonics = false, size_t harmonicNumber = 1);
     bool isInBounds(Pos antinodePosition) const;
 
-        // Two Star Methods
+        // Two-Star Methods
+    void addAntennaAntinodes();
+
 public:
     explicit Day8Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
