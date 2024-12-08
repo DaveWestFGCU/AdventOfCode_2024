@@ -20,6 +20,13 @@ std::vector<std::string> AdventSolver::getInput(std::string const& filepath, con
     std::string str;
     std::vector<std::string> lines;
 
+    if (file.fail())
+    {
+        std::cerr << "ERROR: No file found at \"" << filepath << "\"!";
+        lines.push_back(str);
+        return lines;
+    }
+
     if (output == verbose)
         std::cout << "===============|  AdventSolver::getInput  |===============" << std::endl;
 
