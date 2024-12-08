@@ -10,15 +10,26 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 using std::vector, std::string;
 
 class Day8Solution : public Solution {
+    struct Pos {size_t y,x;};
     string title;
-    vector<string> puzzleInput;
+    std::unordered_map<char,vector<Pos>> frequencyLocations;
 
+        // Setup
+    void buildAntennaPositionLists(const vector<string>& puzzleInput);
+    void printFrequencies();
+
+
+        // One Star Methods
+
+
+        // Two Star Methods
 public:
-    explicit Day8Solution(const std::vector<std::string> & puzzleInput);
+    explicit Day8Solution(const vector<string>& puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
     long long oneStarSolution() override;
     long long twoStarSolution() override;
