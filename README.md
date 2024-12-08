@@ -6,7 +6,7 @@ Solutions are my own unless otherwise noted.
 
 Concepts/Tools I have implemented thus far include:
 
-- Factory method design pattern (each day is a concrete product with an overloaded method for each solution).
+- Factory method design pattern (each day is a concrete product with an overriding method for each solution).
   
 - Regular Expressions (Days 3 & 4)
   
