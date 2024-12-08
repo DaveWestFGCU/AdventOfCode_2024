@@ -21,4 +21,6 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/Day6Solution.h
         AdventSolver/solutions/Day7Solution.cpp
         AdventSolver/solutions/Day7Solution.h
+        AdventSolver/solutions/Day8Solution.cpp
+        AdventSolver/solutions/Day8Solution.h
 )
