@@ -54,7 +54,7 @@ long long Day7Solution::oneStarSolution()
 
     for (const auto& [result, numbers] : calibrations)
     {
-        if (equationSolutionExists(result, numbers, numbers[0], 1))
+        if (reverseEqnSlnExists(result, numbers, result, numbers.size()-1))
             totalCalibrationResult += result;
     }
 
@@ -64,7 +64,7 @@ long long Day7Solution::oneStarSolution()
 
 bool Day7Solution::equationSolutionExists(const size_t& result, const vector<size_t>& numbers, size_t currentResult, const size_t index, Feature concatenation)
 {
-    // Base Case: We ran out of numbers.
+        // Base Case: We ran out of numbers.
     if (index == numbers.size())
     {
         if (currentResult == result)
@@ -86,6 +86,59 @@ bool Day7Solution::equationSolutionExists(const size_t& result, const vector<siz
         size_t concatenateResult = concatenate(currentResult, numbers[index]);
         if (equationSolutionExists(result, numbers, concatenateResult, index+1, concatenation))
             return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Optimized solution for determining whether equations exist to satisfy the result.
+ * Solves backwrds, finding whether the last element can satisfy multiplication or concatenation,
+ * stopping the chain if not. Approx 25x faster.
+ * @param result Result to unknown equation.
+ * @param numbers Numbers in unknown equation.
+ * @param currentResult Keeping track of the result as we reduce it. Aiming to reach 0 with the last element.
+ * @param index Next index in numbers to remove from current result.
+ * @param concatenation ON for two-star solution
+ * @return True if the equation has at least one set of operators that satisfies the result.
+ */
+bool Day7Solution::reverseEqnSlnExists(const size_t& result, const vector<size_t>& numbers, long long currentResult, const size_t index, Feature concatenation)
+{
+        // Base Case: We ran out of numbers.
+    if (index == -1)
+    {
+        if (currentResult == 0)
+            return true;
+
+        return false;
+    }
+
+    if (currentResult < 0)
+        return false;
+
+    long long subtractResult = currentResult - numbers[index];
+    if (reverseEqnSlnExists(result, numbers, subtractResult, index-1, concatenation))
+        return true;
+
+    if (currentResult % numbers[index] == 0)
+    {
+        size_t divideResult = currentResult / numbers[index];
+        if (reverseEqnSlnExists(result, numbers, divideResult, index-1, concatenation))
+            return true;
+    }
+
+    if (concatenation == ON)
+    {
+        string stringResult = std::to_string(currentResult);
+        string stringNumber = std::to_string(numbers[index]);
+        int substringStart = stringResult.length() - stringNumber.length();
+        if (stringResult.substr(substringStart,stringNumber.length()) == stringNumber)
+        {
+            size_t deconcatenateResult = static_cast<size_t>(std::stoll(stringResult.substr(0, substringStart)));
+            if (reverseEqnSlnExists(result, numbers, deconcatenateResult, index - 1, concatenation))
+                return true;
+        }
     }
 
     return false;

@@ -29,6 +29,12 @@ class Day7Solution : public Solution {
     static short getDigits(size_t number);
     static inline size_t concatenate(const size_t& num1, const size_t& num2);
 
+        // Optimized implementation: Left-to-Right
+    bool reverseEqnSlnExists(const size_t& result,
+                             const vector<size_t>& numbers,
+                             long long currentResult,
+                             size_t index,
+                             Feature concatenation = OFF);
 public:
         // Setup methods
     explicit Day7Solution(const std::vector<std::string> & puzzleInput);
