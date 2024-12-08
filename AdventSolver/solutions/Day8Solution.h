@@ -11,25 +11,46 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 using std::vector, std::string;
 
 class Day8Solution : public Solution {
-    struct Pos {size_t y,x;};
+    struct Pos
+    {
+        int y,x;
+        Pos(int y, int x) : y(y), x(x) {};
+        bool operator==(const Pos &position2) const {   // Unordered sets disallow duplicates
+            return x == position2.x && y == position2.y;
+        }
+    };
+    struct PosHash  // Hash function for unordered set
+    {
+        size_t operator()(const Pos &pos) const
+        {
+            const size_t yHash = std::hash<size_t>{}(pos.y);
+            const size_t xHash = std::hash<size_t>{}(pos.x);
+
+            return yHash ^ (xHash << 1);
+        }
+    };
     string title;
-    std::unordered_map<char,vector<Pos>> frequencyLocations;
+    Pos mapBounds;
+    std::unordered_map<char,vector<Pos>> frequencyToAntennaLocations;   //  Organize nodes by frequency
+    std::unordered_set<Pos,PosHash> antinodeLocations;  //  Don't want duplicates, don't care about sorting
 
         // Setup
-    void buildAntennaPositionLists(const vector<string>& puzzleInput);
+    void buildAntennaPositionLists(const vector<string> &puzzleInput);
     void printFrequencies();
 
 
         // One Star Methods
-
+    void findAntinodes(const vector<Pos> &antennaLocations);
+    bool isInBounds(Pos antinodePosition);
 
         // Two Star Methods
 public:
-    explicit Day8Solution(const vector<string>& puzzleInput);
+    explicit Day8Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
     long long oneStarSolution() override;
     long long twoStarSolution() override;
