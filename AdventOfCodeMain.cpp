@@ -61,15 +61,15 @@ int main()
 
             case 8:
                 inputFilename = "day8.txt";
-            aocSolver = std::make_unique<Day8Creator>();
-            break;
+                aocSolver = std::make_unique<Day8Creator>();
+                break;
 
             default:
                 std::cout << "No solution available for day " << day << "." << std::endl;
         }
 
         if constexpr (!DEBUG)
-        {       // Only shows answers to "my" puzzle input.
+        {       // Only shows answers to puzzle input.
             std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + inputFilename);
             auto solution = aocSolver->create_solution(puzzleInput);
 
@@ -79,7 +79,7 @@ int main()
                       << " ** Answer: " << solution->twoStarSolution() << std::endl;
         }
         else
-        {       // Debugging Output
+        {       // Debugging Output (shows example answers as well)
                 // Solution on example puzzle
             std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + "example/" + inputFilename);
             auto exampleSolution = aocSolver->create_solution(puzzleInput);
