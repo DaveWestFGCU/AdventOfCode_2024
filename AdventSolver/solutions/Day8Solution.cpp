@@ -57,97 +57,93 @@ long long Day8Solution::oneStarSolution()
 
 void Day8Solution::findAntinodes(const vector<Pos> &antennaLocations)
 {
-    for (auto firstAntenna_it = antennaLocations.begin(); firstAntenna_it != antennaLocations.end(); ++firstAntenna_it)
-        for (auto secondAntenna_it = firstAntenna_it+1; secondAntenna_it != antennaLocations.end(); ++secondAntenna_it)
+    for (auto firstAntenna = antennaLocations.begin(); firstAntenna != antennaLocations.end(); ++firstAntenna)
+        for (auto secondAntenna = firstAntenna+1; secondAntenna != antennaLocations.end(); ++secondAntenna)
         {
-            const int firstAntennaY = static_cast<int>(firstAntenna_it->y);
-            const int secondAntennaY = static_cast<int>(secondAntenna_it->y);
-            const int yDifference = abs(firstAntennaY - secondAntennaY);
+            const int yDifference = abs(firstAntenna->y - secondAntenna->y);
 
-            const int firstAntennaX = static_cast<int>(firstAntenna_it->x);
-            const int secondAntennaX = static_cast<int>(secondAntenna_it->x);
-            const int xDifference = abs(firstAntennaX - secondAntennaX);
+            const int xDifference = abs(firstAntenna->x - secondAntenna->x);
 
-            if (firstAntennaY > secondAntennaY && firstAntennaX > secondAntennaX)
-            {   //  First antenna below-right of second antenna
-                Pos antinodePosition(firstAntennaY + yDifference, firstAntennaX + xDifference);
+            if (firstAntenna->isBelow(*secondAntenna) && firstAntenna->isRightOf(*secondAntenna))
+            {
+                Pos antinodePosition(firstAntenna->y + yDifference, firstAntenna->x + xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(firstAntennaY + yDifference,firstAntennaX + xDifference));
-                    std::cout << "Antinode: (" << firstAntennaY + yDifference << ", "
-                    << firstAntennaX + xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(firstAntenna->y + yDifference,firstAntenna->x + xDifference));
+                    std::cout << "Antinode: (" << firstAntenna->y + yDifference << ", "
+                    << firstAntenna->x + xDifference << ")" << std::endl;
                 }
 
-                antinodePosition = Pos(secondAntennaY - yDifference, secondAntennaX - xDifference);
+                antinodePosition = Pos(secondAntenna->y - yDifference, secondAntenna->x - xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(secondAntennaY - yDifference, secondAntennaX - xDifference));
-                    std::cout << "Antinode: (" << secondAntennaY - yDifference
-                              << ", " << secondAntennaX - xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(secondAntenna->y - yDifference, secondAntenna->x - xDifference));
+                    std::cout << "Antinode: (" << secondAntenna->y - yDifference
+                              << ", " << secondAntenna->x - xDifference << ")" << std::endl;
                 }
             }
 
-            else if (firstAntennaY > secondAntennaY && firstAntennaX < secondAntennaX)
-            {   //  First antenna below-left of second antenna
-                Pos antinodePosition(firstAntennaY + yDifference, firstAntennaX - xDifference);
+            else if (firstAntenna->isBelow(*secondAntenna) && firstAntenna->isLeftOf(*secondAntenna))
+            {
+                Pos antinodePosition(firstAntenna->y + yDifference, firstAntenna->x - xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(firstAntennaY + yDifference, firstAntennaX - xDifference));
-                    std::cout << "Antinode: (" << firstAntennaY + yDifference
-                              << ", " << firstAntennaX - xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(firstAntenna->y + yDifference, firstAntenna->x - xDifference));
+                    std::cout << "Antinode: (" << firstAntenna->y + yDifference
+                              << ", " << firstAntenna->x - xDifference << ")" << std::endl;
                 }
 
-                antinodePosition = Pos(secondAntennaY - yDifference, secondAntennaX + xDifference);
+                antinodePosition = Pos(secondAntenna->y - yDifference, secondAntenna->x + xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(secondAntennaY - yDifference, secondAntennaX + xDifference));
-                    std::cout << "Antinode: (" << secondAntennaY - yDifference
-                              << ", " << secondAntennaX + xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(secondAntenna->y - yDifference, secondAntenna->x + xDifference));
+                    std::cout << "Antinode: (" << secondAntenna->y - yDifference
+                              << ", " << secondAntenna->x + xDifference << ")" << std::endl;
                 }
             }
 
-            else if (firstAntennaY < secondAntennaY && firstAntennaX > secondAntennaX)
-            {   //  First antenna above-right of second antenna
-                Pos antinodePosition(firstAntennaY - yDifference, firstAntennaX + xDifference);
+            else if (firstAntenna->isAbove(*secondAntenna) && firstAntenna->isRightOf(*secondAntenna))
+            {
+                Pos antinodePosition(firstAntenna->y - yDifference, firstAntenna->x + xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(firstAntennaY - yDifference, firstAntennaX + xDifference));
-                    std::cout << "Antinode: (" << firstAntennaY - yDifference
-                              << ", " << firstAntennaX + xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(firstAntenna->y - yDifference, firstAntenna->x + xDifference));
+                    std::cout << "Antinode: (" << firstAntenna->y - yDifference
+                              << ", " << firstAntenna->x + xDifference << ")" << std::endl;
                 }
 
-                antinodePosition = Pos(secondAntennaY + yDifference, secondAntennaX - xDifference);
+                antinodePosition = Pos(secondAntenna->y + yDifference, secondAntenna->x - xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(secondAntennaY + yDifference, secondAntennaX - xDifference));
-                    std::cout << "Antinode: (" << secondAntennaY + yDifference
-                              << ", " << secondAntennaX - xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(secondAntenna->y + yDifference, secondAntenna->x - xDifference));
+                    std::cout << "Antinode: (" << secondAntenna->y + yDifference
+                              << ", " << secondAntenna->x - xDifference << ")" << std::endl;
                 }
             }
 
             else
             {   //  First antenna above-left of second antenna
-                Pos antinodePosition(firstAntennaY - yDifference, firstAntennaX - xDifference);
+                Pos antinodePosition(firstAntenna->y - yDifference, firstAntenna->x - xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(firstAntennaY - yDifference, firstAntennaX - xDifference));
-                    std::cout << "Antinode: (" << firstAntennaY - yDifference
-                              << ", " << firstAntennaX - xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(firstAntenna->y - yDifference, firstAntenna->x - xDifference));
+                    std::cout << "Antinode: (" << firstAntenna->y - yDifference
+                              << ", " << firstAntenna->x - xDifference << ")" << std::endl;
                 }
 
-                antinodePosition = Pos(secondAntennaY + yDifference, secondAntennaX + xDifference);
+                antinodePosition = Pos(secondAntenna->y + yDifference, secondAntenna->x + xDifference);
                 if (isInBounds(antinodePosition))
                 {
-                    antinodeLocations.insert(Pos(secondAntennaY + yDifference, secondAntennaX + xDifference));
-                    std::cout << "Antinode: (" << secondAntennaY + yDifference
-                              << ", " << secondAntennaX + xDifference << ")" << std::endl;
+                    antinodeLocations.insert(Pos(secondAntenna->y + yDifference, secondAntenna->x + xDifference));
+                    std::cout << "Antinode: (" << secondAntenna->y + yDifference
+                              << ", " << secondAntenna->x + xDifference << ")" << std::endl;
                 }
             }
         }
 }
 
 
-bool Day8Solution::isInBounds(Pos antinodePosition)
+bool Day8Solution::isInBounds(Pos antinodePosition) const
 {
     if (0 <= antinodePosition.x && antinodePosition.x < mapBounds.x)
         if (0 <= antinodePosition.y && antinodePosition.y < mapBounds.y)

@@ -16,13 +16,18 @@
 using std::vector, std::string;
 
 class Day8Solution : public Solution {
-    struct Pos
+    class Pos
     {
+    public:
         int y,x;
         Pos(int y, int x) : y(y), x(x) {};
         bool operator==(const Pos &position2) const {   // Unordered sets disallow duplicates
             return x == position2.x && y == position2.y;
         }
+        inline bool isAbove(  const Pos &position) const { return y < position.y; }
+        inline bool isBelow(  const Pos &position) const { return y > position.y; }
+        inline bool isLeftOf( const Pos &position) const { return x < position.x; }
+        inline bool isRightOf(const Pos &position) const { return x > position.x; }
     };
     struct PosHash  // Hash function for unordered set
     {
@@ -46,7 +51,7 @@ class Day8Solution : public Solution {
 
         // One Star Methods
     void findAntinodes(const vector<Pos> &antennaLocations);
-    bool isInBounds(Pos antinodePosition);
+    bool isInBounds(Pos antinodePosition) const;
 
         // Two Star Methods
 public:
