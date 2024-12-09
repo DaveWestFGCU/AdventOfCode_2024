@@ -25,12 +25,11 @@ void Day1Solution::splitList(const vector<string> & inputList)
     {
         std::stringstream ss(line);
 
-        size_t number;
+        size_t leftNumber, rightNumber;
+        ss >> leftNumber >> rightNumber;;
 
-        ss >> number;
-        leftList.push_back(number);
-        ss >> number;
-        rightList.push_back(number);
+        leftList.push_back(leftNumber);
+        rightList.push_back(rightNumber);
     }
 }
 
