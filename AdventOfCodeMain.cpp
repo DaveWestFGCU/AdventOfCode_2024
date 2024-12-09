@@ -6,6 +6,7 @@
  *       12/6/24 - Added day 6 solution.
  *       12/7/24 - Added day 7 solution. Added simultaneous display of real/example answers for debugging.
  *       12/8/24 - Added day 8 solution.
+ *       12/9/24 - Added day 9 solution.
  */
 
 #include <memory>
@@ -13,7 +14,7 @@
 #include "AdventSolver/AllSolutions.h"
 
 constexpr bool DEBUG = false; // Set to true for solving a single puzzle
-constexpr short TODAY = 8;
+constexpr short TODAY = 9;
 
 int main()
 {
@@ -62,6 +63,11 @@ int main()
             case 8:
                 inputFilename = "day8.txt";
                 aocSolver = std::make_unique<Day8Creator>();
+                break;
+
+            case 9:
+                inputFilename = "day9.txt";
+                aocSolver = std::make_unique<Day9Creator>();
                 break;
 
             default:
