@@ -10,12 +10,30 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
+#include <queue>
+#include <stack>
 
 using std::vector, std::string;
 
 class Day9Solution : public Solution {
+    struct Block { size_t expandedLoc, size, fileId; };
     string title;
-    string diskMap;
+    vector<size_t> diskMap;
+    vector<int> expandedDiskMap;    //  int: free space represented by -1
+    std::stack<Block> files;        //  Part 2, files need to be accessed from back to front (FILO)
+    vector<Block> freeSpaces;   //  Part 2, free space needs to be accessed from front to back and searchable
+
+    void partitionDiskMap();
+
+    static inline bool blockIsFile(size_t loc);
+    void expandDiskMap();
+    void printExpandedDiskMap() const;
+
+        //  One-star solution methods
+    void fragmentedCompaction();
+
+        //  Two-star solution methods
+    void contiguousCompaction();
 
 public:
     explicit Day9Solution(const vector<string> &puzzleInput);
