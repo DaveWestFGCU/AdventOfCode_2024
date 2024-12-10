@@ -4,10 +4,11 @@
 #include <fstream>
 #include "solutions/Solution.h"
 
+enum consoleOutput { SILENT, VERBOSE };
+
 class AdventSolver {
 public:
-    enum consoleOutput {silent, verbose};
-    static inline std::vector<std::string> getInput(std::string const& filepath, consoleOutput output = silent);
+    static inline std::vector<std::string> getInput(std::string const& filepath, consoleOutput output = SILENT);
 
     virtual ~AdventSolver() = default;
     virtual std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const = 0;
@@ -27,17 +28,17 @@ std::vector<std::string> AdventSolver::getInput(std::string const& filepath, con
         return lines;
     }
 
-    if (output == verbose)
+    if (output == VERBOSE)
         std::cout << "===============|  AdventSolver::getInput  |===============" << std::endl;
 
     while (std::getline(file, str))
     {
-        if (output == verbose)
+        if (output == VERBOSE)
             std::cout << str << std::endl;
         lines.push_back(str);
     }
 
-    if (output == verbose)
+    if (output == VERBOSE)
         std::cout << "====================|  End Input  |====================" << std::endl << std::endl;
 
     return lines;
