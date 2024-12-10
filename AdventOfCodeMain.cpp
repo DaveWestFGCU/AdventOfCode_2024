@@ -7,6 +7,7 @@
  *       12/7/24 - Added day 7 solution. Added simultaneous display of real/example answers for debugging.
  *       12/8/24 - Added day 8 solution.
  *       12/9/24 - Added day 9 solution.
+ *       12/10/24 - Added day 10 solution.
  */
 
 #include <memory>
@@ -68,6 +69,11 @@ int main()
             case 9:
                 inputFilename = "day9.txt";
                 aocSolver = std::make_unique<Day9Creator>();
+                break;
+
+            case 10:
+                inputFilename = "day10.txt";
+                aocSolver = std::make_unique<Day10Creator>();
                 break;
 
             default:
