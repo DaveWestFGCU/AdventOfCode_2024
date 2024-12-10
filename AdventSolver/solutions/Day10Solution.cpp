@@ -27,15 +27,14 @@ void Day10Solution::buildMap(const vector<string> &input)
 
         topographicalMap.push_back(mapRow);
     }
-    printMap();
 }
 
 
 void Day10Solution::printMap() const
 {
-    for (int y = static_cast<int>(topographicalMap.size())-1; y >= 0 ; --y)
+    for (int y = static_cast<int>(mapYBound)-1; y >= 0 ; --y)
     {
-        for (int x = 0; x < topographicalMap.size(); ++x)
+        for (int x = 0; x < mapXBound; ++x)
             std::cout << topographicalMap[x][y].value;
 
         std::cout << std::endl;
@@ -66,11 +65,6 @@ void Day10Solution::findNeighbors()
             if (y < mapYBound - 1)
                 if (currentVertex->value + 1 == topographicalMap[x][y+1].value)
                     currentVertex->neighbors.push_back(&topographicalMap[x][y+1]);
-
-            std::cout << "(" << x << "," << y << "): ";
-            for (auto neighbor : currentVertex->neighbors)
-                std::cout << neighbor->value << "(" << neighbor->xPos << "," << neighbor->yPos << "), ";
-            std::cout << std::endl;
         }
 }
 
@@ -78,47 +72,40 @@ void Day10Solution::findNeighbors()
 
 long long Day10Solution::oneStarSolution()
 {
-    int result {0};
-
+    size_t trailCount {0};
 
     for (int y = 0; y < topographicalMap.size(); ++y)
         for (int x = 0; x < topographicalMap[y].size(); ++x)
             if (topographicalMap[x][y].value == 0)
             {
-                int score = depthFirstSearch(&topographicalMap[x][y]);
-                std::cout << "Trailhead score: " << score << std::endl;
-                result += score;
+                trailCount += depthFirstSearch(&topographicalMap[x][y]);
                 resetVertices();
             }
 
-    return result;
+    return static_cast<long long>(trailCount);
 }
 
 
-size_t Day10Solution::depthFirstSearch(Vertex *vertex)
+size_t Day10Solution::depthFirstSearch(Vertex *vertex, const bool &includeRatings)
 {
-    std::cout << "[(" << vertex->xPos << "," << vertex->yPos << "): " << vertex->value << "]" << std::endl;
     // Base case: Found a complete path
-    if (vertex->value == 9 && !vertex->visited)
+    if (vertex->value == 9 && (!vertex->visited || includeRatings))
     {
-        std::cout << "Path found!" << std::endl;
         vertex->visited = true;
         return 1;
     }
 
     // Base case: Dead end
     if (vertex->neighbors.empty())
-    {
-        std::cout << "Dead end" << std::endl;
         return 0;
-    }
 
     // Recursive case: Check each viable neighbor.
     size_t score{0};
-    for (auto neighbor : vertex->neighbors)
-        score += depthFirstSearch(neighbor);
+    for (const auto &neighbor : vertex->neighbors)
+        score += depthFirstSearch(neighbor, includeRatings);
     return score;
 }
+
 
 void Day10Solution::resetVertices()
 {
@@ -131,7 +118,15 @@ void Day10Solution::resetVertices()
 
 long long Day10Solution::twoStarSolution()
 {
-    int result {0};
+    size_t trailRatings {0};
 
-    return result;
+    for (int y = 0; y < topographicalMap.size(); ++y)
+        for (int x = 0; x < topographicalMap[y].size(); ++x)
+            if (topographicalMap[x][y].value == 0)
+            {
+                trailRatings += depthFirstSearch(&topographicalMap[x][y], true);
+                resetVertices();
+            }
+
+    return static_cast<long long>(trailRatings);
 }

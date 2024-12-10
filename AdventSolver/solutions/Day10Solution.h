@@ -35,8 +35,7 @@ class Day10Solution : public Solution {
     void findNeighbors();
 
         //  One-Star Methods
-    void findTrailheads();
-    size_t depthFirstSearch(Vertex *vertex);
+    size_t depthFirstSearch(Vertex *vertex, const bool &includeRatings = false);
     void resetVertices();
 
 public:
@@ -53,7 +52,6 @@ public:
         return std::make_unique<Day10Solution>(puzzleInput);
     }
 };
-
 
 
 #endif //DAY10SOLUTION_H
