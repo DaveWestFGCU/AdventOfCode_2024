@@ -5,13 +5,13 @@
 
 #include "LinkedList.h"
 
-LinkedList::LinkedList() : head(nullptr), tail(nullptr), size(0) {}
+LinkedList::LinkedList() : head(nullptr), tail(nullptr), _size(0) {}
 
 
-LinkedList::LinkedList(int value) : head(new Node(value)), size(1) { tail = head; }
+LinkedList::LinkedList(int value) : head(new Node(value)), _size(1) { tail = head; }
 
 
-LinkedList::LinkedList(const std::vector<int> &vec) : head(nullptr), tail(nullptr), size(0)
+LinkedList::LinkedList(const std::vector<int> &vec) : head(nullptr), tail(nullptr), _size(0)
 {
     for (int item : vec)
         this->insert(item);
@@ -30,20 +30,23 @@ LinkedList::~LinkedList()
  * @param index 
  */
 void LinkedList::insert(const int value, const int index)
-{  
+{
     if (!head)
     {   // First element
         head = new Node(value);
         tail = head;
-        ++size;
+        ++_size;
         return;
     }
 
     if(index == -1)
-    {
+    {   // No index given: add to tail end
         Node *newNode = new Node(value, nullptr, tail);
+        Node *prevTail = tail;
         tail = newNode;
-        ++size;
+        prevTail->next = tail;
+
+        ++_size;
         return;
     }
 
@@ -54,7 +57,7 @@ void LinkedList::insert(const int value, const int index)
     currentNode->prev = newNode;
     prevNode->next = newNode;
     
-    ++size;
+    ++_size;
 }
 
 
@@ -65,26 +68,44 @@ void LinkedList::insert(const int value, const int index)
  */
 int LinkedList::remove(int index)
 {
-    if (index < 0 || index > size-1)
+    if (index < 0 || index > _size-1)
         return INT_MIN;
-    
+
+    if (_size == 1)
+    {
+        int value = head->value;
+        delete head;
+        head = nullptr;
+        tail = nullptr;
+        --_size;
+        return value;
+    }
+
     if (index == 0)
     {
         Node *newHead = head->next;
         int value = head->value;
         delete head;
-        --size;
+        --_size;
         head = newHead;
+
+        if (_size == 1)
+            tail = head;
+
         return value;
     }
 
-    if (index == size-1)
+    if (index == _size-1)
     {
         Node *newTail = tail->prev;
         int value = tail->value;
         delete tail;
-        --size;
         tail = newTail;
+        --_size;
+
+        if (_size == 1)
+            head = tail;
+
         return value;
     }
 
@@ -106,7 +127,7 @@ int LinkedList::remove(int index)
  */
 LinkedList::Node* LinkedList::traverse(int traverseToIndex) const
 {
-    if (traverseToIndex < 0 || traverseToIndex > size-1)
+    if (traverseToIndex < 0 || traverseToIndex > _size-1)
         return nullptr;
     
     int currentIndex = 0;
@@ -131,7 +152,7 @@ LinkedList::Node* LinkedList::traverse(int traverseToIndex) const
 int LinkedList::getValue(int index) const
 {
         // Invalid index
-    if (index < 0 || index > size-1)
+    if (index < 0 || index > _size-1)
         return -1;
 
     return traverse(index)->value;
@@ -149,7 +170,7 @@ int LinkedList::findValue(int value) const
     Node *currentNode = head;
     
         // Traverse to find value 
-    while (currentNode->value != value && index < size-1)
+    while (currentNode->value != value && index < _size-1)
     {
         currentNode->next;
         ++index;
@@ -158,6 +179,7 @@ int LinkedList::findValue(int value) const
     if (currentNode->value == value)
         return index;
 
-    if (index > size-1)
+    if (index > _size-1)
         return -1;
 }
+

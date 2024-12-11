@@ -3,6 +3,9 @@
  * Desc: Class declarations for the linked list data structure.
  */
 
+// TODO: Add iterators for range based looping
+#include <iostream>
+
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
@@ -22,7 +25,7 @@ class LinkedList {
 
     Node *head;
     Node *tail;
-    int size;
+    int _size;
 
     [[nodiscard]] Node* traverse(int index) const;
 
@@ -36,6 +39,7 @@ public:
     int remove(int index);
     [[nodiscard]] int getValue(int index) const;
     [[nodiscard]] int findValue(int value) const;
+    int size() { return _size; };
 };
 
 
