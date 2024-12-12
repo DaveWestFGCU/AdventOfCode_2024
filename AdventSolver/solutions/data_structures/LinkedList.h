@@ -3,8 +3,10 @@
  * Desc: Class declarations for the linked list data structure.
  */
 
+// TODO: Use template datatype
 // TODO: Add iterators for range based looping
-#include <iostream>
+// TODO: Overload subscript operator for array-like access
+
 
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
@@ -15,31 +17,32 @@
 class LinkedList {
     struct Node
     {
-        int value;
+        long long value;
         Node* next;
         Node* prev;
 
-        explicit Node(int _value) : value(_value), next(nullptr), prev(nullptr) {}
-        Node(int _value, Node *_next, Node *_prev) : value(_value), next(_next), prev(_prev) {}
+        explicit Node(long long _value) : value(_value), next(nullptr), prev(nullptr) {}
+        Node(long long _value, Node *_next, Node *_prev) : value(_value), next(_next), prev(_prev) {}
     };
 
     Node *head;
     Node *tail;
-    int _size;
+    size_t _size;
 
     [[nodiscard]] Node* traverse(int index) const;
 
 public:
     LinkedList();
-    explicit LinkedList(int value);
-    explicit LinkedList(const std::vector<int> &vec);
+    explicit LinkedList(long long value);
+    explicit LinkedList(const std::vector<long long> &vec);
     ~LinkedList();
 
-    void insert(int value, int insertIndex = -1);
-    int remove(int index);
-    [[nodiscard]] int getValue(int index) const;
-    [[nodiscard]] int findValue(int value) const;
-    int size() { return _size; };
+    void insert(long long value, int insertIndex = -1);
+    long long remove(int index);
+    [[nodiscard]] long long getValue(int index) const;
+    bool setValue(int index, long long value);
+    [[nodiscard]] int findValue(long long value) const;
+    [[nodiscard]] size_t size() const { return _size; };
 };
 
 
