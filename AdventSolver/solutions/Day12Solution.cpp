@@ -7,17 +7,23 @@
 
 
 Day12Solution::Day12Solution(const vector<string> &puzzleInput)
+    : title("--- Day 12: Garden Groups ---"),
+      plotMap(puzzleInput)
 {
-    title = "";
-    this->puzzleInput = puzzleInput;
+    // plotMap.printAdjacencyList();
 }
 
 
 long long Day12Solution::oneStarSolution()
 {
-    int result {0};
+    long long totalPrice {0};
+    int regionCost;
+    do {
+        regionCost = plotMap.calcUnvisitedRegionCost();
+        totalPrice += regionCost;
+    } while (regionCost);
 
-    return result;
+    return totalPrice;
 }
 
 

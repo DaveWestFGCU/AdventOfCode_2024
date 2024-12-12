@@ -8,6 +8,7 @@
 
 #include "Solution.h"
 #include "../AdventSolver.h"
+#include "data_structures/Grid.h"
 #include <vector>
 #include <string>
 
@@ -15,7 +16,10 @@ using std::vector, std::string;
 
 class Day12Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
+    Grid plotMap;
+
+        // One-Star Methods
+
 
 public:
     explicit Day12Solution(const vector<string> &puzzleInput);
