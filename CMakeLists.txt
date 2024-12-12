@@ -33,4 +33,6 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/data_structures/LinkedList.h
         AdventSolver/solutions/Day12Solution.cpp
         AdventSolver/solutions/Day12Solution.h
+        AdventSolver/solutions/data_structures/Grid.cpp
+        AdventSolver/solutions/data_structures/Grid.h
 )
