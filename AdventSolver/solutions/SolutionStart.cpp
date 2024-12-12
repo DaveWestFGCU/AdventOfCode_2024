@@ -7,8 +7,8 @@
 
 
 Day$Solution::Day$Solution(const vector<string> &puzzleInput)
+    : title("")
 {
-    title = "";
     this->puzzleInput = puzzleInput;
 }
 
