@@ -15,11 +15,15 @@
 #include "AdventSolver/AdventSolver.h"
 #include "AdventSolver/AllSolutions.h"
 
-constexpr bool DEBUG = false; // Set to true for solving a single puzzle
-enum DisplaySolutions {ONE_STAR, TWO_STAR, BOTH};
-constexpr DisplaySolutions SOLUTIONS = ONE_STAR;
+constexpr bool DEBUG = true; // Set to true for solving a single puzzle
+enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
+enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
+
+constexpr SolutionType TYPE = EXAMPLE;
+constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
+
 constexpr bool VERBOSE_INPUT = false;
-constexpr short TODAY = 11;
+constexpr short TODAY = 12;
 
 int main()
 {
@@ -28,6 +32,7 @@ int main()
         std::string inputFilepath = "../puzzle_inputs/";
         std::string inputFilename = "day" + std::to_string(day) + ".txt";
         std::unique_ptr<AdventSolver> aocSolver;
+
         switch(day)
         {
             case 1:
@@ -74,6 +79,10 @@ int main()
                 aocSolver = std::make_unique<Day11Creator>();
                 break;
 
+            case 12:
+                aocSolver = std::make_unique<Day12Creator>();
+                break;
+
             default:
                 std::cout << "No solution available for day " << day << "." << std::endl;
         }
@@ -95,19 +104,46 @@ int main()
             std::vector<std::string> puzzleInput = AdventSolver::getInput(exampleFilepath, VERBOSE_INPUT?VERBOSE:SILENT);
             auto exampleSolution = aocSolver->create_solution(puzzleInput);
 
-            std::cout << std::endl
-                      << exampleSolution->getTitle() << std::endl
-                      << "  * Example Answer: " << exampleSolution->oneStarSolution() << std::endl
-                      << " ** Example Answer: " << exampleSolution->twoStarSolution() << std::endl;
+            std::cout << std::endl << exampleSolution->getTitle() << std::endl;
 
-                // Solution on real puzzle
-            inputFilepath += inputFilename;
-            puzzleInput = AdventSolver::getInput(inputFilepath, VERBOSE_INPUT?VERBOSE:SILENT);
-            auto solution = aocSolver->create_solution(puzzleInput);
+            switch(TYPE)
+            {
+                case EXAMPLE:
+                case BOTH_TYPES:
+                    switch(DIFFICULTY)
+                    {
+                        case ONE_STAR:
+                        case BOTH_DIFFICULTIES:
+                            std::cout << "  * Example Answer: " << exampleSolution->oneStarSolution() << std::endl;
+                        if constexpr (DIFFICULTY == ONE_STAR)
+                            break;
 
-            std::cout << std::endl
-                      << "  * Answer: " << solution->oneStarSolution() << std::endl
-                      << " ** Answer: " << solution->twoStarSolution() << std::endl;
+                        case TWO_STAR:
+                            std::cout << " ** Example Answer: " << exampleSolution->twoStarSolution() << std::endl;
+                        break;
+                    }
+                    if constexpr (TYPE == EXAMPLE)
+                        break;
+
+                case PUZZLE:
+                    // Solution on real puzzle
+                    inputFilepath += inputFilename;
+                    puzzleInput = AdventSolver::getInput(inputFilepath, VERBOSE_INPUT?VERBOSE:SILENT);
+                    auto solution = aocSolver->create_solution(puzzleInput);
+
+                    switch(DIFFICULTY)
+                    {
+                        case ONE_STAR:
+                        case BOTH_DIFFICULTIES:
+                            std::cout << std::endl << "  * Answer: " << solution->oneStarSolution() << std::endl;
+                        if constexpr (BOTH_DIFFICULTIES == ONE_STAR)
+                            break;
+
+                        case TWO_STAR:
+                            std::cout << " ** Answer: " << solution->twoStarSolution() << std::endl;
+                    }
+                    break;
+            }
         }
     }
 
