@@ -95,12 +95,10 @@ int Grid::calcUnvisitedRegionCost(bool bulkDiscount)
     if (!bulkDiscount)
     {
         int perimeter = findPerimeter(region);
-        std::cout << value << " -> A: " << area << " x P: " << perimeter << " = " << area * perimeter << std::endl;
         return area * perimeter;
     }
 
     int sides = findSides(region);
-    std::cout << value << " -> A: " << area << " x S: " << sides << " = " << area * sides << std::endl;
     return area * sides;
 }
 
@@ -173,12 +171,33 @@ int Grid::findPerimeter(vector<Vertex> region)
 
 int Grid::findSides(vector<Vertex> region)
 {
+    int sides {0};
+    char value = adjacencyList[*region.begin()].value;  //  Get the region's plot value from the first plot from the region
+    enum Corner {NORTHEAST, NORTHWEST, SOUTHWEST, SOUTHEAST};
 
-}
+    for (auto &plot : region)
+    {
+        Vertex diagVertexes[4][3] =
+            {
+                {adjacencyList[plot].adjacentVertexes[NORTH], Vertex(plot.xPos+1,plot.yPos-1), adjacencyList[plot].adjacentVertexes[EAST]},    // North-East
+                {adjacencyList[plot].adjacentVertexes[NORTH], Vertex(plot.xPos-1,plot.yPos-1), adjacencyList[plot].adjacentVertexes[WEST]},    // North-West
+                {adjacencyList[plot].adjacentVertexes[SOUTH], Vertex(plot.xPos-1,plot.yPos+1), adjacencyList[plot].adjacentVertexes[WEST]},    // South-West
+                {adjacencyList[plot].adjacentVertexes[SOUTH], Vertex(plot.xPos+1,plot.yPos+1), adjacencyList[plot].adjacentVertexes[EAST]}     // South-East
+        };
+        for (int corner = NORTHEAST; corner <= SOUTHEAST; ++corner)
+        {
+            auto cornerVertexes = diagVertexes[corner];
 
+            //  Is the plot an inner corner?
+            if (adjacencyList[cornerVertexes[0]].value == value && adjacencyList[cornerVertexes[1]].value != value && adjacencyList[cornerVertexes[2]].value == value)
+                ++sides;
 
-bool Grid::isCorner(Vertex plot)
-{
+            //  Is the plot an outer corner?
+            if (adjacencyList[cornerVertexes[0]].value != value && adjacencyList[cornerVertexes[2]].value != value)
+                ++sides;
+        }
+    }
 
+    return sides;
 }
 
