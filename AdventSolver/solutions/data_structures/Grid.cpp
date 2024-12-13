@@ -70,38 +70,42 @@ void Grid::printAdjacencyList()
 /**
  * Solution for Day 12 Part 1
  */
-int Grid::calcUnvisitedRegionCost()
+int Grid::calcUnvisitedRegionCost(bool bulkDiscount)
 {
     Vertex startVertex = findUnvisitedVertex();
-    std::cout << std::endl;
     if (startVertex == Vertex(-1,-1))   //  No unvisited characters found.
-    {
         return 0;
-    }
 
     std::queue<Vertex> unvisited;
     unvisited.push(startVertex);
 
     char value = adjacencyList[startVertex].value;
 
-    vector<Vertex> visited;
-
-    int perimeter {0};
+    vector<Vertex> region;
 
     while (!unvisited.empty())
     {
         Vertex visiting = unvisited.front();
         unvisited.pop();
-        visitVertex(value, visiting, visited, unvisited, perimeter);
+        visitVertex(value, visiting, region, unvisited);
     }
 
-    int area = visited.size();
-    std::cout << " -> A: " << area << " x P: " << perimeter << " = " << area * perimeter << std::endl;
-    return area * perimeter;
+    int area = static_cast<int>(region.size());
+
+    if (!bulkDiscount)
+    {
+        int perimeter = findPerimeter(region);
+        std::cout << value << " -> A: " << area << " x P: " << perimeter << " = " << area * perimeter << std::endl;
+        return area * perimeter;
+    }
+
+    int sides = findSides(region);
+    std::cout << value << " -> A: " << area << " x S: " << sides << " = " << area * sides << std::endl;
+    return area * sides;
 }
 
 
-void Grid::visitVertex(char value, Vertex &visiting, vector<Vertex> &visited, std::queue<Vertex> &unvisited, int &perimeter)
+void Grid::visitVertex(char value, Vertex &visiting, vector<Vertex> &visited, std::queue<Vertex> &unvisited)
 {
     adjacencyList[visiting].visited = true;
     visited.push_back(visiting);
@@ -118,17 +122,7 @@ void Grid::visitVertex(char value, Vertex &visiting, vector<Vertex> &visited, st
                 adjacencyList[adjacentVertex].inQueue = true;
             }
         }
-
-            // Inner boundary checking
-        if (adjacencyList[adjacentVertex].value != value && adjacentVertex != Vertex(-1,-1))
-            ++perimeter;
     }
-
-    // Outer boundary checking
-    if (visiting.xPos == 0 || visiting.xPos == xBounds-1)
-        ++perimeter;
-    if (visiting.yPos == 0 || visiting.yPos == yBounds-1)
-        ++perimeter;
 }
 
 
@@ -150,6 +144,41 @@ Grid::Vertex Grid::findUnvisitedVertex()
 }
 
 
+int Grid::findPerimeter(vector<Vertex> region)
+{
+    int perimeter {0};
+    char value = adjacencyList[*region.begin()].value;  //  Get the region's plot value from the first plot from the region
+
+    for (auto &plot : region)
+    {
+        auto adjacentVertexes = adjacencyList[plot].adjacentVertexes;
+        for (int direction = NORTH; direction <= WEST; ++direction)
+        {
+            auto adjacentVertex = adjacentVertexes[direction];
+            // Inner boundary checking
+            if (adjacencyList[adjacentVertex].value != value && adjacentVertex != Vertex(-1,-1))
+                ++perimeter;
+        }
+
+        // Outer boundary checking
+        if (plot.xPos == 0 || plot.xPos == xBounds-1)
+            ++perimeter;
+        if (plot.yPos == 0 || plot.yPos == yBounds-1)
+            ++perimeter;
+    }
+
+    return perimeter;
+}
 
 
+int Grid::findSides(vector<Vertex> region)
+{
+
+}
+
+
+bool Grid::isCorner(Vertex plot)
+{
+
+}
 

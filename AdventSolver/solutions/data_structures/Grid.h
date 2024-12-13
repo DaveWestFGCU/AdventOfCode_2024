@@ -58,20 +58,23 @@ protected:
     std::unordered_map<Vertex, VertexMapValue, VertexHash> adjacencyList;
 
     void buildAdjacencyList(const vector<string> &input);
-    void visitVertex(char character, Vertex &visiting, vector<Vertex> &visited, std::queue<Vertex> &unvisited, int &perimeter);
+    void visitVertex(char character, Vertex &visiting, vector<Vertex> &visited, std::queue<Vertex> &unvisited);
     Vertex findUnvisitedVertex();
+    int findPerimeter(vector<Vertex> plot);
+    int findSides(vector<Vertex> plot);
+    bool isCorner(Vertex vertex);
 
 public:
     explicit Grid(const vector<string> &input);
     void printAdjacencyList();
 
         // AoC Day 12 Functionality
-    int calcUnvisitedRegionCost();
+    int calcUnvisitedRegionCost(bool bulkDiscount = false);
 
         // Getters
     [[nodiscard]] size_t xSize() const { return xBounds; }
     [[nodiscard]] size_t ySize() const { return yBounds; }
-    char getValue(size_t xPos, size_t yPos) { return adjacencyList[Vertex(xPos,yPos)].value; }
+    char getValue(int xPos, int yPos) { return adjacencyList[Vertex(xPos,yPos)].value; }
 };
 
 
