@@ -9,6 +9,8 @@
  *       12/ 9/24 - Added day 9 solution.
  *       12/10/24 - Added day 10 solution.
  *       12/11/24 - Added day 11 solution.
+ *       12/12/24 - Added day 12 solution.
+ *       12/13/24 - Added day 13 solution.
  */
 
 #include <memory>
@@ -17,17 +19,17 @@
 
 constexpr bool DEBUG = true; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
-enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
+constexpr SolutionType TYPE = PUZZLE;
 
-constexpr SolutionType TYPE = EXAMPLE;
+enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
 constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr short TODAY = 12;
+constexpr short TODAY = 13;
 
 int main()
 {
-    for (size_t day = (DEBUG ? TODAY : 1); day <= TODAY; day++)
+    for (size_t day = DEBUG? TODAY : 1; day <= TODAY; day++)
     {
         std::string inputFilepath = "../puzzle_inputs/";
         std::string inputFilename = "day" + std::to_string(day) + ".txt";
@@ -81,6 +83,10 @@ int main()
 
             case 12:
                 aocSolver = std::make_unique<Day12Creator>();
+                break;
+
+            case 13:
+                aocSolver = std::make_unique<Day13Creator>();
                 break;
 
             default:
