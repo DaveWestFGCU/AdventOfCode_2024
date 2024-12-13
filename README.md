@@ -7,12 +7,12 @@ Solutions are my own unless otherwise noted.
 Concepts/Tools I have implemented thus far include:
 
 - Factory method design pattern (each day is a concrete product with an overriding method for each solution).
-  
 - Regular Expressions (Days 3 & 4)
-  
 - Maps (Day 1 second-star)
-
 - Recursion (Day 7)
+- Dynamic Programming / Memoization (Day 11)
+- Flood Fill Algorithm (Day 12)
+- Linear Algebra (Day 13)
 
 Notes:
 
