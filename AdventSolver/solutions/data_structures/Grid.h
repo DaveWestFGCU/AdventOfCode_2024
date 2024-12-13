@@ -17,25 +17,29 @@
 
 using std::vector, std::string;
 
+
 class Grid
 {
 protected:
+    enum direction{ NORTH, EAST, SOUTH, WEST };
     struct Vertex
     {
         int xPos, yPos;
+        Vertex() : xPos(-1), yPos(-1) {}
         Vertex(int xPos, int yPos) : xPos(xPos), yPos(yPos) {}
-        Vertex(int xPos, int yPos, char value) : xPos(xPos), yPos(yPos) {}
         bool operator== (const Vertex &vertex2) const
         {   return xPos == vertex2.xPos && yPos == vertex2.yPos;    }
     };
+
 
     struct VertexHash
     {
         size_t operator()(const Vertex &vertex) const
         {
-            size_t hashX = std::hash<int>{}(vertex.xPos);
-            size_t hashY = std::hash<int>{}(vertex.yPos);
-            return hashX ^ (hashY << 1);
+            size_t hash1 = std::hash<int>{}(vertex.xPos);
+            size_t hash2 = std::hash<int>{}(vertex.yPos);
+
+            return hash1 ^ (hash2 << 1);
         }
     };
 
@@ -44,10 +48,10 @@ protected:
         char value;
         bool visited;
         bool inQueue;
-        vector<Vertex> adjacent;
-        VertexMapValue() : value('\0'), visited(false) {}
-        explicit VertexMapValue(char value) : value(value), visited(false) {}
-        VertexMapValue(char value, vector<Vertex> adjacent) : value(value), visited(false), adjacent(std::move(adjacent)) {}
+        Vertex adjacentVertexes[4];
+        VertexMapValue() : value('_'), visited(false), inQueue(false), adjacentVertexes() {}
+        explicit VertexMapValue(char value) : value(value), visited(false), inQueue(false), adjacentVertexes() {}
+        VertexMapValue(char value, Vertex adj[4]) : value(value), visited(false), inQueue(false), adjacentVertexes{adj[0],adj[1],adj[2],adj[3]} {}
     };
 
     size_t xBounds, yBounds;
@@ -65,9 +69,9 @@ public:
     int calcUnvisitedRegionCost();
 
         // Getters
-    size_t xSize() const { return xBounds; }
-    size_t ySize() const { return yBounds; }
-    char getValue(size_t xPos, size_t yPos) { return adjacencyList[Vertex(xPos,xPos)].value; }
+    [[nodiscard]] size_t xSize() const { return xBounds; }
+    [[nodiscard]] size_t ySize() const { return yBounds; }
+    char getValue(size_t xPos, size_t yPos) { return adjacencyList[Vertex(xPos,yPos)].value; }
 };
 
 

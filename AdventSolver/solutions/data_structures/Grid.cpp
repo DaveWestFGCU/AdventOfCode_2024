@@ -6,6 +6,7 @@
 
 #include "Grid.h"
 
+
 Grid::Grid(const vector<string> &input)
     : xBounds(input[0].length()), yBounds(input.size())
 {
@@ -13,6 +14,7 @@ Grid::Grid(const vector<string> &input)
 }
 
 
+//template <typename T>
 void Grid::buildAdjacencyList(const vector<string> &input)
 {
         // Add each vertex to the map's keys
@@ -21,24 +23,20 @@ void Grid::buildAdjacencyList(const vector<string> &input)
         for (size_t x = 0; x < xBounds; ++x)
         {
             // Add map key
-            adjacencyList[Vertex(x, y, input[y][x])];
+            adjacencyList[Vertex(x, y)];
         }
     }
 
         // Add map values (pointers to adjacent vertexes)
-    for (size_t y = 0; y < yBounds; ++y)
+    for (int y = 0; y < yBounds; ++y)
     {
-        for (size_t x = 0; x < xBounds; ++x)
+        for (int x = 0; x < xBounds; ++x)
         {
-            vector<Vertex> adjacentVertexes;
-            if (y != 0)
-                adjacentVertexes.emplace_back(x, y-1);
-            if (x != 0)
-                adjacentVertexes.emplace_back(x-1, y);
-            if (y != input.size()-1)
-                adjacentVertexes.emplace_back(x, y+1);
-            if (x != input[x].length()-1)
-                adjacentVertexes.emplace_back(x+1, y);
+            Vertex adjacentVertexes[4];
+            adjacentVertexes[NORTH] = y == 0         ? Vertex(-1,-1) : Vertex(x, y-1);
+            adjacentVertexes[EAST]  = x == xBounds-1 ? Vertex(-1,-1) : Vertex(x+1, y);
+            adjacentVertexes[SOUTH] = y == yBounds-1 ? Vertex(-1,-1) : Vertex(x, y+1);
+            adjacentVertexes[WEST]  = x == 0         ? Vertex(-1,-1) : Vertex(x-1, y);
 
             adjacencyList[Vertex(x,y)] = VertexMapValue(input[y][x], adjacentVertexes);
         }
@@ -55,21 +53,22 @@ void Grid::printAdjacencyList()
             auto vertex = Vertex(x,y);
             std::cout << "[" << x << "," << y << "] " << adjacencyList[vertex].value << " | ";
 
-            for (const auto &adjacentVertex : adjacencyList[vertex].adjacent)
-                std::cout << "(" << adjacentVertex.xPos << "," << adjacentVertex.yPos << ") " << adjacencyList[adjacentVertex].value << " -> ";
-
+            for (int direction = NORTH; direction <= WEST; ++direction)
+            {
+                Vertex adjacentVertex = adjacencyList[vertex].adjacentVertexes[direction];
+                if (adjacentVertex != Vertex(-1,-1))
+                    std::cout << "(" << adjacentVertex.xPos << "," << adjacentVertex.yPos << ") " << adjacencyList[adjacentVertex].value;
+                if (direction != WEST)
+                    std::cout << " -> ";
+            }
             std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
 }
 
 
 /**
  * Solution for Day 12 Part 1
- * Loads 'section' with a vector of vertexes that are touching and have the same value.
- * @param character First unvisited char found.
- * @param section List of vertexes that have a value of that char that are contiguous.
  */
 int Grid::calcUnvisitedRegionCost()
 {
@@ -83,8 +82,8 @@ int Grid::calcUnvisitedRegionCost()
     std::queue<Vertex> unvisited;
     unvisited.push(startVertex);
 
-    char character = adjacencyList[startVertex].value;
-    std::cout << "Character: " << character;
+    char value = adjacencyList[startVertex].value;
+
     vector<Vertex> visited;
 
     int perimeter {0};
@@ -93,7 +92,7 @@ int Grid::calcUnvisitedRegionCost()
     {
         Vertex visiting = unvisited.front();
         unvisited.pop();
-        visitVertex(character, visiting, visited, unvisited, perimeter);
+        visitVertex(value, visiting, visited, unvisited, perimeter);
     }
 
     int area = visited.size();
@@ -102,25 +101,26 @@ int Grid::calcUnvisitedRegionCost()
 }
 
 
-void Grid::visitVertex(char character, Vertex &visiting, vector<Vertex> &visited, std::queue<Vertex> &unvisited, int &perimeter)
+void Grid::visitVertex(char value, Vertex &visiting, vector<Vertex> &visited, std::queue<Vertex> &unvisited, int &perimeter)
 {
     adjacencyList[visiting].visited = true;
     visited.push_back(visiting);
-
     // Add to adjacent nodes to unvisited queue if not visited and match the character
-    for (auto vertex : adjacencyList[visiting].adjacent)
+    auto adjacentVertexes = adjacencyList[visiting].adjacentVertexes;
+    for (int direction = NORTH; direction <= WEST; ++direction)
     {
-        if (!adjacencyList[vertex].visited && !adjacencyList[vertex].inQueue)
+        auto adjacentVertex = adjacentVertexes[direction];
+        if (!adjacencyList[adjacentVertex].visited && !adjacencyList[adjacentVertex].inQueue)
         {
-            if (adjacencyList[vertex].value == character)
+            if (adjacencyList[adjacentVertex].value == value)
             {
-                unvisited.push(vertex);
-                adjacencyList[vertex].inQueue = true;
+                unvisited.push(adjacentVertex);
+                adjacencyList[adjacentVertex].inQueue = true;
             }
         }
 
             // Inner boundary checking
-        if (adjacencyList[vertex].value != character)
+        if (adjacencyList[adjacentVertex].value != value && adjacentVertex != Vertex(-1,-1))
             ++perimeter;
     }
 
@@ -138,12 +138,12 @@ void Grid::visitVertex(char character, Vertex &visiting, vector<Vertex> &visited
  */
 Grid::Vertex Grid::findUnvisitedVertex()
 {
-    for (size_t y = 0; y < yBounds; ++y)
+    for (int y = 0; y < yBounds; ++y)
     {
-        for (size_t x = 0; x < xBounds; ++x)
+        for (int x = 0; x < xBounds; ++x)
         {
             if (!adjacencyList[Vertex(x,y)].visited)
-                return {static_cast<int>(x), static_cast<int>(y)};
+                return {x, y};
         }
     }
     return {-1, -1};
