@@ -34,6 +34,9 @@ class Day14Solution : public Solution {
 
     void parseRobots(const vector<string> &puzzleInput);
 
+    // Two-Star Methods
+    int modInverse(int a, int m);
+
 public:
     explicit Day14Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }

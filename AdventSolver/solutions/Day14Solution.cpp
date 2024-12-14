@@ -86,10 +86,16 @@ long long Day14Solution::oneStarSolution()
 
 
 /**
- * This solution comes from reddit.com/u/i_have_no_biscuits and is an application of the Chinese Remainder Theorem.
- * @return
+ * This is my initial, brute-force-adjacent solution (it doesn't render grids for every second, but it checks every
+ * second for whether overlapping pattern criteria are met.
+ * When visually inspecting robot locations at every second, I noticed there are patterns of
+ * horizontally clustered bands every n(yBound) + 31 iterations (31, 134, 237, ...),
+ * and vertically clustered bands every m(xBound) + 72 iterations (72, 173, 274, ...).
+ * So my thought was that when these two patterns overlap, we have our Christmas tree.
+ * This function loops every second and checks for whether that second fits the above criteria.
+ * If it does, print a representation of robot positions for confirmation and return the number of seconds it took.
  */
-long long Day14Solution::twoStarSolution()
+/*long long Day14Solution::twoStarSolution()
 {
     // Set bounds for example vs puzzle
     const int xBound = robots.size() < 20 ? 11 : 101;
@@ -99,29 +105,13 @@ long long Day14Solution::twoStarSolution()
         robot.setBounds(xBound, yBound);
 
     int seconds = 1;
-    int lastMove {0};
-
-    /* Visually inspecting grids at every second, there are patterns of
-     * horizontal band clustering every 31 + n * yBound iterations (31, 134, 237, ...) and
-     * vertical band clustering every 72 + m * xBound iterations (72, 173, 274, ...).
-     * I think when these banding patterns overlap there will be a Christmas tree pattern.
-     *
-     * (There is!)
-     */
-
-    /* Looping through every second and checking if the two patterns are occurring simultaneously was the way I reasoned
-     * out how to do it. Apparently there is a Chinese Remainder Theorem that will give you the ability to determine
-     * this mathematically.
-     */
     while (seconds < xBound * yBound)    //  Will have returned to initial state after (at most) xBound*yBound steps
     {
 
         if ((seconds-72) % 101 == 0 && (seconds-31) % 103 == 0)
-            return seconds;
-
 
         // Everything after this point is for a visual representation of the robots' positions at this time.
-    /*  if ((seconds-72) % 101 == 0 && (seconds-31) % 103 == 0)
+        if ((seconds-72) % 101 == 0 && (seconds-31) % 103 == 0)
         {
             // Set grid
             char grid[xBound][yBound];
@@ -131,12 +121,9 @@ long long Day14Solution::twoStarSolution()
 
             for (auto &robot : robots)
             {
-                robot.move(seconds - lastMove);
+                robot.move(seconds);
                 grid[robot.getX()][robot.getY()] = 'R';
             }
-            lastMove = seconds;
-
-            std::cout << std::endl << "------------------------------------------------" << seconds << "------------------------------------------------" << std::endl;
 
             for (int y = 0; y < yBound; ++y)
             {
@@ -146,14 +133,76 @@ long long Day14Solution::twoStarSolution()
             }
             std::cout << std::endl;
 
-            string pause;
-            std::cin >> pause;
-
-            system("pause");
+            return seconds;
         }
-    */
+
         seconds++;
     }
 
-    return 0;
+    return -1;
 }
+*/
+
+
+/**
+ * I had recognised the initial equations, but could not deduce an equation to solve for iteration that
+ * would make them equal.
+ * This optimized solution comes from Reddit user i_have_no_biscuits and is an application of the
+ * Chinese Remainder Theorem. (https://www.reddit.com/r/adventofcode/comments/1he0asr/comment/m1zzfsh/)
+ * "
+ * t = bx (mod W)
+ * t = by (mod H)
+ *
+ * As t = bx (mod W), then t = bx + k*W. Substituting this into the second equation we get
+ *
+ * bx + k*W = by (mod H)
+ * k*W = by - bx (mod H)
+ * k = inverse(W)*(by - bx) (mod H)
+ *
+ * and so, finally,
+ *
+ * t = bx + inverse(W)*(by-bx)*W
+ * "
+ */
+long long Day14Solution::twoStarSolution()
+{
+    // Set bounds for example vs puzzle
+    const int xBound = robots.size() < 20 ? 11 : 101;
+    const int yBound = robots.size() < 20 ? 7  : 103;
+
+    const int W = xBound;
+    const int H = yBound;
+    const int bx = 72;
+    const int by = 31;
+
+    int thatMiddleBit = (modInverse(W,H) * (by-bx)) % H;
+    thatMiddleBit = thatMiddleBit > 0 ? thatMiddleBit : thatMiddleBit + H;
+
+    const int t = bx + thatMiddleBit * W;
+    return t;
+}
+
+
+int Day14Solution::modInverse(int a, int m)
+{
+    int m_0 = m, t, q;
+    int x_0 = 0, x_1 = 1;
+
+    if (m == 1)
+        return 0;
+
+    while (a > 1) {
+        q = a / m;
+        t = m;
+        m = a % m, a = t;
+        t = x_0;
+        x_0 = x_1 - q * x_0;
+        x_1 = t;
+    }
+
+    if (x_1 < 0)
+        x_1 += m_0;
+
+    return x_1;
+}
+
