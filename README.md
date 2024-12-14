@@ -2,7 +2,7 @@
 $${\color{yellow}*}$$
 $${\color{green}>\color{orange}o\color{green}<}$$
 $${\color{green}>\color{red}@\color{green}>\color{blue}O\color{green}<}$$
-$${\color{green}>\color{blue}O\color{green}>\color{orange}o\color{green}<\color{blue}O\color{green}<}$$
+$${\color{green}>\color{blue}O\color{green}>\color{orange}o\color{green}<\color{red}@\color{green}<}$$
 $${\color{brown}\\#\\#}$$
 
 All of my C++ solutions for this year are compiled into this project.
