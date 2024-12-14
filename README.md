@@ -1,18 +1,28 @@
 # Advent of Code 2024
+$${\color{yellow}*}$$
+$${\color{green}>\color{orange}o\color{green}<}$$
+$${\color{green}>\color{red}@\color{green}>\color{blue}O\color{green}<}$$
+$${\color{green}>\color{blue}O\color{green}>\color{orange}o\color{green}<\color{red}@\color{green}<}$$
+$${\color{brown}\\#\\#}$$
 
 All of my C++ solutions for this year are compiled into this project.
 
 Solutions are my own unless otherwise noted.
 
 Concepts/Tools I have implemented thus far include:
-
 - Factory method design pattern (each day is a concrete product with an overriding method for each solution).
-  
 - Regular Expressions (Days 3 & 4)
-  
-- Maps (Day 1 second-star)
-
+- Maps (Day 1 second-star and graphs adjacency list)
 - Recursion (Day 7)
+- Graphs (Day 10 & 12)
+- Depth-First Search (Day 10)
+- Dynamic Programming / Memoization (Day 11)
+- Flood Fill Algorithm* (Day 12)
+- Linear Algebra/Cramer's Rule** (Day 13)
+
+\* Came up with organically and later found it has a name
+
+** Received high-level concept from Reddit.com/r/AdventOfCode, implemented myself.
 
 Notes:
 
