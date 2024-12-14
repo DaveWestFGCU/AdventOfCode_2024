@@ -9,11 +9,11 @@
 Day14Solution::Day14Solution(const vector<string> &puzzleInput)
     : title("--- Day 14: Restroom Redoubt ---")
 {
-    parseRobots(puzzleInput, 11, 7);
+    parseRobots(puzzleInput);
 }
 
 
-void Day14Solution::parseRobots(const vector<string> &puzzleInput, const int &xBound, const int &yBound)
+void Day14Solution::parseRobots(const vector<string> &puzzleInput)
 {
     for (auto line : puzzleInput)
     {
@@ -26,7 +26,7 @@ void Day14Solution::parseRobots(const vector<string> &puzzleInput, const int &xB
         int xVel = std::stoi(match->str());
         ++match;
         int yVel = std::stoi(match->str());
-        robots.emplace_back(xPos, yPos, xVel, yVel, xBound, yBound);
+        robots.emplace_back(xPos, yPos, xVel, yVel);
     }
 }
 
@@ -36,11 +36,11 @@ void Day14Solution::Robot::move(int seconds)
     position.x = (position.x + velocity.x * seconds) % bounds.x;
     while (position.x < 0)
         position.x += bounds.x;
+
     position.y = (position.y + velocity.y * seconds) % bounds.y;
     while (position.y < 0)
         position.y += bounds.y;
 }
-
 
 
 long long Day14Solution::oneStarSolution()
@@ -85,9 +85,75 @@ long long Day14Solution::oneStarSolution()
 }
 
 
+/**
+ * This solution comes from reddit.com/u/i_have_no_biscuits and is an application of the Chinese Remainder Theorem.
+ * @return
+ */
 long long Day14Solution::twoStarSolution()
 {
-    int result {0};
+    // Set bounds for example vs puzzle
+    const int xBound = robots.size() < 20 ? 11 : 101;
+    const int yBound = robots.size() < 20 ? 7  : 103;
 
-    return result;
+    for (auto &robot : robots)
+        robot.setBounds(xBound, yBound);
+
+    int seconds = 1;
+    int lastMove {0};
+
+    /* Visually inspecting grids at every second, there are patterns of
+     * horizontal band clustering every 31 + n * yBound iterations (31, 134, 237, ...) and
+     * vertical band clustering every 72 + m * xBound iterations (72, 173, 274, ...).
+     * I think when these banding patterns overlap there will be a Christmas tree pattern.
+     *
+     * (There is!)
+     */
+
+    /* Looping through every second and checking if the two patterns are occurring simultaneously was the way I reasoned
+     * out how to do it. Apparently there is a Chinese Remainder Theorem that will give you the ability to determine
+     * this mathematically.
+     */
+    while (seconds < xBound * yBound)    //  Will have returned to initial state after (at most) xBound*yBound steps
+    {
+
+        if ((seconds-72) % 101 == 0 && (seconds-31) % 103 == 0)
+            return seconds;
+
+
+        // Everything after this point is for a visual representation of the robots' positions at this time.
+    /*  if ((seconds-72) % 101 == 0 && (seconds-31) % 103 == 0)
+        {
+            // Set grid
+            char grid[xBound][yBound];
+            for (int y = 0; y < yBound; ++y)
+                for (int x = 0; x < xBound; ++x)
+                    grid[x][y] = ' ';
+
+            for (auto &robot : robots)
+            {
+                robot.move(seconds - lastMove);
+                grid[robot.getX()][robot.getY()] = 'R';
+            }
+            lastMove = seconds;
+
+            std::cout << std::endl << "------------------------------------------------" << seconds << "------------------------------------------------" << std::endl;
+
+            for (int y = 0; y < yBound; ++y)
+            {
+                for (int x = 0; x < xBound; ++x)
+                    std::cout << grid[x][y];
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
+
+            string pause;
+            std::cin >> pause;
+
+            system("pause");
+        }
+    */
+        seconds++;
+    }
+
+    return 0;
 }

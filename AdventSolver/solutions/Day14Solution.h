@@ -23,16 +23,16 @@ class Day14Solution : public Solution {
         struct Bounds   { int x, y; } bounds;
 
     public:
-        Robot(const int &xPos, const int &yPos, const int &xVel, const int &yVel, const int &xBound, const int &yBound)
-            : position(xPos, yPos), velocity(xVel, yVel) {};
+        Robot(const int &xPos, const int &yPos, const int &xVel, const int &yVel)
+            : position(xPos, yPos), velocity(xVel, yVel), bounds(0,0) {};
         void move(int seconds);
-        void setBounds(const int &xBound, const int &yBound) { bounds.x = xBound; bounds.y = yBound; }
+        void setBounds(int xBound, int yBound) { bounds.x = xBound; bounds.y = yBound; }
         [[nodiscard]] int getX() const { return position.x; }
         [[nodiscard]] int getY() const { return position.y; }
     };
     vector<Robot> robots;
 
-    void parseRobots(const vector<string> &puzzleInput, const int &xBound, const int &yBound);
+    void parseRobots(const vector<string> &puzzleInput);
 
 public:
     explicit Day14Solution(const vector<string> &puzzleInput);
