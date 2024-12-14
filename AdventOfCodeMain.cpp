@@ -11,6 +11,7 @@
  *       12/11/24 - Added day 11 solution.
  *       12/12/24 - Added day 12 solution.
  *       12/13/24 - Added day 13 solution.
+ *       12/14/24 - Added day 14 solution.
  */
 
 #include <memory>
@@ -22,7 +23,7 @@ enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
 constexpr SolutionType TYPE = PUZZLE;
 
 enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
-constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
+constexpr SolutionDifficulty DIFFICULTY = BOTH_DIFFICULTIES;
 
 constexpr bool VERBOSE_INPUT = false;
 constexpr short TODAY = 13;
@@ -88,6 +89,10 @@ int main()
             case 13:
                 aocSolver = std::make_unique<Day13Creator>();
                 break;
+
+            case 14:
+                aocSolver = std::make_unique<Day14Creator>();
+            break;
 
             default:
                 std::cout << "No solution available for day " << day << "." << std::endl;
