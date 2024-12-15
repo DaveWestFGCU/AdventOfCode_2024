@@ -1,5 +1,5 @@
 /*  Dev: Dave West
-* Date: December 15, 2024
+ * Date: December 15, 2024
  * Desc: Class declarations for the AoC 2024 day 15 puzzle solution and solution factory.
  */
 
@@ -15,11 +15,39 @@ using std::vector, std::string;
 
 class Day15Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
+    vector<string> warehouseMap;
+    string moveInstructions;
+    struct Position
+    {
+        int x, y;
+        bool operator==(Position otherPosition) const
+        {
+            return x == otherPosition.x && y == otherPosition.y;
+        }
+        Position operator+(const Position &otherPosition) const
+        {
+            return {
+                2*otherPosition.x - x,
+                2*otherPosition.y - y
+            };
+        }
+    } robot;
+
+    void parseInput(const vector<string> &puzzleInput);
+    void setRobotInitialPosition();
+    void printWarehouseState();
+
+    // One-Star Methods
+    void runMovementInstructions();
+    bool move(Position object, Position nextPosition);
+    bool isBlocked(const Position &pos);
+    bool isClear(const Position &pos);
+    void moveObject(const Position &object, const Position &nextPosition);
+    [[nodiscard]] vector<Position> findBoxes() const;
 
 public:
     explicit Day15Solution(const vector<string> &puzzleInput);
-    [[nodiscard]] std::string getTitle() const override { return title; }
+    [[nodiscard]] string getTitle() const override { return title; }
     long long oneStarSolution() override;
     long long twoStarSolution() override;
 };
