@@ -4,7 +4,8 @@
  *  Log: 12/ 4/24 - Added days 1-4 into current project.
  *       12/ 5/24 - Added day 5 solution.
  *       12/ 6/24 - Added day 6 solution.
- *       12/ 7/24 - Added day 7 solution. Added simultaneous display of real/example answers for debugging.
+ *       12/ 7/24 - Added day 7 solution.
+ *                  Added simultaneous display of real/example answers for debugging.
  *       12/ 8/24 - Added day 8 solution.
  *       12/ 9/24 - Added day 9 solution.
  *       12/10/24 - Added day 10 solution.
@@ -20,83 +21,26 @@
 
 constexpr bool DEBUG = true; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
-constexpr SolutionType TYPE = PUZZLE;
+constexpr SolutionType TYPE = EXAMPLE;
 
 enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
-constexpr SolutionDifficulty DIFFICULTY = BOTH_DIFFICULTIES;
+constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr short TODAY = 13;
+constexpr unsigned short TODAY = 15;
+
+std::unique_ptr<AdventSolver> getDaySolver(unsigned short dayNumber);
 
 int main()
 {
-    for (size_t day = DEBUG? TODAY : 1; day <= TODAY; day++)
+    for (unsigned short dayNumber = DEBUG? TODAY : 1; dayNumber <= TODAY; ++dayNumber)
     {
         std::string inputFilepath = "../puzzle_inputs/";
-        std::string inputFilename = "day" + std::to_string(day) + ".txt";
-        std::unique_ptr<AdventSolver> aocSolver;
+        std::string inputFilename = "day" + std::to_string(dayNumber) + ".txt";
+        std::unique_ptr<AdventSolver> aocSolver = getDaySolver(dayNumber);
 
-        switch(day)
-        {
-            case 1:
-                aocSolver = std::make_unique<Day1Creator>();
-                break;
-
-            case 2:
-                aocSolver = std::make_unique<Day2Creator>();
-                break;
-
-            case 3:
-                aocSolver = std::make_unique<Day3Creator>();
-                break;
-
-            case 4:
-                aocSolver = std::make_unique<Day4Creator>();
-                break;
-
-            case 5:
-                aocSolver = std::make_unique<Day5Creator>();
-                break;
-
-            case 6:
-                aocSolver = std::make_unique<Day6Creator>();
-                break;
-
-            case 7:
-                aocSolver = std::make_unique<Day7Creator>();
-                break;
-
-            case 8:
-                aocSolver = std::make_unique<Day8Creator>();
-                break;
-
-            case 9:
-                aocSolver = std::make_unique<Day9Creator>();
-                break;
-
-            case 10:
-                aocSolver = std::make_unique<Day10Creator>();
-                break;
-
-            case 11:
-                aocSolver = std::make_unique<Day11Creator>();
-                break;
-
-            case 12:
-                aocSolver = std::make_unique<Day12Creator>();
-                break;
-
-            case 13:
-                aocSolver = std::make_unique<Day13Creator>();
-                break;
-
-            case 14:
-                aocSolver = std::make_unique<Day14Creator>();
-            break;
-
-            default:
-                std::cout << "No solution available for day " << day << "." << std::endl;
-        }
+        if (aocSolver == nullptr)   // Guard clause for Day##Solution class not found.
+            return 1;
 
         if constexpr (!DEBUG)
         {       // Only shows answers to puzzle input.
@@ -160,3 +104,61 @@ int main()
 
     return 0;
 }
+
+
+std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
+{
+    switch(dayNumber)
+    {
+        case 1:
+            return std::make_unique<Day1Creator>();
+
+        case 2:
+            return std::make_unique<Day2Creator>();
+
+        case 3:
+            return std::make_unique<Day3Creator>();
+
+        case 4:
+            return std::make_unique<Day4Creator>();
+
+        case 5:
+            return std::make_unique<Day5Creator>();
+
+        case 6:
+            return std::make_unique<Day6Creator>();
+
+        case 7:
+            return std::make_unique<Day7Creator>();
+
+        case 8:
+            return std::make_unique<Day8Creator>();
+
+        case 9:
+            return std::make_unique<Day9Creator>();
+
+        case 10:
+            return std::make_unique<Day10Creator>();
+
+        case 11:
+            return std::make_unique<Day11Creator>();
+
+        case 12:
+            return std::make_unique<Day12Creator>();
+
+        case 13:
+            return std::make_unique<Day13Creator>();
+
+        case 14:
+            return std::make_unique<Day14Creator>();
+
+        case 15:
+            return std::make_unique<Day15Creator>();
+
+        default:
+            std::cout << "No solution available for day " << dayNumber << "." << std::endl;
+            return nullptr;
+    }
+}
+
+
