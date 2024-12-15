@@ -15,5 +15,6 @@
 #include "./solutions/Day12Solution.h"
 #include "./solutions/Day13Solution.h"
 #include "./solutions/Day14Solution.h"
+#include "./solutions/Day15Solution.h"
 
 #endif //ALLSOLUTIONS_H
