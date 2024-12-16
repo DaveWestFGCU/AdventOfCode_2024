@@ -7,7 +7,7 @@
 
 
 Day15Solution::Day15Solution(const vector<string> &puzzleInput)
-    : title("--- Day 15: Warehouse Woes ---")
+    : title("--- Day 15: Warehouse Woes ---"), robot(&warehouseMap)
 {
     parseInput(puzzleInput);
     setRobotInitialPosition();
@@ -42,8 +42,7 @@ void Day15Solution::setRobotInitialPosition()
         {
             if (warehouseMap[y][x] == ROBOT)
             {
-                robot.x = x;
-                robot.y = y;
+                robot.setPosition(x,y);
                 warehouseMap[y][x] = SPACE;  // We'll keep track of the robot outside the map and display the position when necessary.
                 return;
             }
@@ -55,7 +54,7 @@ void Day15Solution::printWarehouseState() const
 {
     // Render the robot
     vector tempMap(warehouseMap);
-    tempMap[robot.y][robot.x] = ROBOT;
+    tempMap[robot.getY()][robot.getX()] = ROBOT;
 
     // Print the map w/ robot to console
     for (const auto &line : tempMap)
@@ -69,9 +68,10 @@ long long Day15Solution::oneStarSolution()
     runMovementInstructions();
 
     int boxGPSCoordinateSum {0};
-    vector<Position> boxes = findBoxes();
-    for (auto box : boxes)
-        boxGPSCoordinateSum += box.x + box.y*100;
+
+    for (const auto &[x, y] : findBoxes())
+        boxGPSCoordinateSum += x + y*100;
+
     return boxGPSCoordinateSum;
 }
 
@@ -80,8 +80,6 @@ void Day15Solution::runMovementInstructions()
 {
     for (const auto instruction : moveInstructions)
     {
-        move(robot, instruction);
-
         // Set to true to view ste-by-step diagrams
         if constexpr (false)
         {
@@ -89,27 +87,62 @@ void Day15Solution::runMovementInstructions()
             string pause;
             std::cin >> pause;
         }
+
+        robot.move(instruction);
     }
 }
 
 
-bool Day15Solution::move(const Position object, const Direction &direction)
+void Day15Solution::Robot::move(const Direction &direction)
+{
+    const Position nextPosition = getNextPosition(position, direction);
+
+    if (isBlocked(nextPosition))
+        return;
+
+    if (isClear(nextPosition))
+    {
+        setPosition(nextPosition);
+        return;
+    }
+
+    if (pushBox(nextPosition, direction))
+    {
+        setPosition(nextPosition);
+    }
+}
+
+
+bool Day15Solution::Robot::isBlocked(const Position &pos) const
+{
+    return (*warehouseMap)[pos.y][pos.x] == WALL;
+}
+
+
+bool Day15Solution::Robot::isClear(const Position &pos) const
+{
+    return (*warehouseMap)[pos.y][pos.x] == SPACE;
+}
+
+
+bool Day15Solution::Robot::pushBox(Position object, const Direction &direction)
 {
     const Position nextPosition = getNextPosition(object, direction);
 
-    if(isBlocked(nextPosition))
+    if (isBlocked(nextPosition))
         return false;
 
-    if(isClear(nextPosition))
+    if (isClear(nextPosition))
     {
-        moveObject(object, nextPosition);
+        (*warehouseMap)[nextPosition.y][nextPosition.x] = BOX;
+        (*warehouseMap)[object.y][object.x] = SPACE;
         return true;
     }
 
-    // Not blocked, not clear = must be a box. Check if its blocked or clear.
-    if (move(nextPosition, direction))
+    if (pushBox(nextPosition, direction))
     {
-        moveObject(object, nextPosition);
+        (*warehouseMap)[nextPosition.y][nextPosition.x] = BOX;
+        (*warehouseMap)[object.y][object.x] = SPACE;
         return true;
     }
 
@@ -119,7 +152,7 @@ bool Day15Solution::move(const Position object, const Direction &direction)
 
 Day15Solution::Position Day15Solution::getNextPosition(const Position &startPosition,const Direction &direction)
 {
-    switch(direction)
+    switch (direction)
     {
         case NORTH:
             return {startPosition.x, startPosition.y-1};
@@ -135,35 +168,8 @@ Day15Solution::Position Day15Solution::getNextPosition(const Position &startPosi
 
         default:
             std::cerr << "Unknown direction: ";
-        std::cout << static_cast<char>(direction) << std::endl;
-        return {-1, -1};
-    }
-}
-
-
-bool Day15Solution::isBlocked(const Position &pos) const
-{
-    return warehouseMap[pos.y][pos.x] == WALL;
-}
-
-
-bool Day15Solution::isClear(const Position &pos) const
-{
-    return warehouseMap[pos.y][pos.x] == SPACE;
-}
-
-
-void Day15Solution::moveObject(const Position &object, const Position &nextPosition)
-{
-    if (object == robot)
-    {
-        robot.x = nextPosition.x;
-        robot.y = nextPosition.y;
-    }
-    else
-    {
-        warehouseMap[nextPosition.y][nextPosition.x] = BOX;
-        warehouseMap[object.y][object.x] = SPACE;
+            std::cout << static_cast<char>(direction) << std::endl;
+            return {-1, -1};
     }
 }
 
