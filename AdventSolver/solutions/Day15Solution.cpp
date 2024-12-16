@@ -1,7 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 15, 2024
  * Desc: Method definitions for the AoC 2024 day 15 puzzle.
- */
+ **/
 
 #include "Day15Solution.h"
 
@@ -17,9 +17,9 @@ Day15Solution::Day15Solution(const vector<string> &puzzleInput)
 void Day15Solution::parseInput(const vector<string> &puzzleInput)
 {
     bool parsingWarehouseMap = true;
-    for (auto line : puzzleInput)
+    for (const auto &line : puzzleInput)
     {
-        if (line == "")
+        if (line.empty())
         {
             parsingWarehouseMap = false;
             continue;
@@ -39,25 +39,25 @@ void Day15Solution::setRobotInitialPosition()
     for (int y = 0; y < warehouseMap.size(); ++y)
         for(int x = 0; x < warehouseMap[y].length(); ++x)
         {
-            if (warehouseMap[y][x] == '@')
+            if (warehouseMap[y][x] == ROBOT)
             {
                 robot.x = x;
                 robot.y = y;
-                warehouseMap[y][x] = '.';  // We'll keep track of the robot outside of the map and display the position when necessary.
+                warehouseMap[y][x] = SPACE;  // We'll keep track of the robot outside the map and display the position when necessary.
                 return;
             }
         }
 }
 
 
-void Day15Solution::printWarehouseState()
+void Day15Solution::printWarehouseState() const
 {
     // Render the robot
     vector tempMap(warehouseMap);
-    tempMap[robot.y][robot.x] = '@';
+    tempMap[robot.y][robot.x] = ROBOT;
 
     // Print the map w/ robot to console
-    for (auto line : tempMap)
+    for (const auto &line : tempMap)
         std::cout << line << std::endl;
     std::cout << std::endl;
 }
@@ -77,29 +77,37 @@ long long Day15Solution::oneStarSolution()
 
 void Day15Solution::runMovementInstructions()
 {
-    for (auto step : moveInstructions)
+    for (const auto &step : moveInstructions)
     {
         switch(step)
         {
-            case '^':
+            case NORTH:
                 move(robot, {robot.x, robot.y-1});
                 break;
 
-            case '>':
+            case EAST:
                 move(robot, {robot.x+1, robot.y});
                 break;
 
-            case 'v':
+            case SOUTH:
                 move(robot, {robot.x, robot.y+1});
                 break;
 
-            case '<':
+            case WEST:
                 move(robot, {robot.x-1, robot.y});
                 break;
 
             default:
                 std::cerr << "Unknown instruction: ";
                 std::cout << step << std::endl;
+        }
+
+        // Set to true to view stepwise diagrams
+        if constexpr (false)
+        {
+            printWarehouseState();
+            string pause;
+            std::cin >> pause;
         }
     }
 }
@@ -127,15 +135,15 @@ bool Day15Solution::move(const Position object, const Position nextPosition)
 }
 
 
-bool Day15Solution::isBlocked(const Position &pos)
+bool Day15Solution::isBlocked(const Position &pos) const
 {
-    return warehouseMap[pos.y][pos.x] == '#';
+    return warehouseMap[pos.y][pos.x] == WALL;
 }
 
 
-bool Day15Solution::isClear(const Position &pos)
+bool Day15Solution::isClear(const Position &pos) const
 {
-    return warehouseMap[pos.y][pos.x] == '.';
+    return warehouseMap[pos.y][pos.x] == SPACE;
 }
 
 
@@ -148,8 +156,8 @@ void Day15Solution::moveObject(const Position &object, const Position &nextPosit
     }
     else
     {
-        warehouseMap[nextPosition.y][nextPosition.x] = 'O';
-        warehouseMap[object.y][object.x] = '.';
+        warehouseMap[nextPosition.y][nextPosition.x] = BOX;
+        warehouseMap[object.y][object.x] = SPACE;
     }
 }
 
@@ -160,7 +168,7 @@ vector<Day15Solution::Position> Day15Solution::findBoxes() const
 
     for (int y = 0; y < warehouseMap.size(); ++y)
         for (int x = 0; x < warehouseMap.size(); ++x)
-            if (warehouseMap[y][x] == 'O')
+            if (warehouseMap[y][x] == BOX)
                 boxes.emplace_back(x, y);
 
     return boxes;

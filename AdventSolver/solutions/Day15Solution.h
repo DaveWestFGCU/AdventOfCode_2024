@@ -13,10 +13,13 @@
 
 using std::vector, std::string;
 
-class Day15Solution : public Solution {
+class Day15Solution : public Solution
+{
     string title;
     vector<string> warehouseMap;
     string moveInstructions;
+    enum Direction { NORTH = '^', EAST = '>', SOUTH = 'v', WEST = '<' };
+    enum Tile { WALL = '#', SPACE = '.', ROBOT = '@', BOX = 'O' };
     struct Position
     {
         int x, y;
@@ -31,17 +34,17 @@ class Day15Solution : public Solution {
                 2*otherPosition.y - y
             };
         }
-    } robot;
+    } robot{};
 
     void parseInput(const vector<string> &puzzleInput);
     void setRobotInitialPosition();
-    void printWarehouseState();
+    void printWarehouseState() const;
 
     // One-Star Methods
     void runMovementInstructions();
     bool move(Position object, Position nextPosition);
-    bool isBlocked(const Position &pos);
-    bool isClear(const Position &pos);
+    bool isBlocked(const Position &pos) const;
+    bool isClear(const Position &pos) const;
     void moveObject(const Position &object, const Position &nextPosition);
     [[nodiscard]] vector<Position> findBoxes() const;
 
