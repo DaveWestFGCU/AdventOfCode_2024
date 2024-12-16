@@ -17,7 +17,8 @@ class Day15Solution : public Solution
 {
     string title;
     enum Direction { NORTH = '^', EAST = '>', SOUTH = 'v', WEST = '<' };
-    enum Tile { WALL = '#', SPACE = '.', ROBOT = '@', BOX = 'O' };
+    enum Tile { WALL = '#', SPACE = '.', ROBOT = '@', BOX = 'O', BOX_LEFT = '[', BOX_RIGHT = ']' };
+    vector<string> initialMap;
     vector<string> warehouseMap;
     vector<Direction> moveInstructions;
 
@@ -37,7 +38,10 @@ class Day15Solution : public Solution
         Position position{};
         [[nodiscard]] bool isBlocked(const Position &pos) const;
         [[nodiscard]] bool isClear(const Position &pos) const;
-        bool pushBox(Position object, const Direction &direction);
+        Position getNextPosition(const Position &startPosition, const Direction &direction);
+        bool pushIsClear(Position object, const Direction &direction);
+        void pushBox(Position object, const Direction &direction);
+
     public:
         explicit Robot(vector<string> *warehouseMap)
             : warehouseMap(warehouseMap) {}
@@ -57,9 +61,10 @@ class Day15Solution : public Solution
 
     // One-Star Methods
     void runMovementInstructions();
-    static Position getNextPosition(const Position &startPosition, const Direction &direction);
-    void moveObject(const Position &object, const Position &nextPosition);
     [[nodiscard]] vector<Position> findBoxes() const;
+
+    // Two-Star Methods
+    void doubleWarehouseWidth();
 
 public:
     explicit Day15Solution(const vector<string> &puzzleInput);
