@@ -13,7 +13,7 @@ Concepts/Tools I have implemented thus far include:
 - Factory method design pattern (each day is a concrete product with an overriding method for each solution).
 - Regular Expressions (Days 3 & 4)
 - Maps (Day 1 second-star and graphs adjacency list)
-- Recursion (Day 7)
+- Recursion (Day 7, Day 15 (!!))
 - Graphs (Day 10 & 12)
 - Depth-First Search (Day 10)
 - Dynamic Programming / Memoization (Day 11)
