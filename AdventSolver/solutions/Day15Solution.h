@@ -1,7 +1,10 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 15, 2024
  * Desc: Class declarations for the AoC 2024 day 15 puzzle solution and solution factory.
- */
+ *  Log: 12/15/24 - Initial creation.
+ *                  One-star solution added.
+ *       12/16/24 - Two-star solution added. (WOO!)
+**/
 
 #ifndef DAY15SOLUTION_H
 #define DAY15SOLUTION_H
