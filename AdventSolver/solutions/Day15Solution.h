@@ -16,14 +16,14 @@ using std::vector, std::string;
 class Day15Solution : public Solution
 {
     string title;
-    vector<string> warehouseMap;
-    string moveInstructions;
     enum Direction { NORTH = '^', EAST = '>', SOUTH = 'v', WEST = '<' };
     enum Tile { WALL = '#', SPACE = '.', ROBOT = '@', BOX = 'O' };
+    vector<string> warehouseMap;
+    vector<Direction> moveInstructions;
     struct Position
     {
         int x, y;
-        bool operator==(Position otherPosition) const
+        bool operator==(const Position &otherPosition) const
         {
             return x == otherPosition.x && y == otherPosition.y;
         }
@@ -42,9 +42,10 @@ class Day15Solution : public Solution
 
     // One-Star Methods
     void runMovementInstructions();
-    bool move(Position object, Position nextPosition);
-    bool isBlocked(const Position &pos) const;
-    bool isClear(const Position &pos) const;
+    Position getNextPosition(const Position &startPosition, const Direction &direction);
+    bool move(Position object, const Direction &direction);
+    [[nodiscard]] bool isBlocked(const Position &pos) const;
+    [[nodiscard]] bool isClear(const Position &pos) const;
     void moveObject(const Position &object, const Position &nextPosition);
     [[nodiscard]] vector<Position> findBoxes() const;
 

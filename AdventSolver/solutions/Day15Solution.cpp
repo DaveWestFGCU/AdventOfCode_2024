@@ -19,7 +19,7 @@ void Day15Solution::parseInput(const vector<string> &puzzleInput)
     bool parsingWarehouseMap = true;
     for (const auto &line : puzzleInput)
     {
-        if (line.empty())
+        if (line.empty())   // Warehouse map and instructions are separated by an empty line
         {
             parsingWarehouseMap = false;
             continue;
@@ -29,7 +29,8 @@ void Day15Solution::parseInput(const vector<string> &puzzleInput)
             warehouseMap.push_back(line);
 
         if (!parsingWarehouseMap)
-            moveInstructions += line;
+            for(auto instruction : line)
+                moveInstructions.push_back(static_cast<Direction>(instruction));
     }
 }
 
@@ -77,32 +78,11 @@ long long Day15Solution::oneStarSolution()
 
 void Day15Solution::runMovementInstructions()
 {
-    for (const auto &step : moveInstructions)
+    for (const auto instruction : moveInstructions)
     {
-        switch(step)
-        {
-            case NORTH:
-                move(robot, {robot.x, robot.y-1});
-                break;
+        move(robot, instruction);
 
-            case EAST:
-                move(robot, {robot.x+1, robot.y});
-                break;
-
-            case SOUTH:
-                move(robot, {robot.x, robot.y+1});
-                break;
-
-            case WEST:
-                move(robot, {robot.x-1, robot.y});
-                break;
-
-            default:
-                std::cerr << "Unknown instruction: ";
-                std::cout << step << std::endl;
-        }
-
-        // Set to true to view stepwise diagrams
+        // Set to true to view ste-by-step diagrams
         if constexpr (false)
         {
             printWarehouseState();
@@ -113,8 +93,10 @@ void Day15Solution::runMovementInstructions()
 }
 
 
-bool Day15Solution::move(const Position object, const Position nextPosition)
+bool Day15Solution::move(const Position object, const Direction &direction)
 {
+    const Position nextPosition = getNextPosition(object, direction);
+
     if(isBlocked(nextPosition))
         return false;
 
@@ -125,13 +107,37 @@ bool Day15Solution::move(const Position object, const Position nextPosition)
     }
 
     // Not blocked, not clear = must be a box. Check if its blocked or clear.
-    if(move(nextPosition, object + nextPosition))
+    if (move(nextPosition, direction))
     {
         moveObject(object, nextPosition);
         return true;
     }
 
     return false;
+}
+
+
+Day15Solution::Position Day15Solution::getNextPosition(const Position &startPosition,const Direction &direction)
+{
+    switch(direction)
+    {
+        case NORTH:
+            return {startPosition.x, startPosition.y-1};
+
+        case EAST:
+            return {startPosition.x+1, startPosition.y};
+
+        case SOUTH:
+            return {startPosition.x, startPosition.y+1};
+
+        case WEST:
+            return {startPosition.x-1, startPosition.y};
+
+        default:
+            std::cerr << "Unknown direction: ";
+        std::cout << static_cast<char>(direction) << std::endl;
+        return {-1, -1};
+    }
 }
 
 
