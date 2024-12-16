@@ -7,26 +7,25 @@
 
 
 Day15Solution::Day15Solution(const vector<string> &puzzleInput)
-    : title("--- Day 15: Warehouse Woes ---")
+    : title("--- Day 15: Warehouse Woes ---"), robot(-1,-1)
 {
     parseInput(puzzleInput);
-    setRobotInitialPosition();
 }
 
 
 void Day15Solution::parseInput(const vector<string> &puzzleInput)
 {
     bool parsingWarehouseMap = true;
-    for (auto line : puzzleInput)
+    for (const auto &line : puzzleInput)
     {
-        if (line == "")
+        if (line.empty())
         {
             parsingWarehouseMap = false;
             continue;
         }
 
         if (parsingWarehouseMap)
-            warehouseMap.push_back(line);
+            initialWarehouseState.push_back(line);
 
         if (!parsingWarehouseMap)
             moveInstructions += line;
@@ -43,33 +42,41 @@ void Day15Solution::setRobotInitialPosition()
             {
                 robot.x = x;
                 robot.y = y;
-                warehouseMap[y][x] = '.';  // We'll keep track of the robot outside of the map and display the position when necessary.
+                warehouseMap[y][x] = EMPTY_SPACE;  // We'll keep track of the robot outside the map and display the position when necessary.
                 return;
             }
         }
 }
 
 
-void Day15Solution::printWarehouseState()
+void Day15Solution::printWarehouseState(vector<string> map) const
 {
-    // Render the robot
-    vector tempMap(warehouseMap);
-    tempMap[robot.y][robot.x] = '@';
+    // Check if robot has been initialized
+    if (robot != Position(-1,-1))
+    {
+        // Render the robot
+        map[robot.y][robot.x] = ROBOT;
+    }
 
     // Print the map w/ robot to console
-    for (auto line : tempMap)
-        std::cout << line << std::endl;
-    std::cout << std::endl;
+    for (const auto &line : map)
+    {
+        for (const auto &character : line)
+            std::cout << character << " ";
+        std::cout << std::endl;
+    }
 }
 
 
 long long Day15Solution::oneStarSolution()
 {
+    warehouseMap = initialWarehouseState;
+    setRobotInitialPosition();
     runMovementInstructions();
 
     int boxGPSCoordinateSum {0};
     vector<Position> boxes = findBoxes();
-    for (auto box : boxes)
+    for (const auto &box : boxes)
         boxGPSCoordinateSum += box.x + box.y*100;
     return boxGPSCoordinateSum;
 }
@@ -77,35 +84,39 @@ long long Day15Solution::oneStarSolution()
 
 void Day15Solution::runMovementInstructions()
 {
-    for (auto step : moveInstructions)
+    for (const auto &step : moveInstructions)
     {
         switch(step)
         {
-            case '^':
-                move(robot, {robot.x, robot.y-1});
+            case NORTH:
+                move(robot, {robot.x, robot.y-1}, NORTH);
                 break;
 
-            case '>':
-                move(robot, {robot.x+1, robot.y});
+            case EAST:
+                move(robot, {robot.x+1, robot.y}, EAST);
                 break;
 
-            case 'v':
-                move(robot, {robot.x, robot.y+1});
+            case SOUTH:
+                move(robot, {robot.x, robot.y+1}, SOUTH);
                 break;
 
-            case '<':
-                move(robot, {robot.x-1, robot.y});
+            case WEST:
+                move(robot, {robot.x-1, robot.y}, WEST);
                 break;
 
             default:
                 std::cerr << "Unknown instruction: ";
                 std::cout << step << std::endl;
         }
+
+        printWarehouseState(warehouseMap);
+        string pause;
+        std::cin >> pause;
     }
 }
 
 
-bool Day15Solution::move(const Position object, const Position nextPosition)
+bool Day15Solution::move(const Position &object, const Position &nextPosition, const Direction &direction)
 {
     if(isBlocked(nextPosition))
         return false;
@@ -116,26 +127,53 @@ bool Day15Solution::move(const Position object, const Position nextPosition)
         return true;
     }
 
-    // Not blocked, not clear = must be a box. Check if its blocked or clear.
-    if(move(nextPosition, object + nextPosition))
+
+    if (warehouseMap[nextPosition.y][nextPosition.x] == BOX || direction == EAST || direction == WEST)
+        if (move(nextPosition, object + nextPosition, direction))
+        {
+            moveObject(object, nextPosition);
+            return true;
+        }
+
+    if (warehouseMap[nextPosition.y][nextPosition.x] == BOX_LEFT)
     {
-        moveObject(object, nextPosition);
-        return true;
+        Position rightPosition(object.x+1, object.y);
+        Position nextRightPosition(nextPosition.x+1,nextPosition.y);
+
+        if (move(nextPosition, object + nextPosition, direction) && move(nextRightPosition, rightPosition + nextRightPosition, direction))
+        {
+            moveObject(object, nextPosition);
+            moveObject(rightPosition, nextRightPosition);
+            return true;
+        }
+    }
+
+    if (warehouseMap[nextPosition.y][nextPosition.x] == BOX_RIGHT)
+    {
+        Position leftPosition(object.x-1, object.y);
+        Position nextLeftPosition(nextPosition.x-1, nextPosition.y);
+
+        if (move(nextPosition, object + nextPosition, direction) && move(nextLeftPosition, leftPosition + nextLeftPosition, direction))
+        {
+            moveObject(object, nextPosition);
+            moveObject(leftPosition, nextLeftPosition);
+            return true;
+        }
     }
 
     return false;
 }
 
 
-bool Day15Solution::isBlocked(const Position &pos)
+bool Day15Solution::isBlocked(const Position &pos) const
 {
-    return warehouseMap[pos.y][pos.x] == '#';
+    return warehouseMap[pos.y][pos.x] == WALL;
 }
 
 
-bool Day15Solution::isClear(const Position &pos)
+bool Day15Solution::isClear(const Position &pos) const
 {
-    return warehouseMap[pos.y][pos.x] == '.';
+    return warehouseMap[pos.y][pos.x] == EMPTY_SPACE;
 }
 
 
@@ -148,8 +186,8 @@ void Day15Solution::moveObject(const Position &object, const Position &nextPosit
     }
     else
     {
-        warehouseMap[nextPosition.y][nextPosition.x] = 'O';
-        warehouseMap[object.y][object.x] = '.';
+        warehouseMap[nextPosition.y][nextPosition.x] = warehouseMap[object.y][object.x];
+        warehouseMap[object.y][object.x] = EMPTY_SPACE;
     }
 }
 
@@ -160,7 +198,7 @@ vector<Day15Solution::Position> Day15Solution::findBoxes() const
 
     for (int y = 0; y < warehouseMap.size(); ++y)
         for (int x = 0; x < warehouseMap.size(); ++x)
-            if (warehouseMap[y][x] == 'O')
+            if (warehouseMap[y][x] == BOX || warehouseMap[y][x] == BOX_LEFT)
                 boxes.emplace_back(x, y);
 
     return boxes;
@@ -169,7 +207,50 @@ vector<Day15Solution::Position> Day15Solution::findBoxes() const
 
 long long Day15Solution::twoStarSolution()
 {
-    int result {0};
+    warehouseMap = doubleMapWidth(initialWarehouseState);
+    setRobotInitialPosition();
+    printWarehouseState(warehouseMap);
 
-    return result;
+    runMovementInstructions();
+
+    int boxGPSCoordinateSum {0};
+    vector<Position> boxes = findBoxes();
+    for (const auto &box : boxes)
+        boxGPSCoordinateSum += box.x + box.y*100;
+    return boxGPSCoordinateSum;
 }
+
+
+vector<string> Day15Solution::doubleMapWidth(const vector<string> &map) const
+{
+    vector<string> newMap;
+
+    for (int y = 0; y < map.size(); ++y)
+    {
+        string newLine;
+        for (int x = 0; x < map[y].length(); ++x)
+        {
+            switch(map[y][x])
+            {
+                case ROBOT:
+                    newLine += ROBOT;
+                    newLine += EMPTY_SPACE;
+                    break;
+
+                case BOX:
+                    newLine += BOX_LEFT;
+                    newLine += BOX_RIGHT;
+                    break;
+
+                default:
+                    newLine += map[y][x];
+                    newLine += map[y][x];
+            }
+        }
+        newMap.push_back(newLine);
+    }
+
+    return newMap;
+}
+
+

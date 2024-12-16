@@ -15,7 +15,10 @@ using std::vector, std::string;
 
 class Day15Solution : public Solution {
     string title;
+    vector<string> initialWarehouseState;
     vector<string> warehouseMap;
+    enum TileType { WALL = '#', EMPTY_SPACE = '.', BOX = 'O', ROBOT = '@', BOX_LEFT = '[', BOX_RIGHT = ']' };
+    enum Direction { NORTH = '^', EAST = '>', SOUTH = 'v', WEST = '<' };
     string moveInstructions;
     struct Position
     {
@@ -31,19 +34,23 @@ class Day15Solution : public Solution {
                 2*otherPosition.y - y
             };
         }
-    } robot;
+    } robot{};
 
     void parseInput(const vector<string> &puzzleInput);
     void setRobotInitialPosition();
-    void printWarehouseState();
+    void printWarehouseState(vector<string> map) const;
 
     // One-Star Methods
     void runMovementInstructions();
-    bool move(Position object, Position nextPosition);
-    bool isBlocked(const Position &pos);
-    bool isClear(const Position &pos);
+    bool move(const Position &object, const Position &nextPosition,  const Direction &direction);
+    [[nodiscard]] bool isBlocked(const Position &pos) const;
+    [[nodiscard]] bool isClear(const Position &pos) const;
     void moveObject(const Position &object, const Position &nextPosition);
     [[nodiscard]] vector<Position> findBoxes() const;
+
+    // Two-Star Methods
+    [[nodiscard]] vector<string> doubleMapWidth(const vector<string> &map) const;
+    void moveDoubleObject(const Position &object, const Position &nextPosition);
 
 public:
     explicit Day15Solution(const vector<string> &puzzleInput);
