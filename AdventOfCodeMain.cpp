@@ -23,13 +23,13 @@
 
 constexpr bool DEBUG = true; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
-constexpr SolutionType TYPE = PUZZLE;
+constexpr SolutionType TYPE = EXAMPLE;
 
 enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
-constexpr SolutionDifficulty DIFFICULTY = TWO_STAR;
+constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 15;
+constexpr unsigned short TODAY = 16;
 
 std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber);
 
