@@ -7,23 +7,18 @@
 
 
 Day16Solution::Day16Solution(const vector<string> &puzzleInput)
-    : title("--- Day 16: Reindeer Maze ---")
+    : title("--- Day 16: Reindeer Maze ---"), maze(puzzleInput)
 {
-    this->puzzleInput = puzzleInput;
 }
 
 
 long long Day16Solution::oneStarSolution()
 {
-    int result {0};
-
-    return result;
+    return maze.findShortestPathDistance(maze.getStartPosition(), maze.getEndPosition());
 }
 
 
 long long Day16Solution::twoStarSolution()
 {
-    int result {0};
-
-    return result;
+    return maze.countShortestPathTiles();
 }

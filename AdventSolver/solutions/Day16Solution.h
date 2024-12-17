@@ -8,6 +8,7 @@
 
 #include "Solution.h"
 #include "../AdventSolver.h"
+#include "data_structures/Graph.h"
 #include <vector>
 #include <string>
 
@@ -16,6 +17,7 @@ using std::vector, std::string;
 class Day16Solution : public Solution {
     string title;
     vector<string> puzzleInput;
+    Graph maze;
 
 public:
     explicit Day16Solution(const vector<string> &puzzleInput);
