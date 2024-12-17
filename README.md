@@ -22,7 +22,7 @@ Concepts/Tools I have implemented thus far include:
 
 \* Came up with organically and later found it has a name
 
-** Received high-level concept from Reddit.com/r/AdventOfCode, implemented myself.
+** Received high-level concept from the [Advent of Code subreddit](https://www.reddit.com/r/adventofcode/) and implemented it myself.
 
 Notes:
 
