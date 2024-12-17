@@ -1,4 +1,4 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 4, 2024
  * Desc: Main program hub for my AoC 2024 solutions.
  *  Log: 12/ 4/24 - Added days 1-4 into current project.
@@ -15,11 +15,15 @@
  *       12/14/24 - Added day 14 solution.
  *       12/15/24 - Added day 15 solution.
  *       12/16/24 - Added day 16 solution.
- */
+ *       12/17/24 - Added day 17 solution.
+**/
 
 #include <memory>
 #include "AdventSolver/AdventSolver.h"
 #include "AdventSolver/AllSolutions.h"
+
+
+// -----------------------------------------------|    DEBUGGING    |------------------------------------------------ //
 
 constexpr bool DEBUG = true; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
@@ -29,10 +33,15 @@ enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
 constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 16;
+constexpr unsigned short TODAY = 17;
+
+
+// -----------------------------------------|    FUNCTION DECLARATIONS     |----------------------------------------- //
 
 std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber);
 
+
+// --------------------------------------------------|    MAIN    |-------------------------------------------------- //
 
 int main()
 {
@@ -109,6 +118,8 @@ int main()
 }
 
 
+// ---------------------------------------------| FUNCTION DEFINITIONS |--------------------------------------------- //
+
 std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 {
     switch(dayNumber)
@@ -160,6 +171,9 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 
         case 16:
             return std::make_unique<Day16Creator>();
+
+        case 17:
+            return std::make_unique<Day17Creator>();
 
         default:
             std::cout << "No solution available for day " << dayNumber << "." << std::endl;
