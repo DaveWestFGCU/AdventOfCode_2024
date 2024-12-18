@@ -5,19 +5,21 @@
 
 #include "Day18Solution.h"
 
+#include <cmath>
+
 
 Day18Solution::Day18Solution(const vector<string> &puzzleInput)
     : title("--- Day 18: RAM Run ---")
 {
     parseCorruptedMemory(puzzleInput);
 
+    int fallenMemoryTotal;
     if (corruptedMemoryLocations.size() == 25)
-    {   xBounds = 7; yBounds = 7; fallenMemoryCount = 12;   }
+    {   xBounds = 7; yBounds = 7; fallenMemoryTotal = 12;   }
     else
-    {   xBounds = 71; yBounds = 71; fallenMemoryCount = 1024;   }
+    {   xBounds = 71; yBounds = 71; fallenMemoryTotal = 1024;   }
 
-    buildMemoryMap();
-    printMemoryMap();
+    buildMemoryMap(fallenMemoryTotal);
 }
 
 
@@ -52,8 +54,10 @@ void Day18Solution::printCorruptedMemory()
 }
 
 
-void Day18Solution::buildMemoryMap()
+void Day18Solution::buildMemoryMap(const int &fallenMemoryTotal)
 {
+    memoryMap.clear();
+
     for (int y = 0; y < yBounds; ++y)
     {
         vector<MemoryLoc> line;
@@ -62,9 +66,9 @@ void Day18Solution::buildMemoryMap()
         memoryMap.push_back(line);
     }
 
-    for (int fallenMemory = 0; fallenMemory < fallenMemoryCount; ++fallenMemory)
+    for (int fallenMemoryCount = 0; fallenMemoryCount < fallenMemoryTotal; ++fallenMemoryCount)
     {
-        auto [x, y] = corruptedMemoryLocations[fallenMemory];
+        auto [x, y] = corruptedMemoryLocations[fallenMemoryCount];
         memoryMap[x][y].value = '#';
         memoryMap[x][y].safe = false;
     }
@@ -98,7 +102,9 @@ void Day18Solution::printMemoryMap()
 
 string Day18Solution::oneStarSolution()
 {
-    return std::to_string(findShortestPath(xBounds-1, yBounds-1));
+    int shortestPathLength = findShortestPath(xBounds-1, yBounds-1);
+
+    return std::to_string(shortestPathLength);
 }
 
 
@@ -150,7 +156,55 @@ int Day18Solution::findShortestPath(int searchX, int searchY)
 
 string Day18Solution::twoStarSolution()
 {
-    int result {0};
+    // Array for some memoization on the upcoming binary search for the interrupting corruption index.
+    int shortestPathLengths[corruptedMemoryLocations.size()];
+    for (int i = 0; i < corruptedMemoryLocations.size(); ++i)
+        shortestPathLengths[i] = 0;
 
-    return std::to_string(result);
+    int firstIndex = findFirstPathInterruption(0, corruptedMemoryLocations.size()-1, shortestPathLengths);
+    auto [x, y] = corruptedMemoryLocations[firstIndex];
+
+    return std::to_string(x) + "," + std::to_string(y);
+}
+
+
+/**
+ * Binary search, testing maps as corruption is added and using memoization to prevent re-testing.
+ * @param leftIndex
+ * @param rightIndex
+ * @param shortestPathLengths
+ * @return
+ */
+int Day18Solution::findFirstPathInterruption(const int leftIndex, const int rightIndex, int shortestPathLengths[])
+{
+    int midIndex = std::floor((leftIndex + rightIndex) /2);
+
+    int midPathLength;
+    if (shortestPathLengths[midIndex])
+        midPathLength = shortestPathLengths[midIndex];
+    else
+    {
+        buildMemoryMap(midIndex);
+        midPathLength = findShortestPath(xBounds-1, yBounds-1);
+        shortestPathLengths[midIndex] = midPathLength;
+    }
+
+    int prevPathLength;
+    if (shortestPathLengths[midIndex-1])
+        prevPathLength = shortestPathLengths[midIndex-1];
+    else
+    {
+        buildMemoryMap(midIndex);
+        prevPathLength = findShortestPath(xBounds-1, yBounds-1);
+        shortestPathLengths[midIndex-1] = prevPathLength;
+    }
+
+    if (prevPathLength > 0 && midPathLength < 0)
+        return midIndex;
+
+    if (midPathLength > 0)  // Path exists
+        return findFirstPathInterruption(midIndex+1, rightIndex, shortestPathLengths);
+
+    //  No path exists
+    return findFirstPathInterruption(leftIndex, midIndex, shortestPathLengths);
 }

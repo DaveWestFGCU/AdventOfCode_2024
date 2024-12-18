@@ -16,7 +16,7 @@
 class Day18Solution : public Solution {
     string title;
     vector<std::pair<int,int>> corruptedMemoryLocations;
-    int xBounds{}, yBounds{}, fallenMemoryCount{};
+    int xBounds{}, yBounds{};
     enum Direction { NORTH, EAST, SOUTH, WEST };
     struct MemoryLoc
     {
@@ -33,10 +33,11 @@ class Day18Solution : public Solution {
 
     void parseCorruptedMemory(const vector<string> &puzzleInput);
     void printCorruptedMemory();
-    void buildMemoryMap();
+    void buildMemoryMap(const int &fallenMemoryTotal);
     void printMemoryMap();
 
     int findShortestPath(int searchX, int searchY);
+    int findFirstPathInterruption(int leftIndex, int rightIndex, int shortestPathLengths[]);
 public:
     explicit Day18Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
