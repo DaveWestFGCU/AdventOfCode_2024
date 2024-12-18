@@ -1,4 +1,4 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 7, 2024
  * Desc: Method definitions for the AoC 2024 day 7 puzzle.
  *
@@ -8,6 +8,8 @@
  *       calibrations anyway.
  *
  *       Uses recursion to solve whether a calibration can equate to the result.
+ *
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day7Solution.h"
@@ -48,7 +50,7 @@ void Day7Solution::addCalibrations(const vector<string>& puzzleInput)
 }
 
 
-long long Day7Solution::oneStarSolution()
+string Day7Solution::oneStarSolution()
 {
     size_t totalCalibrationResult {0};
 
@@ -58,7 +60,7 @@ long long Day7Solution::oneStarSolution()
             totalCalibrationResult += result;
     }
 
-    return static_cast<long long>(totalCalibrationResult);
+    return std::to_string(totalCalibrationResult);
 }
 
 
@@ -145,7 +147,7 @@ bool Day7Solution::reverseEqnSlnExists(const size_t& result, const vector<size_t
 }
 
 
-long long Day7Solution::twoStarSolution()
+string Day7Solution::twoStarSolution()
 {
     size_t totalCalibrationResult {0};
 
@@ -155,7 +157,7 @@ long long Day7Solution::twoStarSolution()
             totalCalibrationResult += result;
     }
 
-    return static_cast<long long>(totalCalibrationResult);
+    return std::to_string(totalCalibrationResult);
 }
 
 

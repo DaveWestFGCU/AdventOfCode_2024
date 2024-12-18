@@ -1,9 +1,10 @@
 /*  Dev: Dave West
-* Date: December 4, 2024
+ * Date: December 4, 2024
  * Desc: Method definitions for the AoC 2024 day 4 puzzle.
- *  Log: 12/4/2024 - Refactored from its own program to a class for a larger solutions program.
- *       12/7/2024 - Refactored integer to long long or size_t.
+ *  Log: 12/ 4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/ 7/2024 - Refactored integer to long long or size_t.
  *                   Refactored puzzle parsing from regex to stringstream.
+ *       12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day4Solution.h"
@@ -16,7 +17,7 @@ Day4Solution::Day4Solution(const std::vector<std::string> & puzzleInput)
 }
 
 
-long long Day4Solution::oneStarSolution()
+string Day4Solution::oneStarSolution()
 {
     size_t xmasCount {0};
     const std::regex xmasPattern(R"(XMAS)");
@@ -34,7 +35,7 @@ long long Day4Solution::oneStarSolution()
     xmasCount += countBackwardDiagonal(xmasPattern);
     xmasCount += countBackwardDiagonal(samxPattern);
 
-    return static_cast<int>(xmasCount);
+    return std::to_string(xmasCount);
 }
 
 
@@ -183,7 +184,7 @@ size_t Day4Solution::countBackwardDiagonal(const std::regex & pattern)
 }
 
 
-long long Day4Solution::twoStarSolution()
+string Day4Solution::twoStarSolution()
 {
     size_t xmasCount {0};
 
@@ -199,7 +200,7 @@ long long Day4Solution::twoStarSolution()
         }   // End column loop
     }   // End row loop
 
-    return static_cast<int>(xmasCount);
+    return std::to_string(xmasCount);
 }
 
 

@@ -1,8 +1,9 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 4, 2024
  * Desc: Class declarations for the AoC 2024 day 4 puzzle solution and solution factory.
- *  Log: 12/4/24 - Completed solution.
- *       12/7/24 - Refactored ints to long long or size_t.
+ *  Log: 12/ 4/2024 - Completed solution.
+ *       12/ 7/2024 - Refactored ints to long long or size_t.
+ *       12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #ifndef DAY4SOLUTION_H
@@ -12,8 +13,6 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <regex>
-
-using std::vector, std::string;
 
 class Day4Solution : public Solution {
     string title;
@@ -27,16 +26,16 @@ class Day4Solution : public Solution {
     bool isXmas(const size_t & row, const size_t & col);
 
 public:
-    Day4Solution(const std::vector<std::string> & puzzleInput);
-    std::string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    explicit Day4Solution(const std::vector<std::string> & puzzleInput);
+    [[nodiscard]] string getTitle() const override { return title; }
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 
 class Day4Creator : public AdventSolver {
 public:
-    std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
+    [[nodiscard]] std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
         return std::make_unique<Day4Solution>(puzzleInput);
     }
 };

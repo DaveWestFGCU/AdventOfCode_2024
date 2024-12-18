@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 5, 2024
  * Desc: Class declarations for the AoC 2024 day 5 puzzle solution and solution factory.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #ifndef DAY5SOLUTION_H
@@ -11,8 +12,6 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-
-using std::vector, std::string;
 
 class Day5Solution : public Solution {
     string title;
@@ -35,9 +34,9 @@ class Day5Solution : public Solution {
     
 public:
     explicit Day5Solution(const std::vector<std::string> & puzzleInput);
-    std::string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    [[nodiscard]] string getTitle() const override { return title; }
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 
@@ -46,7 +45,7 @@ public:
  */
 class Day5Creator : public AdventSolver {
 public:
-    std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
+    [[nodiscard]] std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
         return std::make_unique<Day5Solution>(puzzleInput);
     }
 };

@@ -6,15 +6,18 @@
 #include <memory>
 #include <vector>
 
+using std::vector, std::string;
+
 // Abstract Product class
 class Solution {
     enum difficulty {oneStar, twoStars};
 
 public:
     virtual ~Solution() = default;
-    virtual std::string getTitle() const = 0;
-    virtual long long oneStarSolution() = 0;
-    virtual long long twoStarSolution() = 0;
+    [[nodiscard]] virtual string getTitle() const = 0;
+
+    virtual string oneStarSolution() = 0;
+    virtual string twoStarSolution() = 0;
 };
 
 #endif //SOLUTION_H

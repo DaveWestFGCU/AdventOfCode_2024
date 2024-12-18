@@ -1,10 +1,11 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 1, 2024
  * Desc: Method definitions for the AoC 2024 day 1 puzzle.
- *  Log: 12/1/2024 - Completed solution.
- *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
- *       12/7/2024 - Refactored integer to long long or size_t.
- *                   Refactored puzzle parsing from regex to stringstream.
+ *  Log: 12/ 1/2024 - Completed solution.
+ *       12/ 4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/ 7/2024 - Refactored integer to long long or size_t.
+ *                    Refactored puzzle parsing from regex to stringstream.
+ *       12/17/2024 - Refactored one and two star solutions to return strings.
  */
 
 #include "Day1Solution.h"
@@ -34,17 +35,17 @@ void Day1Solution::splitList(const vector<string> & inputList)
 }
 
 
-long long Day1Solution::oneStarSolution() {
+string Day1Solution::oneStarSolution() {
     // Calculate total distance
     long long answer {0};
     for (size_t i = 0; i < leftList.size(); i++)
         answer += abs(static_cast<int>(leftList[i] - rightList[i]));
-    return answer;
+    return std::to_string(answer);
 }
 
 
-long long Day1Solution::twoStarSolution() {
-    return static_cast<long long>(twoStarsUnorderedMap());
+string Day1Solution::twoStarSolution() {
+    return std::to_string(twoStarsUnorderedMap());
 }
 
 

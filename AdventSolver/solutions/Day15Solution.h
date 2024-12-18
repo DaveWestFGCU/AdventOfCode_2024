@@ -14,7 +14,6 @@
 #include <vector>
 #include <string>
 
-using std::vector, std::string;
 
 class Day15Solution : public Solution
 {
@@ -72,8 +71,8 @@ class Day15Solution : public Solution
 public:
     explicit Day15Solution(const vector<string> &puzzleInput);
     [[nodiscard]] string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 

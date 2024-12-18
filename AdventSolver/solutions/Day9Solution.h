@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 9, 2024
  * Desc: Class declarations for the AoC 2024 day 9 puzzle solution and solution factory.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #ifndef DAY9SOLUTION_H
@@ -38,8 +39,8 @@ class Day9Solution : public Solution {
 public:
     explicit Day9Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 

@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 13, 2024
  * Desc: Class declarations for the AoC 2024 day 13 puzzle solution and solution factory.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #ifndef DAY13SOLUTION_H
@@ -12,7 +13,6 @@
 #include <string>
 #include <regex>
 
-using std::vector, std::string;
 
 class Day13Solution : public Solution {
     string title;
@@ -43,8 +43,8 @@ class Day13Solution : public Solution {
 public:
     explicit Day13Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 

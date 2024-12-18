@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 9, 2024
  * Desc: Method definitions for the AoC 2024 day 9 puzzle.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day9Solution.h"
@@ -80,7 +81,7 @@ void Day9Solution::printExpandedDiskMap() const
 }
 
 
-long long Day9Solution::oneStarSolution()
+string Day9Solution::oneStarSolution()
 {
     fragmentedCompaction();
 
@@ -88,7 +89,7 @@ long long Day9Solution::oneStarSolution()
     for (int index = 0; expandedDiskMap[index] != -1; ++index)
         checksum += index * expandedDiskMap[index];
 
-    return checksum;
+    return std::to_string(checksum);
 }
 
 
@@ -119,7 +120,7 @@ void Day9Solution::fragmentedCompaction()
 
 
 
-long long Day9Solution::twoStarSolution()
+string Day9Solution::twoStarSolution()
 {
     expandDiskMap();    //  Reset expandedDiskMap to initial state
     contiguousCompaction();
@@ -130,7 +131,7 @@ long long Day9Solution::twoStarSolution()
         if (expandedDiskMap[individualBlock] != -1)
             checksum += individualBlock * expandedDiskMap[individualBlock];
     }
-    return checksum;
+    return std::to_string(checksum);
 }
 
 

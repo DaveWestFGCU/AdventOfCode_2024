@@ -44,12 +44,12 @@ void Day8Solution::printFrequencies()
 }
 
 
-long long Day8Solution::oneStarSolution()
+string Day8Solution::oneStarSolution()
 {
     for (const auto &[frequency, antennaPositions] : frequencyToAntennaLocations)
         findFrequencyAntinodes(antennaPositions);
 
-    return static_cast<long long>(antinodeLocations.size());
+    return std::to_string(antinodeLocations.size());
 }
 
 
@@ -96,7 +96,7 @@ bool Day8Solution::isInBounds(Pos antinodePosition) const
 }
 
 
-long long Day8Solution::twoStarSolution()
+string Day8Solution::twoStarSolution()
 {
     for (const auto &[frequency, antennaPositions] : frequencyToAntennaLocations)
         findFrequencyAntinodes(antennaPositions, true);
@@ -104,7 +104,7 @@ long long Day8Solution::twoStarSolution()
         // Include antinodes on top of every antenna
     addAntennaAntinodes();
 
-    return static_cast<long long>(antinodeLocations.size());
+    return std::to_string(antinodeLocations.size());
 }
 
 

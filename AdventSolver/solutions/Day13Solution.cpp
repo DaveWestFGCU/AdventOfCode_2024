@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 13, 2024
  * Desc: Method definitions for the AoC 2024 day 13 puzzle.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day13Solution.h"
@@ -85,16 +86,16 @@ void Day13Solution::ClawGame::recalibrate(const long long &addend)
 }
 
 
-long long Day13Solution::oneStarSolution()
+string Day13Solution::oneStarSolution()
 {
     int totalTokens {0};
     for (auto game : clawGames)
         totalTokens += game.winCost();
-    return totalTokens;
+    return std::to_string(totalTokens);
 }
 
 
-long long Day13Solution::twoStarSolution()
+string Day13Solution::twoStarSolution()
 {
     size_t totalTokens {0};
     for (auto game : clawGames)
@@ -102,5 +103,5 @@ long long Day13Solution::twoStarSolution()
         game.recalibrate(10000000000000);
         totalTokens += game.winCost();
     }
-    return static_cast<long long>(totalTokens);
+    return std::to_string(totalTokens);
 }

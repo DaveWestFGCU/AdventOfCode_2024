@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/**  Dev: Dave West
  * Date: December 5, 2024
  * Desc: Method definitions for the AoC 2024 day 5 puzzle.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day5Solution.h"
@@ -120,7 +121,7 @@ bool Day5Solution::isDigit(const char & character)
  * Solution to the one-star problem.
  * @return The sum of the middle page number from ordered updates.
  */
-long long Day5Solution::oneStarSolution()
+string Day5Solution::oneStarSolution()
 {
     size_t answer {0};
     for (const auto & update : updates)
@@ -132,7 +133,7 @@ long long Day5Solution::oneStarSolution()
         }
     }
 
-    return static_cast<int>(answer);
+    return std::to_string(answer);
 }
 
 
@@ -174,7 +175,7 @@ bool Day5Solution::isUpdateInOrder(vector<int> update)
  * Solution to the two-star problem.
  * @return The sum of the middle page number of unordered updates, after being ordered.
  */
-long long Day5Solution::twoStarSolution()
+string Day5Solution::twoStarSolution()
 {
     size_t answer {0};
 
@@ -189,7 +190,7 @@ long long Day5Solution::twoStarSolution()
         }
     }
 
-    return static_cast<int>(answer);
+    return std::to_string(answer);
 }
 
 

@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/**  Dev: Dave West
  * Date: December 6, 2024
  * Desc: Method definitions for the AoC 2024 day 6 puzzle.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day6Solution.h"
@@ -284,13 +285,13 @@ bool Day6Solution::Guard::isOutOfBounds(const vector<string>& patrolMap)
  * Solution to the puzzle's first gold star.
  * @return Returns answer to the one-star puzzle.
  */
-long long Day6Solution::oneStarSolution()
+string Day6Solution::oneStarSolution()
 {
         // Loop until Bob's status changes to LEFT_AREA
     while(guardBob.getStatus() == Guard::PATROLING)
         guardBob.patrol();
 
-    return static_cast<int>(countVisitedLocations());
+    return std::to_string(countVisitedLocations());
 }
 
 
@@ -324,9 +325,9 @@ size_t Day6Solution::Guard::countVisitedLocations()
  * Solution to the puzzle's second gold star.
  * @return Returns answer to the two-star puzzle.
  */
-long long Day6Solution::twoStarSolution()
+string Day6Solution::twoStarSolution()
 {
-    return static_cast<int>(optimizedTwoStar());
+    return std::to_string(optimizedTwoStar());
 }
 
 

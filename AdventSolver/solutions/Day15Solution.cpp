@@ -4,6 +4,7 @@
  *  Log: 12/15/24 - Initial creation.
  *                  One-star solution added.
  *       12/16/24 - Two-star solution added. (WOO!)
+ *       12/17/2024 - Refactored one and two-star solutions to return strings.
  **/
 
 #include "Day15Solution.h"
@@ -67,7 +68,7 @@ void Day15Solution::printWarehouseState() const
 }
 
 
-long long Day15Solution::oneStarSolution()
+string Day15Solution::oneStarSolution()
 {
     runMovementInstructions();
 
@@ -76,7 +77,7 @@ long long Day15Solution::oneStarSolution()
     for (const auto &[x, y] : findBoxes())
         boxGPSCoordinateSum += x + y*100;
 
-    return boxGPSCoordinateSum;
+    return std::to_string(boxGPSCoordinateSum);
 }
 
 
@@ -267,7 +268,7 @@ vector<Day15Solution::Position> Day15Solution::findBoxes() const
 }
 
 
-long long Day15Solution::twoStarSolution()
+string Day15Solution::twoStarSolution()
 {
     doubleWarehouseWidth();
     setRobotInitialPosition();
@@ -278,7 +279,7 @@ long long Day15Solution::twoStarSolution()
     for (const auto &[x, y] : findBoxes())
         boxGPSCoordinateSum += x + y*100;
 
-    return boxGPSCoordinateSum;
+    return std::to_string(boxGPSCoordinateSum);
 }
 
 

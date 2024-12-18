@@ -1,4 +1,4 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 14, 2024
  * Desc: Method definitions for the AoC 2024 day 14 puzzle.
  */
@@ -43,7 +43,7 @@ void Day14Solution::Robot::move(int seconds)
 }
 
 
-long long Day14Solution::oneStarSolution()
+string Day14Solution::oneStarSolution()
 {
     int xBound, yBound;
 
@@ -81,7 +81,7 @@ long long Day14Solution::oneStarSolution()
     for (const int &quadrant : robotCount)
         safetyFactor *= quadrant;
 
-    return safetyFactor;
+    return std::to_string(safetyFactor);
 }
 
 
@@ -150,36 +150,36 @@ long long Day14Solution::oneStarSolution()
  * This optimized solution comes from Reddit user i_have_no_biscuits and is an application of the
  * Chinese Remainder Theorem. (https://www.reddit.com/r/adventofcode/comments/1he0asr/comment/m1zzfsh/)
  * "
- * t = bx (mod W)
- * t = by (mod H)
+ * time = best_x (mod Width)
+ * time = best_y (mod Height)
  *
- * As t = bx (mod W), then t = bx + k*W. Substituting this into the second equation we get
+ * As time = best_x (mod Width), then time = best_x + k*Width. Substituting this into the second equation we get
  *
- * bx + k*W = by (mod H)
- * k*W = by - bx (mod H)
- * k = inverse(W)*(by - bx) (mod H)
+ * best_x + k*Width = best_y (mod Height)
+ * k*Width = best_y - best_x (mod Height)
+ * k = inverse(Width)*(best_y - best_x) (mod Height)
  *
  * and so, finally,
  *
- * t = bx + inverse(W)*(by-bx)*W
+ * time = best_x + inverse(Width)*(best_y-best_x)*Width
  * "
  */
-long long Day14Solution::twoStarSolution()
+string Day14Solution::twoStarSolution()
 {
     // Set bounds for example vs puzzle
     const int xBound = robots.size() < 20 ? 11 : 101;
     const int yBound = robots.size() < 20 ? 7  : 103;
 
-    const int W = xBound;
-    const int H = yBound;
-    const int bx = 72;
-    const int by = 31;
+    const int width = xBound;
+    const int height = yBound;
+    const int best_x = 72;
+    const int best_y = 31;
 
-    int thatMiddleBit = (modInverse(W,H) * (by-bx)) % H;
-    thatMiddleBit = thatMiddleBit > 0 ? thatMiddleBit : thatMiddleBit + H;
+    int thatMiddleBit = (modInverse(width,height) * (best_y-best_x)) % height;
+    thatMiddleBit = thatMiddleBit > 0 ? thatMiddleBit : thatMiddleBit + height;
 
-    const int t = bx + thatMiddleBit * W;
-    return t;
+    const int time = best_x + thatMiddleBit * width;
+    return std::to_string(time);
 }
 
 

@@ -1,6 +1,7 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 10, 2024
  * Desc: Method definitions for the AoC 2024 day 10 puzzle.
+ *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
  */
 
 #include "Day10Solution.h"
@@ -69,8 +70,7 @@ void Day10Solution::findNeighbors()
 }
 
 
-
-long long Day10Solution::oneStarSolution()
+string Day10Solution::oneStarSolution()
 {
     size_t trailCount {0};
 
@@ -82,7 +82,7 @@ long long Day10Solution::oneStarSolution()
                 resetVertices();
             }
 
-    return static_cast<long long>(trailCount);
+    return std::to_string(trailCount);
 }
 
 
@@ -115,8 +115,7 @@ void Day10Solution::resetVertices()
 }
 
 
-
-long long Day10Solution::twoStarSolution()
+string Day10Solution::twoStarSolution()
 {
     size_t trailRatings {0};
 
@@ -128,5 +127,5 @@ long long Day10Solution::twoStarSolution()
                 resetVertices();
             }
 
-    return static_cast<long long>(trailRatings);
+    return std::to_string(trailRatings);
 }

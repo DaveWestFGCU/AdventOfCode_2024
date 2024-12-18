@@ -11,7 +11,6 @@
 #include <vector>
 #include <string>
 
-using std::vector, std::string;
 
 class Day$Solution : public Solution {
     string title;
@@ -20,8 +19,8 @@ class Day$Solution : public Solution {
 public:
     explicit Day$Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 
@@ -31,7 +30,6 @@ public:
         return std::make_unique<Day$Solution>(puzzleInput);
     }
 };
-
 
 
 #endif //DAY$SOLUTION_H

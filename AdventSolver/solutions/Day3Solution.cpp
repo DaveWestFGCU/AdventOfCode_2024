@@ -1,10 +1,11 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 3, 2024
  * Desc: Method definitions for the AoC 2024 day 3 puzzle.
- *  Log: 12/3/2024 - Completed solution.
- *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
- *       12/7/2024 - Refactored integer to long long or size_t.
- *                   Refactored puzzle parsing from regex to stringstream.
+ *  Log: 12/ 3/2024 - Completed solution.
+ *       12/ 4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/ 7/2024 - Refactored integer to long long or size_t.
+ *                    Refactored puzzle parsing from regex to stringstream.
+ *       12/17/2024 - Refactored one and two star solutions to return strings.
  */
 
 #include "Day3Solution.h"
@@ -17,7 +18,7 @@ Day3Solution::Day3Solution(const std::vector<std::string> & puzzleInput)
 }
 
 
-long long Day3Solution::oneStarSolution()
+string Day3Solution::oneStarSolution()
 {
     int mulResult {0};
     const std::regex mulPattern(R"(mul\(\d+,\d+\))");
@@ -42,11 +43,11 @@ long long Day3Solution::oneStarSolution()
         mulResult += std::stoi(numbers->str()) * std::stoi((++numbers)->str());
     }
 
-    return mulResult;
+    return std::to_string(mulResult);
 }
 
 
-long long Day3Solution::twoStarSolution()
+string Day3Solution::twoStarSolution()
 {
     long long mulResult {0};
 
@@ -83,5 +84,5 @@ long long Day3Solution::twoStarSolution()
         }
     }
 
-    return mulResult;
+    return std::to_string(mulResult);
 }

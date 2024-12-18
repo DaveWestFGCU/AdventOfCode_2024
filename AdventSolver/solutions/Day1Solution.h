@@ -1,10 +1,11 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 1, 2024
  * Desc: Class declarations for the AoC 2024 day 1 puzzle solution and solution factory.
- *  Log: 12/1/2024 - Completed solution.
- *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
- *       12/7/2024 - Refactored integer to long long or size_t.
- *                   Refactored puzzle parsing from regex to stringstream.
+ *  Log: 12/ 1/2024 - Completed solution.
+ *       12/ 4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/ 7/2024 - Refactored integer to long long or size_t.
+ *                    Refactored puzzle parsing from regex to stringstream.
+ *       12/17/2024 - Refactored one and two star solutions to return strings.
  */
 
 #ifndef DAY1SOLUTION_H
@@ -18,8 +19,6 @@
 #include <unordered_map>
 #include <algorithm>
 
-using std::vector, std::string;
-
 class Day1Solution : public Solution {
     enum twoStarSolution {sortedList, map, unordered_map};
     std::string title;
@@ -30,16 +29,16 @@ class Day1Solution : public Solution {
     size_t twoStarsPreSortedLists();
     size_t twoStarsUnorderedMap();
 public:
-    Day1Solution(const std::vector<std::string> & puzzleInput);
-    std::string getTitle() const override;
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    explicit Day1Solution(const vector<string> & puzzleInput);
+    [[nodiscard]] string getTitle() const override;
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 
 class Day1Creator : public AdventSolver {
 public:
-    std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
+    [[nodiscard]] std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const override {
         return std::make_unique<Day1Solution>(puzzleInput);
     }
 };

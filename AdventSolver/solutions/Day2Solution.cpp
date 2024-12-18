@@ -1,10 +1,11 @@
-/*  Dev: Dave West
+/** Dev: Dave West
  * Date: December 2, 2024
  * Desc: Method definitions for the AoC 2024 day 2 puzzle.
- *  Log: 12/2/2024 - Completed solution.
- *       12/4/2024 - Refactored from its own program to a class for a larger solutions program.
- *       12/7/2024 - Refactored ints to long long or size_t.
- *                   Refactored puzzle parsing to stringstream.
+ *  Log: 12/ 2/2024 - Completed solution.
+ *       12/ 4/2024 - Refactored from its own program to a class for a larger solutions program.
+ *       12/ 7/2024 - Refactored ints to long long or size_t.
+ *                    Refactored puzzle parsing to stringstream.
+ *       12/17/2024 - Refactored one and two star solutions to return strings.
  */
 
 #include "Day2Solution.h"
@@ -37,7 +38,7 @@ vector<vector<size_t>> Day2Solution::parseStringToIntegers(const vector<string>&
 }
 
 
-long long Day2Solution::oneStarSolution() {
+string Day2Solution::oneStarSolution() {
     int safeCount {0};
     for (const auto & levels : reports)
     {
@@ -53,7 +54,7 @@ long long Day2Solution::oneStarSolution() {
         safeCount++;
     }
 
-    return safeCount;
+    return std::to_string(safeCount);
 }
 
 
@@ -92,7 +93,7 @@ bool Day2Solution::changeIsSafe(const vector<size_t> & levels)
 }
 
 
-long long Day2Solution::twoStarSolution() {
+string Day2Solution::twoStarSolution() {
     int safeCount {0};
     for (const auto & levels : reports)
     {
@@ -116,11 +117,11 @@ long long Day2Solution::twoStarSolution() {
 
     } // end report loop
 
-    return safeCount;
+    return std::to_string(safeCount);
 }
 
 
-bool Day2Solution::levelsAreSafe(vector<size_t> levels)
+bool Day2Solution::levelsAreSafe(const vector<size_t>& levels)
 {
     // Unsafe: Reactor is not maintaining trend
     if (!trendIsSafe(levels))
