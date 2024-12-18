@@ -16,6 +16,7 @@
  *       12/15/24 - Added day 15 solution.
  *       12/16/24 - Added day 16 solution.
  *       12/17/24 - Added day 17 solution.
+ *       12/18/24 - Added day 18 solution.
 **/
 
 #include <memory>
@@ -27,7 +28,7 @@
 
 constexpr bool DEBUG = true; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
-constexpr SolutionType TYPE = EXAMPLE;
+constexpr SolutionType TYPE = PUZZLE;
 
 enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
 constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
@@ -174,6 +175,9 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 
         case 17:
             return std::make_unique<Day17Creator>();
+
+        case 18:
+            return std::make_unique<Day18Creator>();
 
         default:
             std::cout << "No solution available for day " << dayNumber << "." << std::endl;
