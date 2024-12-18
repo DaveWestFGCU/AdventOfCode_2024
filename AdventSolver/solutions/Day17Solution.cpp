@@ -34,10 +34,10 @@ void Day17Solution::parseDebugger(const vector<string> &puzzleInput)
 
 
 
-long long Day17Solution::oneStarSolution()
+string Day17Solution::oneStarSolution()
 {
     device.runInstructions();
-    return std::stoll(device.getOutput());
+    return device.getOutput();
 }
 
 
@@ -183,7 +183,7 @@ void Day17Solution::Computer::bxc()
  */
 void Day17Solution::Computer::out(const long comboOperand)
 {
-    output += std::to_string(comboOperand % 8);
+    output += std::to_string(comboOperand % 8) + ",";
 }
 
 
@@ -207,9 +207,9 @@ void Day17Solution::Computer::cdv(const long comboOperand)
 }
 
 
-long long Day17Solution::twoStarSolution()
+string Day17Solution::twoStarSolution()
 {
     int result {0};
 
-    return result;
+    return std::to_string(result);
 }

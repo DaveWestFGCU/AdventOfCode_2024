@@ -13,7 +13,6 @@
 #include <string>
 #include <cmath>
 
-using std::vector, std::string;
 
 class Day17Solution : public Solution {
     string title;
@@ -41,7 +40,7 @@ class Day17Solution : public Solution {
             : registerA(regA), registerB(regB), registerC(regC), program(std::move(prog)), instructionPointer(0) {}
 
         void runInstructions();
-        string getOutput() { return output; }
+        string getOutput() { return output.substr(0,output.length()-1); }
     };
     Computer device;
 
@@ -50,8 +49,8 @@ class Day17Solution : public Solution {
 public:
     explicit Day17Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
-    long long oneStarSolution() override;
-    long long twoStarSolution() override;
+    string oneStarSolution() override;
+    string twoStarSolution() override;
 };
 
 
