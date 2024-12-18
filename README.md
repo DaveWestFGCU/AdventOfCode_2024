@@ -1,4 +1,4 @@
-# Advent of Code 2024
+# <p align="center">Advent of Code 2024 </p>
 $${\color{yellow}*}$$
 $${\color{green}>\color{orange}o\color{green}<}$$
 $${\color{green}>\color{red}@\color{green}>\color{blue}O\color{green}<}$$
@@ -22,7 +22,7 @@ Concepts/Tools I have implemented thus far include:
 
 \* Came up with organically and later found it has a name
 
-** Received high-level concept from Reddit.com/r/AdventOfCode, implemented myself.
+** Received high-level concept from the [Advent of Code subreddit](https://www.reddit.com/r/adventofcode/) and implemented it myself.
 
 Notes:
 
