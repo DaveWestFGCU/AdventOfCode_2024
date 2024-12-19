@@ -20,6 +20,7 @@ Day19Solution::Day19Solution(const vector<string> &puzzleInput)
             string towel;
             while (std::getline(ss, towel, ','))
             {
+                // Remove preceeding spaces
                 if (towel[0] == ' ')
                     towel = towel.substr(1,towel.length()-1);
                 towelPatterns.push_back(towel);
@@ -50,10 +51,12 @@ void Day19Solution::printTowels()
 
 void Day19Solution::sortPatterns()
 {
-    std::sort(towelPatterns.begin(), towelPatterns.end(), []
-        (const std::string& first, const std::string& second){
-            return first.size() > second.size();
-        });
+    std::ranges::sort(towelPatterns, []
+        (const std::string &first, const std::string &second)
+        {
+            return first.length() > second.length();
+        }
+    );
 }
 
 
@@ -99,29 +102,31 @@ string Day19Solution::findNextTowel(string design)
 
 string Day19Solution::twoStarSolution()
 {
-    int totalDesignPossibilities {0};
-    std::cout << std::endl;
+    long long totalDesignPossibilities {0};
 
     for (const auto &design : designs)
     {
-        std::cout << design << " : ";
-        int designPossibilities = countPossibilities(design);
+        long long designPossibilities = countPossibilities(design);
         totalDesignPossibilities += designPossibilities;
-        std::cout << designPossibilities << std::endl;
     }
 
     return std::to_string(totalDesignPossibilities);
 }
 
 
-int Day19Solution::countPossibilities(string design)
+long long Day19Solution::countPossibilities(const string &design)
 {
     // Base case: All design colors have been found in patterns
-    if (design.length() == 0)
+    if (design.empty())
         return 1;
 
+    // Base case: Remaining design has been seen before
+    if (possibilityCounts.contains(design))
+        return possibilityCounts[design];
 
-    int count {0};
+    // Recursive case: Design has colors unaccounted for.
+    possibilityCounts[design] = 0;
+
     for (const auto &pattern : towelPatterns)
     {
         // Skip pattern if it's longer than the remaining design.
@@ -130,8 +135,9 @@ int Day19Solution::countPossibilities(string design)
 
         // Check if the last colors of the design matches the pattern
         if (design.substr(design.length()-pattern.length(),pattern.length()) == pattern)
-            count += countPossibilities(design.substr(0, design.length()-pattern.length()));
+            possibilityCounts[design] += countPossibilities(design.substr(0, design.length()-pattern.length()));
     }
 
-    return count;
+    return possibilityCounts[design];
 }
+

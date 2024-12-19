@@ -10,6 +10,7 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 
 class Day19Solution : public Solution {
@@ -17,13 +18,14 @@ class Day19Solution : public Solution {
 
     vector<string> towelPatterns;
     vector<string> designs;
+    std::unordered_map<string,long long> possibilityCounts;
 
     void printTowels();
-    bool isPossible(const string& design);
+    bool isPossible(const string &design);
     void sortPatterns();
     string findNextTowel(string design);
 
-    int countPossibilities(string design);
+    long long countPossibilities(const string &design);
 
 public:
     explicit Day19Solution(const vector<string> &puzzleInput);
