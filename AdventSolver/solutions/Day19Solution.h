@@ -16,6 +16,14 @@ class Day19Solution : public Solution {
     string title;
     vector<string> puzzleInput;
 
+    vector<string> towelPatterns;
+    vector<string>  designs;
+
+    void printTowels();
+    bool isPossible(string design);
+    void sortPatterns();
+    string findNextTowel(string design);
+
 public:
     explicit Day19Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
