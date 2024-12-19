@@ -1,19 +1,19 @@
 /** Dev: Dave West
- * Date: December 18, 2024
- * Desc: Method definitions for the AoC 2024 day 18 puzzle.
-**/
+ * Date: December $, 2024
+ * Desc: Method definitions for the AoC 2024 day $ puzzle.
+ */
 
-#include "Day18Solution.h"
+#include "Day$Solution.h"
 
 
-Day18Solution::Day18Solution(const vector<string> &puzzleInput)
+Day18Solution::Day$Solution(const vector<string> &puzzleInput)
     : title("")
 {
     this->puzzleInput = puzzleInput;
 }
 
 
-string Day18Solution::oneStarSolution()
+string Day$Solution::oneStarSolution()
 {
     int result {0};
 
@@ -21,7 +21,7 @@ string Day18Solution::oneStarSolution()
 }
 
 
-string Day18Solution::twoStarSolution()
+string Day$Solution::twoStarSolution()
 {
     int result {0};
 
