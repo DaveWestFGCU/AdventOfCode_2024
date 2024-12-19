@@ -95,10 +95,10 @@ string Day19Solution::findNextTowel(string design)
         if (design.substr(design.length()-pattern.length(),pattern.length()) == pattern)
         {
             std::cout << design << " - " << pattern << " = " << design.substr(0, design.length()-pattern.length()) << std::endl;
-            design = findNextTowel(design.substr(0, design.length()-pattern.length()));
+            string newDesign = findNextTowel(design.substr(0, design.length()-pattern.length()));
 
-            if (design.empty())
-                return design;
+            if (newDesign.empty())
+                return newDesign;
         }
     }
 
