@@ -17,24 +17,25 @@
  *       12/16/24 - Added day 16 solution.
  *       12/17/24 - Added day 17 solution.
  *       12/18/24 - Added day 18 solution.
-**/
+ *       12/19/24 - Added day 19 solution.
+ */
 
 #include <memory>
 #include "AdventSolver/AdventSolver.h"
 #include "AdventSolver/AllSolutions.h"
 
 
-// -----------------------------------------------|    DEBUGGING    |------------------------------------------------ //
+// -------------------------------------------|    DEBUGGING SETTINGS    |------------------------------------------- //
 
-constexpr bool DEBUG = true; // Set to true for solving a single puzzle
+constexpr bool DEBUG = false; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
-constexpr SolutionType TYPE = PUZZLE;
+constexpr SolutionType TYPE = BOTH_TYPES;
 
 enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
-constexpr SolutionDifficulty DIFFICULTY = ONE_STAR;
+constexpr SolutionDifficulty DIFFICULTY = BOTH_DIFFICULTIES;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 17;
+constexpr unsigned short TODAY = 19;
 
 
 // -----------------------------------------|    FUNCTION DECLARATIONS     |----------------------------------------- //
@@ -48,6 +49,10 @@ int main()
 {
     for (unsigned short dayNumber = DEBUG? TODAY : 1; dayNumber <= TODAY; ++dayNumber)
     {
+        // Day 11 & 16 are broken, skip for now.
+        if (dayNumber == 11 || dayNumber == 16)
+            continue;
+
         std::string inputFilepath = "../puzzle_inputs/";
         std::string inputFilename = "day" + std::to_string(dayNumber) + ".txt";
         std::unique_ptr<AdventSolver> aocSolver = getDaySolver(dayNumber);
@@ -92,6 +97,8 @@ int main()
                     }
                     if constexpr (TYPE == EXAMPLE)
                         break;
+                    else
+                        std::cout << std::endl;
 
                 case PUZZLE:
                     // Solution on real puzzle
@@ -103,7 +110,7 @@ int main()
                     {
                         case ONE_STAR:
                         case BOTH_DIFFICULTIES:
-                            std::cout << std::endl << "  * Answer: " << solution->oneStarSolution() << std::endl;
+                            std::cout << "  * Answer: " << solution->oneStarSolution() << std::endl;
                         if constexpr (DIFFICULTY == ONE_STAR)
                             break;
 
@@ -177,6 +184,9 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
             return std::make_unique<Day17Creator>();
 
         case 18:
+            return std::make_unique<Day18Creator>();
+
+        case 19:
             return std::make_unique<Day18Creator>();
 
         default:
