@@ -16,7 +16,7 @@ Concepts/Tools I have implemented thus far include:
 - Recursion (Day 7, Day 15 (!!))
 - Graphs (Day 10 & 12)
 - Depth-First Search (Day 10)
-- Dynamic Programming / Memoization (Day 11)
+- Dynamic Programming / Memoization (Days 11 & 19)
 - Flood Fill Algorithm* (Day 12)
 - Linear Algebra/Cramer's Rule** (Day 13)
 
