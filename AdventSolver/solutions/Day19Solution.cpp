@@ -63,23 +63,16 @@ string Day19Solution::oneStarSolution()
 
     for (const auto &design : designs)
     {
-        std::cout << design << " : ";
         if (isPossible(design))
-        {
-            std::cout << "true" << std::endl;
             ++possibleDesigns;
-        }
-        else
-            std::cout << "false" << std::endl;
     }
 
     return std::to_string(possibleDesigns);
 }
 
 
-bool Day19Solution::isPossible(const string design)
+bool Day19Solution::isPossible(const string& design)
 {
-    std::cout << std::endl;
     return findNextTowel(design).empty();
 }
 
@@ -88,13 +81,11 @@ string Day19Solution::findNextTowel(string design)
 {
     for (const auto &pattern : towelPatterns)
     {
-        // std::cout << design.substr(design.length()-pattern.length(),pattern.length()) << " == " << pattern << " ? " << std::endl;
         if (pattern.length() > design.length())
             continue;
 
         if (design.substr(design.length()-pattern.length(),pattern.length()) == pattern)
         {
-            std::cout << design << " - " << pattern << " = " << design.substr(0, design.length()-pattern.length()) << std::endl;
             string newDesign = findNextTowel(design.substr(0, design.length()-pattern.length()));
 
             if (newDesign.empty())
@@ -106,10 +97,41 @@ string Day19Solution::findNextTowel(string design)
 }
 
 
-
 string Day19Solution::twoStarSolution()
 {
-    int result {0};
+    int totalDesignPossibilities {0};
+    std::cout << std::endl;
 
-    return std::to_string(result);
+    for (const auto &design : designs)
+    {
+        std::cout << design << " : ";
+        int designPossibilities = countPossibilities(design);
+        totalDesignPossibilities += designPossibilities;
+        std::cout << designPossibilities << std::endl;
+    }
+
+    return std::to_string(totalDesignPossibilities);
+}
+
+
+int Day19Solution::countPossibilities(string design)
+{
+    // Base case: All design colors have been found in patterns
+    if (design.length() == 0)
+        return 1;
+
+
+    int count {0};
+    for (const auto &pattern : towelPatterns)
+    {
+        // Skip pattern if it's longer than the remaining design.
+        if (pattern.length() > design.length())
+            continue;
+
+        // Check if the last colors of the design matches the pattern
+        if (design.substr(design.length()-pattern.length(),pattern.length()) == pattern)
+            count += countPossibilities(design.substr(0, design.length()-pattern.length()));
+    }
+
+    return count;
 }

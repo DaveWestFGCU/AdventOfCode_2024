@@ -14,15 +14,16 @@
 
 class Day19Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
 
     vector<string> towelPatterns;
-    vector<string>  designs;
+    vector<string> designs;
 
     void printTowels();
-    bool isPossible(string design);
+    bool isPossible(const string& design);
     void sortPatterns();
     string findNextTowel(string design);
+
+    int countPossibilities(string design);
 
 public:
     explicit Day19Solution(const vector<string> &puzzleInput);
