@@ -1,7 +1,7 @@
 /** Dev: Dave West
  * Date: December $, 2024
  * Desc: Class declarations for the AoC 2024 day $ puzzle solution and solution factory.
-**/
+ */
 
 #ifndef DAY$SOLUTION_H
 #define DAY$SOLUTION_H
