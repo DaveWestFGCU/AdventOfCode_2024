@@ -65,10 +65,8 @@ string Day19Solution::oneStarSolution()
     int possibleDesigns {0};
 
     for (const auto &design : designs)
-    {
         if (isPossible(design))
             ++possibleDesigns;
-    }
 
     return std::to_string(possibleDesigns);
 }
@@ -105,10 +103,7 @@ string Day19Solution::twoStarSolution()
     long long totalDesignPossibilities {0};
 
     for (const auto &design : designs)
-    {
-        long long designPossibilities = countPossibilities(design);
-        totalDesignPossibilities += designPossibilities;
-    }
+        totalDesignPossibilities += countPossibilities(design);
 
     return std::to_string(totalDesignPossibilities);
 }

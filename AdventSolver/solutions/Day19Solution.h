@@ -1,5 +1,5 @@
 /** Dev: Dave West
-* Date: December 19, 2024
+ * Date: December 19, 2024
  * Desc: Class declarations for the AoC 2024 day 19 puzzle solution and solution factory.
  */
 
