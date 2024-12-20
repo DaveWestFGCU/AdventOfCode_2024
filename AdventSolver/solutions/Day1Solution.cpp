@@ -6,6 +6,7 @@
  *       12/ 7/2024 - Refactored integer to long long or size_t.
  *                    Refactored puzzle parsing from regex to stringstream.
  *       12/17/2024 - Refactored one and two star solutions to return strings.
+ *       12/19/2024 - Refactored two-star solution to use a switch-case in choosing a data structure to use.
  */
 
 #include "Day1Solution.h"
@@ -45,12 +46,22 @@ string Day1Solution::oneStarSolution() {
 
 
 string Day1Solution::twoStarSolution() {
-    return std::to_string(twoStarsUnorderedMap());
+    return std::to_string(solveTwoStarProblem(UNORDERED_MAP));
 }
 
 
-std::string Day1Solution::getTitle() const {
-    return title;
+size_t Day1Solution::solveTwoStarProblem(const SolutionDataStructure &dataStructure)
+{
+    if (dataStructure == SORTED_LISTS)
+        return twoStarsPreSortedLists();
+
+    if (dataStructure == MAP)
+        return twoStarsMap();
+
+    if (dataStructure == UNORDERED_MAP)
+        return twoStarsUnorderedMap();
+
+    return 0;
 }
 
 
@@ -91,23 +102,23 @@ size_t Day1Solution::twoStarsPreSortedLists()
 {
     size_t similarityScore {0};
 
-    int i = 0, j = 0;
-    while (i < leftList.size() && j < rightList.size())
+    int leftIndex = 0, rightIndex = 0;
+    while (leftIndex < leftList.size() && rightIndex < rightList.size())
     {
         int rightCount = 0;
 
-        while (leftList[i] == rightList[j])
+        while (leftList[leftIndex] == rightList[rightIndex])
         {
             rightCount++;
-            j++;
+            rightIndex++;
         }
-        similarityScore += leftList[i] * rightCount;
+        similarityScore += leftList[leftIndex] * rightCount;
 
-        while (leftList[i] < rightList[j] && i < leftList.size())
-            i++;
+        while (leftList[leftIndex] < rightList[rightIndex] && leftIndex < leftList.size())
+            leftIndex++;
 
-        while (leftList[i] > rightList[j] && j < rightList.size())
-            j++;
+        while (leftList[leftIndex] > rightList[rightIndex] && rightIndex < rightList.size())
+            rightIndex++;
     }
 
     return similarityScore;

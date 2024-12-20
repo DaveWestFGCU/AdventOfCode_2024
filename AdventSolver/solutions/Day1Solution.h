@@ -6,6 +6,7 @@
  *       12/ 7/2024 - Refactored integer to long long or size_t.
  *                    Refactored puzzle parsing from regex to stringstream.
  *       12/17/2024 - Refactored one and two star solutions to return strings.
+ *       12/19/2024 - Refactored two-star solution to use a switch-case in choosing a data structure to use.
  */
 
 #ifndef DAY1SOLUTION_H
@@ -20,17 +21,18 @@
 #include <algorithm>
 
 class Day1Solution : public Solution {
-    enum twoStarSolution {sortedList, map, unordered_map};
+    enum SolutionDataStructure { SORTED_LISTS, MAP, UNORDERED_MAP };
     std::string title;
     std::vector<size_t> leftList, rightList;
 
-    void splitList(const vector<string> & inputList);
+    void splitList(const vector<string> &inputList);
+    size_t solveTwoStarProblem(const SolutionDataStructure &dataStructure);
     size_t twoStarsMap();
     size_t twoStarsPreSortedLists();
     size_t twoStarsUnorderedMap();
 public:
-    explicit Day1Solution(const vector<string> & puzzleInput);
-    [[nodiscard]] string getTitle() const override;
+    explicit Day1Solution(const vector<string> &puzzleInput);
+    [[nodiscard]] std::string getTitle() const override { return title; }
     string oneStarSolution() override;
     string twoStarSolution() override;
 };
