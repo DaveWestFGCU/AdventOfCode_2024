@@ -38,7 +38,7 @@ class Day20Solution : public Solution {
     };
     vector<string> racetrack;
     std::unordered_map<Position,int,Hash_Position> track;
-    vector<Position> walls;
+    vector<Position> trackBySteps;
     Position startPosition, endPosition;
 
     void parseTrack();
@@ -47,6 +47,7 @@ class Day20Solution : public Solution {
     Position findNextPosition(const Position &current, const Position &last);
 
     int getTimeSaved(Position wall);
+    vector<Position> getShortcutEndpoints(const Position &first, const int &maxShortcutDuration, const int &minImprovement);
 
 public:
     explicit Day20Solution(const vector<string> &puzzleInput);

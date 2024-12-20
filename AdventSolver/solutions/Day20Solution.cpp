@@ -21,28 +21,16 @@ void Day20Solution::parseTrack()
     {
         for (int x = 1; x < racetrack[y].length()-1; x++)
         {
-            switch (racetrack[y][x])
+            if (racetrack[y][x] == 'S')
             {
-                case '#':
-                    walls.emplace_back(x,y);
-                    continue;
+                startPosition = Position(x,y);
+                racetrack[y][x] = '.';
+            }
 
-                case 'S':
-                    startPosition = Position(x,y);
-                    racetrack[y][x] = '.';
-                    continue;
-
-                case 'E':
-                    endPosition = Position(x,y);
-                    racetrack[y][x] = '.';
-                    continue;
-
-                case '.':
-                    continue;
-
-                default:
-                    std::cerr << "Unknown tile: ";
-                    std::cout << racetrack[y][x] << std::endl;
+            if (racetrack[y][x] == 'E')
+            {
+                endPosition = Position(x,y);
+                racetrack[y][x] = '.';
             }
         }
     }
@@ -58,6 +46,7 @@ void Day20Solution::runTrack()
     while (currentPosition != endPosition)
     {
         track[currentPosition] = step;
+        trackBySteps.push_back(currentPosition);
         Position nextPosition = findNextPosition(currentPosition, lastPosition);
 
         lastPosition = currentPosition;
@@ -66,6 +55,7 @@ void Day20Solution::runTrack()
         step++;
     }
     track[currentPosition] = step;
+    trackBySteps.push_back(currentPosition);
     // std::cout << "End position reached! " << track[currentPosition] << " steps" << std::endl;
 }
 
@@ -117,12 +107,8 @@ string Day20Solution::oneStarSolution()
         minTimeSaved = 100;
 
     int bestCheatCount {0};
-    for (const auto wall : walls)
-    {
-        int timeSaved = getTimeSaved(wall);
-        if (timeSaved >= minTimeSaved)
-            bestCheatCount++;
-    }
+    for (const auto trackStep : trackBySteps)
+        bestCheatCount += getShortcutEndpoints(trackStep, 2, minTimeSaved).size();
 
     return std::to_string(bestCheatCount);
 }
@@ -161,7 +147,34 @@ int Day20Solution::getTimeSaved(Position wall)
 
 string Day20Solution::twoStarSolution()
 {
-    int result {0};
+    int minTimeSaved {50};
+    if (track[endPosition] > 100)
+        minTimeSaved = 100;
 
-    return std::to_string(result);
+    int bestCheatCount {0};
+    for (const auto trackStep : trackBySteps)
+        bestCheatCount += getShortcutEndpoints(trackStep, 20, minTimeSaved).size();
+
+    return std::to_string(bestCheatCount);
 }
+
+
+vector<Day20Solution::Position> Day20Solution::getShortcutEndpoints(const Position &first, const int &maxShortcutDuration, const int &minImprovement)
+{
+    vector<Position> viableEndpoints;
+    for (int x = 0 - maxShortcutDuration; x <= maxShortcutDuration; x++)
+        for (int y = 0 - maxShortcutDuration; y <= maxShortcutDuration; y++)
+        {
+            int shortcutDuration = std::abs(x) + std::abs(y);
+            if (shortcutDuration > maxShortcutDuration)
+                continue;
+
+            Position endpoint {first.x + x, first.y + y};
+            if (track.contains(endpoint))
+                if (track[endpoint] - track[first] >= minImprovement + shortcutDuration)
+                    viableEndpoints.push_back(endpoint);
+        }
+
+    return viableEndpoints;
+}
+
