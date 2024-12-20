@@ -18,6 +18,7 @@
  *       12/17/24 - Added day 17 solution.
  *       12/18/24 - Added day 18 solution.
  *       12/19/24 - Added day 19 solution.
+ *       12/20/24 - Added day 20 solution.
  */
 
 #include <memory>
@@ -31,11 +32,11 @@ constexpr bool DEBUG = false; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
 constexpr SolutionType TYPE = BOTH_TYPES;
 
-enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_DIFFICULTIES };
-constexpr SolutionDifficulty DIFFICULTY = BOTH_DIFFICULTIES;
+enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_STARS };
+constexpr SolutionDifficulty DIFFICULTY = BOTH_STARS;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 19;
+constexpr unsigned short TODAY = 20;
 
 
 // -----------------------------------------|    FUNCTION DECLARATIONS     |----------------------------------------- //
@@ -86,7 +87,7 @@ int main()
                     switch(DIFFICULTY)
                     {
                         case ONE_STAR:
-                        case BOTH_DIFFICULTIES:
+                        case BOTH_STARS:
                             std::cout << "  * Example Answer: " << exampleSolution->oneStarSolution() << std::endl;
                         if constexpr (DIFFICULTY == ONE_STAR)
                             break;
@@ -109,7 +110,7 @@ int main()
                     switch(DIFFICULTY)
                     {
                         case ONE_STAR:
-                        case BOTH_DIFFICULTIES:
+                        case BOTH_STARS:
                             std::cout << "  * Answer: " << solution->oneStarSolution() << std::endl;
                         if constexpr (DIFFICULTY == ONE_STAR)
                             break;
@@ -187,7 +188,10 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
             return std::make_unique<Day18Creator>();
 
         case 19:
-            return std::make_unique<Day18Creator>();
+            return std::make_unique<Day19Creator>();
+
+        case 20:
+            return std::make_unique<Day20Creator>();
 
         default:
             std::cout << "No solution available for day " << dayNumber << "." << std::endl;
