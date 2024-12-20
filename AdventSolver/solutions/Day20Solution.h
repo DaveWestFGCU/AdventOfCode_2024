@@ -10,11 +10,43 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
-
+#include <unordered_map>
 
 class Day20Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
+    enum Direction { NORTH, SOUTH, EAST, WEST };
+    struct Position
+    {
+        int x, y;
+        bool operator==(const Position &otherPosition) const
+        {
+            return x == otherPosition.x && y == otherPosition.y;
+        }
+        bool operator!=(const Position &otherPosition) const
+        {
+            return x != otherPosition.x || y != otherPosition.y;
+        }
+    };
+    struct Hash_Position
+    {
+        size_t operator()(const Position &pos) const
+        {
+            size_t hashX = std::hash<int>{}(pos.x);
+            size_t hashY = std::hash<int>{}(pos.y);
+            return hashX ^ (hashY << 1);
+        }
+    };
+    vector<string> racetrack;
+    std::unordered_map<Position,int,Hash_Position> track;
+    vector<Position> walls;
+    Position startPosition, endPosition;
+
+    void parseTrack();
+    void runTrack();
+    void printSteps();
+    Position findNextPosition(const Position &current, const Position &last);
+
+    int getTimeSaved(Position wall);
 
 public:
     explicit Day20Solution(const vector<string> &puzzleInput);
