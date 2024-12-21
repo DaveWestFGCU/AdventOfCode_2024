@@ -159,17 +159,12 @@ string Day21Solution::oneStarSolution()
 
     for (const auto &code : doorCodes)
     {
-        std::cout << code << " -> ";
         string newCode = translateCodeToDirections(code);
-        std::cout << newCode << " -> ";
         newCode = translateDirectionsToDirections(newCode);
-        std::cout << newCode << " -> ";
         newCode = translateDirectionsToDirections(newCode);
-        std::cout << newCode << std::endl;
 
         int codeLength = newCode.length();
         int codeNum = std::stoi(code.substr(0,code.length()-1));
-        std::cout << codeLength << " * " << codeNum << std::endl;
 
         sumComplexities += codeLength * codeNum;
     }
