@@ -18,13 +18,15 @@
 
 class Day11Solution : public Solution {
     string title;
-    vector<string> initialStones;
-    std::unordered_map<string, long[75]> stoneScores;
+    vector<long long> initialStones;
+    std::unordered_map<long long,long long[76]> cache;
         // Constructor methods
     void getInitialStones(const vector<string> &puzzleInput);
+    void buildCache();
 
-        // One-star methods
-    unsigned long scoreStone(string stone, int blink);
+    // One-star methods
+    std::pair<long long,long long> blink(const long long &stoneValue);
+    long long stonesPerBlink(long long stoneValue, int depth);
 
 public:
     explicit Day11Solution(const vector<string> &puzzleInput);
