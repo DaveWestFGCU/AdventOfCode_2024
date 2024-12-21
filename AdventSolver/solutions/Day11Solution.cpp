@@ -20,70 +20,67 @@ void Day11Solution::getInitialStones(const vector<string> &puzzleInput)
     int value;
 
     while (ss >> value)
-        initialStones.push_back(std::to_string(value));
+        initialStones.push_back(value);
+}
+
+
+std::pair<long long,long long> Day11Solution::blink(const long long &stoneValue)
+{
+    if (stoneValue == 0)
+        return {1, -1};
+
+    string stoneString = std::to_string(stoneValue);
+    if (stoneString.length() % 2 == 0)
+    {
+        int halfDigits = stoneString.length() / 2;
+        return {std::stoll(stoneString.substr(0,halfDigits)), std::stoll(stoneString.substr(halfDigits,halfDigits))};
+    }
+
+    return {stoneValue * 2024, -1};
+}
+
+
+long long Day11Solution::stonesPerBlink(long long stoneValue, int depth)
+{
+    // Base case: No more blinks
+    if (depth == 0)
+        return 1;
+
+    // Use cache if value/depth has been seen before
+    if (cache.contains(stoneValue))
+        if (cache[stoneValue][depth] != 0)
+            return cache[stoneValue][depth];
+
+    // Get values for this stone
+    auto [leftStone, rightStone] = blink(stoneValue);
+
+    long long output = stonesPerBlink(leftStone, depth - 1);
+    if (rightStone != -1)
+        output += stonesPerBlink(rightStone, depth - 1);
+
+    // Add to cache now that number of stones for this depth is known.
+    cache[stoneValue][depth] = output;
+    return output;
 }
 
 
 string Day11Solution::oneStarSolution()
 {
-    int totalBlinks = 25;
+    int totalStones = 0;
 
     for (const auto &stone : initialStones)
-        scoreStone(stone, totalBlinks);
-
-    uint64_t totalStones {0};
-    for (auto stone : initialStones)
-        totalStones += stoneScores[stone][totalBlinks];
+        totalStones += stonesPerBlink(stone, 25);
 
     return std::to_string(totalStones);
 }
 
 
-unsigned long Day11Solution::scoreStone(string stone, int blink)
-{   std::cout << stone << " | ";
-    if(stoneScores[stone][blink] != 0)
-        return stoneScores[stone][blink];
-
-    if (blink == 0)
-    {
-        stoneScores[stone][blink] = 1;
-        return 1;
-    }
-
-    unsigned long totalScore {0};
-        //  If the stone is engraved with the number 0, it is replaced by a stone engraved with the number 1.
-    if (stone == "0")
-        totalScore = scoreStone("1", blink-1);
-
-        //  If the stone is engraved with a number that has an even number of digits, it is replaced by two stones.
-        //  The left half of the digits are engraved on the new left stone, and the right half of the digits are
-        //  engraved on the new right stone. (The new numbers don't keep extra leading zeroes: 1000 would become
-        //  stones 10 and 0.)
-    else if (stone.length() % 2 == 0)
-    {
-        int halfDigits = stone.length() / 2;
-        totalScore = scoreStone(stone.substr(0, halfDigits), blink-1);
-        totalScore += scoreStone(stone.substr(halfDigits+1, halfDigits), blink-1);
-    }
-
-        //  If none of the other rules apply, the stone is replaced by a new stone; the old stone's number
-        //  multiplied by 2024 is engraved on the new stone.
-    else
-    {
-        string newStone = std::to_string(std::stoi(stone) * 2024);
-        std::cout << stone << " -> " << newStone << " | ";
-        totalScore = scoreStone(newStone, blink-1);
-    }
-
-    stoneScores[stone][blink] = totalScore;
-
-    return totalScore;
-}
-
-
 string Day11Solution::twoStarSolution()
 {
-    int result {0};
+    long long totalStones = 0;
 
-    return std::to_string(result);
+    for (const auto &stone : initialStones)
+        totalStones += stonesPerBlink(stone, 75);
+
+    return std::to_string(totalStones);
 }
