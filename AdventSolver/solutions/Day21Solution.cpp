@@ -31,24 +31,24 @@ void Day21Solution::buildNumberToDirectionLookup()
     buttonPosition['A'] = {2,0};
 
     // The Manhattan Distance between two points (X1, Y1) and (X2, Y2) is given by |X1 – X2| + |Y1 – Y2|.
-    for (int button1 = 0; button1 <= A; ++button1)
-        for (int button2 = 0; button2 <= A; ++button2)
+    for (int fromKey = 0; fromKey <= A; ++fromKey)
+        for (int toKey = 0; toKey <= A; ++toKey)
         {
-            char button1Char = button1 == A ? 'A' : static_cast<char>(button1 + '0');
-            char button2Char = button2 == A ? 'A' : static_cast<char>(button2 + '0');
-            numKeyLookup[{button1Char,button2Char}] = numKeysToDirectionKeys(buttonPosition[button1Char], buttonPosition[button2Char]);
+            char fromKeyChar = fromKey == A ? 'A' : static_cast<char>(fromKey + '0');
+            char toKeyChar = toKey == A ? 'A' : static_cast<char>(toKey + '0');
+            numKeyLookup[{fromKeyChar,toKeyChar}] = numKeysToDirectionKeys(buttonPosition[fromKeyChar], buttonPosition[toKeyChar]);
         }
 }
 
 
-string Day21Solution::numKeysToDirectionKeys(Position button1, Position button2)
+string Day21Solution::numKeysToDirectionKeys(Position fromKey, Position toKey)
 {
     string translation;
-    int xDistance = button2.x - button1.x;
-    int yDistance = button2.y - button1.y;
+    int xDistance = toKey.x - fromKey.x;
+    int yDistance = toKey.y - fromKey.y;
 
     // Avoid the empty space
-    if (button1.y == 0 && button2.x == 0)
+    if (fromKey.y == 0 && toKey.x == 0)
     {
         for (int y = 0; y < yDistance; ++y)
             translation += "^";
@@ -60,12 +60,12 @@ string Day21Solution::numKeysToDirectionKeys(Position button1, Position button2)
     }
 
     // Avoid the empty space
-    if (button1.x == 0 && button2.y == 0)
+    if (fromKey.x == 0 && toKey.y == 0)
     {
-        for (int y = 0; y > yDistance; --y)
+        for (int x = 0; x < xDistance; ++x)
             translation += ">";
 
-        for (int x = 0; x < xDistance; ++x)
+        for (int y = 0; y > yDistance; --y)
             translation += "v";
 
         return translation + "A";
@@ -99,11 +99,57 @@ void Day21Solution::buildDirectionToDirectionLookup()
     buttonPosition['A'] = {2,1};
 
     // The Manhattan Distance between two points (X1, Y1) and (X2, Y2) is given by |X1 – X2| + |Y1 – Y2|.
-    for (int button1 = LEFT; button1 <= ACT; ++button1)
-        for (int button2 = LEFT; button2 <= ACT; ++button2)
-            directionLookup[{buttonNum[button1], buttonNum[button2]}] = numKeysToDirectionKeys(buttonPosition[buttonNum[button1]], buttonPosition[buttonNum[button2]]);
+    for (int fromKey = LEFT; fromKey <= ACT; ++fromKey)
+        for (int toKey = LEFT; toKey <= ACT; ++toKey)
+            directionLookup[{buttonNum[fromKey], buttonNum[toKey]}] = directionKeysToDirectionKeys(buttonPosition[buttonNum[fromKey]], buttonPosition[buttonNum[toKey]]);
 }
 
+
+string Day21Solution::directionKeysToDirectionKeys(Position fromKey, Position toKey)
+{
+    string translation;
+    int xDistance = toKey.x - fromKey.x;
+    int yDistance = toKey.y - fromKey.y;
+
+    // Avoid the empty space
+    if (fromKey.y == 1 && toKey.x == 0)
+    {
+        for (int y = 0; y > yDistance; --y)
+            translation += "v";
+
+        for (int x = 0; x > xDistance; --x)
+            translation += "<";
+
+        return translation + "A";
+    }
+
+    // Avoid the empty space
+    if (fromKey.x == 0 && toKey.y == 1)
+    {
+        for (int x = 0; x < xDistance; ++x)
+            translation += ">";
+
+        for (int y = 0; y < yDistance; ++y)
+            translation += "^";
+
+        return translation + "A";
+    }
+
+    // Do the most expensive operation first
+    for (int x = 0; x > xDistance; --x)
+        translation += "<";
+
+    for (int y = 0; y > yDistance; --y)
+        translation += "v";
+
+    for (int y = 0; y < yDistance; ++y)
+        translation += "^";
+
+    for (int x = 0; x < xDistance; ++x)
+        translation += ">";
+
+    return translation + "A";
+}
 
 string Day21Solution::codeToDirections(const string &code)
 {
@@ -120,47 +166,50 @@ string Day21Solution::codeToDirections(const string &code)
 }
 
 
-string Day21Solution::translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth)
+long long Day21Solution::translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth)
 {
     // Base case: No more translating
     if (depth == 0)
-        return {toKey};
+        return 1;
+
+    // Base case: We've seen this movement at this depth before
+    if (cache.contains({{fromKey,toKey},depth}))
+        return cache[{{fromKey,toKey},depth}];
 
     // Recursive case: Apply translation, go a layer deeper
     string directions = directionLookup[{fromKey, toKey}];
 
-    string newDirections;
+    long long sequenceLength { 0 };
     for (int i = 0; i < directions.length(); ++i)
     {
         char startButton = (i == 0) ? 'A' : directions[i-1];
         char endButton = directions[i];
 
-        newDirections += translateDirectionToDirections(startButton, endButton, depth-1);
+        sequenceLength += translateDirectionToDirections(startButton, endButton, depth-1);
     }
 
-    return newDirections;
+    cache[{{fromKey,toKey},depth}] = sequenceLength;
+    return sequenceLength;
 }
 
 
 string Day21Solution::oneStarSolution()
 {
     int directionalKeypads = 2;
-    int sumComplexities { 0 };
+    long long sumComplexities { 0 };
 
     for (const auto &code : doorCodes)
     {
         string firstDirections = codeToDirections(code);
 
-        string newCode;
+        long long codeLength { 0 };
         for (int i = 0; i < firstDirections.length(); ++i)
         {
             if (i == 0)
-                newCode += translateDirectionToDirections('A', firstDirections[i], directionalKeypads);
+                codeLength = translateDirectionToDirections('A', firstDirections[i], directionalKeypads);
             else
-                newCode += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], directionalKeypads);
+                codeLength += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], directionalKeypads);
         }
-
-        int codeLength = newCode.length();
         int codeNum = std::stoi(code.substr(0,code.length()-1));
         sumComplexities += codeLength * codeNum;
     }
@@ -171,5 +220,24 @@ string Day21Solution::oneStarSolution()
 
 string Day21Solution::twoStarSolution()
 {
-    return "Not yet implemented.";
+    int directionalKeypads = 25;
+    long long sumComplexities { 0 };
+
+    for (const auto &code : doorCodes)
+    {
+        string firstDirections = codeToDirections(code);
+
+        long long codeLength { 0 };
+        for (int i = 0; i < firstDirections.length(); ++i)
+        {
+            if (i == 0)
+                codeLength = translateDirectionToDirections('A', firstDirections[i], directionalKeypads);
+            else
+                codeLength += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], directionalKeypads);
+        }
+        int codeNum = std::stoi(code.substr(0,code.length()-1));
+        sumComplexities += codeLength * codeNum;
+    }
+
+    return std::to_string(sumComplexities);
 }

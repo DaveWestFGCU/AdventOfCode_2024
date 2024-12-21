@@ -24,25 +24,32 @@ class Day21Solution : public Solution {
     struct IntIntPairHash
     {
         size_t operator()(const pair<int,int> &intPair) const
-        { return std::hash<int>()(intPair.first) ^ std::hash<int>()(intPair.second); }
+        { return std::hash<int>()(intPair.first) ^ (std::hash<int>()(intPair.second) << 1); }
     };
     unordered_map<pair<int,int>,string,IntIntPairHash> numKeyLookup;
 
     struct CharCharPairHash
     {
         size_t operator()(const pair<char,char> &charPair) const
-        { return std::hash<char>()(charPair.first) ^ std::hash<char>()(charPair.second); }
+        { return std::hash<char>()(charPair.first) ^ (std::hash<char>()(charPair.second) << 1); }
     };
     unordered_map<pair<char,char>,string,CharCharPairHash> directionLookup;
+
+    struct CharPairIntPairHash
+    {
+        size_t operator()(const pair<pair<char,char>,int> &CharPairIntPair) const
+        { return CharCharPairHash()(CharPairIntPair.first) ^ (std::hash<int>()(CharPairIntPair.second) << 1); }
+    };
+    unordered_map<pair<pair<char,char>,int>,long long,CharPairIntPairHash> cache;
 
         // Construct lookups
     void buildNumberToDirectionLookup();
     string numKeysToDirectionKeys(Position button1, Position button2);
     void buildDirectionToDirectionLookup();
-    string directionKeysToDirectionKeys(Position button1, Position button2);
+    string directionKeysToDirectionKeys(Position fromKey, Position toKey);
 
     string codeToDirections(const string &code);
-    string translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth);
+    long long translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth);
 
 public:
     explicit Day21Solution(const vector<string> &puzzleInput);
