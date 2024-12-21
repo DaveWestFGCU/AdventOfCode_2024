@@ -19,6 +19,7 @@
  *       12/18/24 - Added day 18 solution.
  *       12/19/24 - Added day 19 solution.
  *       12/20/24 - Added day 20 solution.
+ *       12/21/24 - Added day 21 solution.
  */
 
 #include <memory>
@@ -50,8 +51,8 @@ int main()
 {
     for (unsigned short dayNumber = DEBUG? TODAY : 1; dayNumber <= TODAY; ++dayNumber)
     {
-        // Day 11 & 16 are broken, skip for now.
-        if (dayNumber == 11 || dayNumber == 16)
+        // Day 16 is broken, skip for now.
+        if (dayNumber == 16)
             continue;
 
         std::string inputFilepath = "../puzzle_inputs/";
@@ -192,6 +193,9 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 
         case 20:
             return std::make_unique<Day20Creator>();
+
+        case 21:
+            return std::make_unique<Day21Creator>();
 
         default:
             std::cout << "No solution available for day " << dayNumber << "." << std::endl;
