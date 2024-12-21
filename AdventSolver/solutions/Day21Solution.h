@@ -10,11 +10,26 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 
 class Day21Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
+    struct Position { int x, y; };
+    enum Button { A = 10 };
+    enum Direction { LEFT, DOWN, RIGHT, UP, ACT };
+    vector<string> doorCodes;
+    string numberToDirection[11][11];
+    string directionToDirection[5][5];
+
+        // Construct lookups
+    void buildNumberToDirectionLookup();
+    string numKeysToDirectionKeys(Position button1, Position button2);
+    void buildDirectionToDirectionLookup();
+    string directionKeysToDirectionKeys(Position button1, Position button2);
+
+    string translateCodeToDirections(const string &code);
+    string translateDirectionsToDirections(const string &directions);
 
 public:
     explicit Day21Solution(const vector<string> &puzzleInput);
