@@ -7,7 +7,7 @@
 
 
 Day21Solution::Day21Solution(const vector<string> &puzzleInput)
-    : title("--- Day 21: Keypad Conundrum ---")
+    : title("--- Day 21: Keypad Conundrum ---"), numKeyLookup(), directionLookup()
 {
     this->doorCodes = puzzleInput;
     buildNumberToDirectionLookup();
@@ -36,8 +36,7 @@ void Day21Solution::buildNumberToDirectionLookup()
         {
             char button1Char = button1 == A ? 'A' : static_cast<char>(button1 + '0');
             char button2Char = button2 == A ? 'A' : static_cast<char>(button2 + '0');
-
-            numberToDirection[button1][button2] = numKeysToDirectionKeys(buttonPosition[button1Char], buttonPosition[button2Char]);
+            numKeyLookup[{button1Char,button2Char}] = numKeysToDirectionKeys(buttonPosition[button1Char], buttonPosition[button2Char]);
         }
 }
 
@@ -82,7 +81,6 @@ string Day21Solution::numKeysToDirectionKeys(Position button1, Position button2)
     for (int y = 0; y < yDistance; ++y)
         translation += "^";
 
-
     for (int x = 0; x < xDistance; ++x)
         translation += ">";
 
@@ -103,50 +101,41 @@ void Day21Solution::buildDirectionToDirectionLookup()
     // The Manhattan Distance between two points (X1, Y1) and (X2, Y2) is given by |X1 – X2| + |Y1 – Y2|.
     for (int button1 = LEFT; button1 <= ACT; ++button1)
         for (int button2 = LEFT; button2 <= ACT; ++button2)
-            directionToDirection[button1][button2] = numKeysToDirectionKeys(buttonPosition[buttonNum[button1]], buttonPosition[buttonNum[button2]]);
+            directionLookup[{buttonNum[button1], buttonNum[button2]}] = numKeysToDirectionKeys(buttonPosition[buttonNum[button1]], buttonPosition[buttonNum[button2]]);
 }
 
 
-string Day21Solution::translateCodeToDirections(const string &code)
+string Day21Solution::codeToDirections(const string &code)
 {
     string directions;
     for (int i = 0; i < code.length(); ++i)
     {
-        int startButton, endButton;
-        if (i == 0)
-            startButton = A;
-        else if (code[i-1] == 'A')
-            startButton = A;
-        else
-            startButton = code[i-1] - '0';
+        char startButton = (i == 0) ? 'A' : code[i-1];
+        char endButton = code[i];
 
-        if (code[i] == 'A')
-            endButton = A;
-        else
-            endButton = code[i] - '0';
-
-        directions += numberToDirection[startButton][endButton];
+        directions += numKeyLookup[{startButton,endButton}];
     }
 
     return directions;
 }
 
 
-string Day21Solution::translateDirectionsToDirections(const string &directions)
+string Day21Solution::translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth)
 {
-    std::unordered_map<char,int> buttonPosition;
-    buttonPosition['<'] = {0};
-    buttonPosition['v'] = {1};
-    buttonPosition['>'] = {2};
-    buttonPosition['^'] = {3};
-    buttonPosition['A'] = {4};
+    // Base case: No more translating
+    if (depth == 0)
+        return {toKey};
+
+    // Recursive case: Apply translation, go a layer deeper
+    string directions = directionLookup[{fromKey, toKey}];
 
     string newDirections;
-    for (int i = 0; i < directions.length(); i++)
+    for (int i = 0; i < directions.length(); ++i)
     {
-        char startDirection = (i == 0) ? 'A' : directions[i-1];
-        char endDirection = directions[i];
-        newDirections += directionToDirection[buttonPosition[startDirection]][buttonPosition[endDirection]];
+        char startButton = (i == 0) ? 'A' : directions[i-1];
+        char endButton = directions[i];
+
+        newDirections += translateDirectionToDirections(startButton, endButton, depth-1);
     }
 
     return newDirections;
@@ -155,17 +144,24 @@ string Day21Solution::translateDirectionsToDirections(const string &directions)
 
 string Day21Solution::oneStarSolution()
 {
+    int directionalKeypads = 2;
     int sumComplexities { 0 };
 
     for (const auto &code : doorCodes)
     {
-        string newCode = translateCodeToDirections(code);
-        newCode = translateDirectionsToDirections(newCode);
-        newCode = translateDirectionsToDirections(newCode);
+        string firstDirections = codeToDirections(code);
+
+        string newCode;
+        for (int i = 0; i < firstDirections.length(); ++i)
+        {
+            if (i == 0)
+                newCode += translateDirectionToDirections('A', firstDirections[i], directionalKeypads);
+            else
+                newCode += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], directionalKeypads);
+        }
 
         int codeLength = newCode.length();
         int codeNum = std::stoi(code.substr(0,code.length()-1));
-
         sumComplexities += codeLength * codeNum;
     }
 
@@ -175,7 +171,5 @@ string Day21Solution::oneStarSolution()
 
 string Day21Solution::twoStarSolution()
 {
-    int result {0};
-
-    return std::to_string(result);
+    return "Not yet implemented.";
 }

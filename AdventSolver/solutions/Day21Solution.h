@@ -12,6 +12,7 @@
 #include <string>
 #include <unordered_map>
 
+using std::unordered_map, std::pair;
 
 class Day21Solution : public Solution {
     string title;
@@ -19,8 +20,20 @@ class Day21Solution : public Solution {
     enum Button { A = 10 };
     enum Direction { LEFT, DOWN, RIGHT, UP, ACT };
     vector<string> doorCodes;
-    string numberToDirection[11][11];
-    string directionToDirection[5][5];
+
+    struct IntIntPairHash
+    {
+        size_t operator()(const pair<int,int> &intPair) const
+        { return std::hash<int>()(intPair.first) ^ std::hash<int>()(intPair.second); }
+    };
+    unordered_map<pair<int,int>,string,IntIntPairHash> numKeyLookup;
+
+    struct CharCharPairHash
+    {
+        size_t operator()(const pair<char,char> &charPair) const
+        { return std::hash<char>()(charPair.first) ^ std::hash<char>()(charPair.second); }
+    };
+    unordered_map<pair<char,char>,string,CharCharPairHash> directionLookup;
 
         // Construct lookups
     void buildNumberToDirectionLookup();
@@ -28,8 +41,8 @@ class Day21Solution : public Solution {
     void buildDirectionToDirectionLookup();
     string directionKeysToDirectionKeys(Position button1, Position button2);
 
-    string translateCodeToDirections(const string &code);
-    string translateDirectionsToDirections(const string &directions);
+    string codeToDirections(const string &code);
+    string translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth);
 
 public:
     explicit Day21Solution(const vector<string> &puzzleInput);
