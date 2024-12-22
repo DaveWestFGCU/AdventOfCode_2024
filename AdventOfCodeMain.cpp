@@ -37,7 +37,7 @@ enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_STARS };
 constexpr SolutionDifficulty DIFFICULTY = BOTH_STARS;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 20;
+constexpr unsigned short TODAY = 21;
 
 
 // -----------------------------------------|    FUNCTION DECLARATIONS     |----------------------------------------- //
