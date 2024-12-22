@@ -49,8 +49,7 @@ int Day22Solution::secretNumberEvolutionStep3(const int &secretNumber)
 string Day22Solution::oneStarSolution()
 {
     long long secretNumberSum {0};
-
-    for (auto &secretNumber : secretNumbers)
+    for (auto secretNumber : secretNumbers)
     {
         for (int i = 0; i < 2000; ++i)
             secretNumber = findNextSecretNumber(secretNumber);
@@ -64,5 +63,49 @@ string Day22Solution::oneStarSolution()
 
 string Day22Solution::twoStarSolution()
 {
-    return "0";
+    findSellSequenceBananaCounts();
+
+    int maxBananas { 0 };
+    for (const auto &sellSequence : sellSequences)
+    {
+        if (sellSequence.second.totalBananas > maxBananas)
+            maxBananas = sellSequence.second.totalBananas;
+    }
+
+    return std::to_string(maxBananas);
+}
+
+
+void Day22Solution::findSellSequenceBananaCounts()
+{
+    for (auto &secretNumber : secretNumbers)
+    {
+        short lastPrice { static_cast<short>(secretNumber % 10) };
+        SellSequence lastSellSeq;
+
+        // Reset sell sequence seen values with each new initial secret number
+        for (auto &sellSequence : sellSequences)
+            sellSequence.second.seen = false;
+
+        for (int i = 0; i < 2000; ++i)
+        {
+            // Update the sell sequence
+            secretNumber = findNextSecretNumber(secretNumber);
+            auto currentPrice = static_cast<short>(secretNumber % 10);
+            SellSequence currentSellSeq(currentPrice-lastPrice, lastSellSeq);
+
+            // Only start tracking after the initial zeros are removed
+            if (i > 2)
+            {
+                // We only want to add the total for the first occurrence of a sell sequence
+                if (!sellSequences[currentSellSeq].seen)
+                {
+                    sellSequences[currentSellSeq].totalBananas += currentPrice;
+                    sellSequences[currentSellSeq].seen = true;
+                }
+            }
+            lastPrice = currentPrice;
+            lastSellSeq = currentSellSeq;
+        }
+    }
 }
