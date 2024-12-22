@@ -22,5 +22,6 @@
 #include "./solutions/Day19Solution.h"
 #include "./solutions/Day20Solution.h"
 #include "./solutions/Day21Solution.h"
+#include "./solutions/Day22Solution.h"
 
 #endif //ALLSOLUTIONS_H

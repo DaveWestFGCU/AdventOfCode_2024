@@ -20,6 +20,7 @@
  *       12/19/24 - Added day 19 solution.
  *       12/20/24 - Added day 20 solution.
  *       12/21/24 - Added day 21 solution.
+ *       12/22/24 - Added day 22 solution.
  */
 
 #include <memory>
@@ -196,6 +197,9 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 
         case 21:
             return std::make_unique<Day21Creator>();
+
+        case 22:
+            return std::make_unique<Day22Creator>();
 
         default:
             std::cout << "No solution available for day " << dayNumber << "." << std::endl;

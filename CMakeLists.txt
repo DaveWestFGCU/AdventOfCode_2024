@@ -57,4 +57,6 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/Day20Solution.h
         AdventSolver/solutions/Day21Solution.cpp
         AdventSolver/solutions/Day21Solution.h
+        AdventSolver/solutions/Day22Solution.cpp
+        AdventSolver/solutions/Day22Solution.h
 )
