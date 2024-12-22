@@ -1,4 +1,5 @@
 # <p align="center">Advent of Code 2024 </p>
+### <p align="center"> Current Star Count: 40/42 </p>
 $${\color{yellow}*}$$
 $${\color{green}>\color{orange}o\color{green}<}$$
 $${\color{green}>\color{red}@\color{green}>\color{blue}O\color{green}<}$$
