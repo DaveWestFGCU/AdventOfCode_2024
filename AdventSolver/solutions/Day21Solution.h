@@ -18,7 +18,7 @@ class Day21Solution : public Solution {
     string title;
     struct Position { int x, y; };
     enum Button { A = 10 };
-    enum Direction { LEFT, DOWN, RIGHT, UP, ACT };
+    enum DirectionButton { LEFT, DOWN, RIGHT, UP, ACT };
     vector<string> doorCodes;
 
     struct IntIntPairHash
@@ -42,14 +42,18 @@ class Day21Solution : public Solution {
     };
     unordered_map<pair<pair<char,char>,int>,long long,CharPairIntPairHash> cache;
 
-        // Construct lookups
-    void buildNumberToDirectionLookup();
+        //  Construct lookups
+    void buildNumKeyLookup();
     string numKeysToDirectionKeys(Position button1, Position button2);
-    void buildDirectionToDirectionLookup();
+    void buildDirectionLookup();
     string directionKeysToDirectionKeys(Position fromKey, Position toKey);
 
+        //  Translate between layers
     string codeToDirections(const string &code);
     long long translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth);
+
+        //
+    long long calcCodeKeyPresses(const string &initialCode, const int &totalDepth);
 
 public:
     explicit Day21Solution(const vector<string> &puzzleInput);

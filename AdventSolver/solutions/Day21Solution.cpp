@@ -5,17 +5,24 @@
 
 #include "Day21Solution.h"
 
-
+/**
+ * Parses the day's input and builds lookups for memoization later.
+ * @param puzzleInput
+ */
 Day21Solution::Day21Solution(const vector<string> &puzzleInput)
-    : title("--- Day 21: Keypad Conundrum ---"), numKeyLookup(), directionLookup()
+    : title("--- Day 21: Keypad Conundrum ---")
 {
     this->doorCodes = puzzleInput;
-    buildNumberToDirectionLookup();
-    buildDirectionToDirectionLookup();
+    buildNumKeyLookup();
+    buildDirectionLookup();
 }
 
 
-void Day21Solution::buildNumberToDirectionLookup()
+/**
+ * Fills the numKeyLookup member variable with the shortest path between any two buttons on the number keypad.
+ * We're going to do a lot of these, so might as well memoize it for later.
+ */
+void Day21Solution::buildNumKeyLookup()
 {
     std::unordered_map<char,Position> buttonPosition;
     buttonPosition['0'] = {1,0};
@@ -41,13 +48,19 @@ void Day21Solution::buildNumberToDirectionLookup()
 }
 
 
+/**
+ * Finds the shortest path between two num keys based on their position.
+ * @param fromKey Button position at the start of the movement.
+ * @param toKey Button position at the end of the movement.
+ * @return Returns a string of the arrow keys for the shortest path.
+ */
 string Day21Solution::numKeysToDirectionKeys(Position fromKey, Position toKey)
 {
     string translation;
     int xDistance = toKey.x - fromKey.x;
     int yDistance = toKey.y - fromKey.y;
 
-    // Avoid the empty space
+    // Avoid the empty space @ (0,0)
     if (fromKey.y == 0 && toKey.x == 0)
     {
         for (int y = 0; y < yDistance; ++y)
@@ -59,7 +72,7 @@ string Day21Solution::numKeysToDirectionKeys(Position fromKey, Position toKey)
         return translation + "A";
     }
 
-    // Avoid the empty space
+    // Avoid the empty space @ (0,0)
     if (fromKey.x == 0 && toKey.y == 0)
     {
         for (int x = 0; x < xDistance; ++x)
@@ -88,7 +101,11 @@ string Day21Solution::numKeysToDirectionKeys(Position fromKey, Position toKey)
 }
 
 
-void Day21Solution::buildDirectionToDirectionLookup()
+/**
+ * Fills the directionLookup member variable with the shortest path between any two buttons on the directional keypad.
+ * We're going to do a lot of these, so might as well memoize it first.
+ */
+void Day21Solution::buildDirectionLookup()
 {
     std::unordered_map<char,Position> buttonPosition;
     char buttonNum[5] = {'<', 'v', '>', '^', 'A'};
@@ -105,13 +122,19 @@ void Day21Solution::buildDirectionToDirectionLookup()
 }
 
 
+/**
+ * Finds the shortest path between two directional keys based on their position.
+ * @param fromKey Button position at the start of the movement.
+ * @param toKey Button position at the end of the movement.
+ * @return Returns a string of the arrow keys for the shortest path.
+ */
 string Day21Solution::directionKeysToDirectionKeys(Position fromKey, Position toKey)
 {
     string translation;
     int xDistance = toKey.x - fromKey.x;
     int yDistance = toKey.y - fromKey.y;
 
-    // Avoid the empty space
+    // Avoid the empty space @ (0,1)
     if (fromKey.y == 1 && toKey.x == 0)
     {
         for (int y = 0; y > yDistance; --y)
@@ -123,7 +146,7 @@ string Day21Solution::directionKeysToDirectionKeys(Position fromKey, Position to
         return translation + "A";
     }
 
-    // Avoid the empty space
+    // Avoid the empty space @ (0,1)
     if (fromKey.x == 0 && toKey.y == 1)
     {
         for (int x = 0; x < xDistance; ++x)
@@ -151,12 +174,18 @@ string Day21Solution::directionKeysToDirectionKeys(Position fromKey, Position to
     return translation + "A";
 }
 
+
+/**
+ * Converts the initial code into the first set of directions.
+ * @param code One line from the puzzle input.
+ * @return A string of directions that will input the code.
+ */
 string Day21Solution::codeToDirections(const string &code)
 {
     string directions;
     for (int i = 0; i < code.length(); ++i)
     {
-        char startButton = (i == 0) ? 'A' : code[i-1];
+        char startButton = (i == 0) ? 'A' : code[i-1];  //  Starts at 'A' position.
         char endButton = code[i];
 
         directions += numKeyLookup[{startButton,endButton}];
@@ -166,6 +195,14 @@ string Day21Solution::codeToDirections(const string &code)
 }
 
 
+/**
+ * Recursive method for creating a directional input for the prior layer's directional input.
+ * Uses tabulation to early return if we've calculated this start/end key pair and depth before.
+ * @param fromKey Directional key to start from.
+ * @param toKey Directional key to end at.
+ * @param depth Depth of the translation. A directional input for a directional input for...
+ * @return Returns the number of inputs at the depth of translation.
+ */
 long long Day21Solution::translateDirectionToDirections(const char &fromKey, const char &toKey, const int &depth)
 {
     // Base case: No more translating
@@ -193,50 +230,63 @@ long long Day21Solution::translateDirectionToDirections(const char &fromKey, con
 }
 
 
+/**
+ * Solution to the one-star problem.
+ * @return Returns an appropriately formatted string of the solution.
+ */
 string Day21Solution::oneStarSolution()
 {
-    int directionalKeypads = 2;
+    int directionalKeypads { 2 };
     long long sumComplexities { 0 };
 
     for (const auto &code : doorCodes)
     {
-        string firstDirections = codeToDirections(code);
-
-        long long codeLength { 0 };
-        for (int i = 0; i < firstDirections.length(); ++i)
-        {
-            if (i == 0)
-                codeLength = translateDirectionToDirections('A', firstDirections[i], directionalKeypads);
-            else
-                codeLength += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], directionalKeypads);
-        }
+        long long numKeyPresses = calcCodeKeyPresses(code, directionalKeypads);
         int codeNum = std::stoi(code.substr(0,code.length()-1));
-        sumComplexities += codeLength * codeNum;
+        sumComplexities += numKeyPresses * codeNum;
     }
 
     return std::to_string(sumComplexities);
 }
 
 
+/**
+ * Finds the number of key pad presses needed at the first directional keypad to input the code at the numeric keypad.
+ * @param initialCode One numeric door code from the puzzle input.
+ * @param totalDepth Number of directional keypads.
+ * @return Returns the number of key presses at the most distal directional keypad needed for the numeric keypad input.
+ */
+long long Day21Solution::calcCodeKeyPresses(const string &initialCode, const int &totalDepth)
+{
+    string firstDirections = codeToDirections(initialCode);
+
+    long long numKeyPresses { 0 };
+    for (int i = 0; i < firstDirections.length(); ++i)
+    {
+        if (i == 0)
+            numKeyPresses = translateDirectionToDirections('A', firstDirections[i], totalDepth);
+        else
+            numKeyPresses += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], totalDepth);
+    }
+
+    return numKeyPresses;
+}
+
+
+/**
+ * Solution to the two-star problem.
+ * @return Returns an appropriately formatted string of the solution.
+ */
 string Day21Solution::twoStarSolution()
 {
-    int directionalKeypads = 25;
+    int directionalKeypads { 25 };
     long long sumComplexities { 0 };
 
     for (const auto &code : doorCodes)
     {
-        string firstDirections = codeToDirections(code);
-
-        long long codeLength { 0 };
-        for (int i = 0; i < firstDirections.length(); ++i)
-        {
-            if (i == 0)
-                codeLength = translateDirectionToDirections('A', firstDirections[i], directionalKeypads);
-            else
-                codeLength += translateDirectionToDirections(firstDirections[i-1], firstDirections[i], directionalKeypads);
-        }
+        long long numKeyPresses = calcCodeKeyPresses(code, directionalKeypads);
         int codeNum = std::stoi(code.substr(0,code.length()-1));
-        sumComplexities += codeLength * codeNum;
+        sumComplexities += numKeyPresses * codeNum;
     }
 
     return std::to_string(sumComplexities);
