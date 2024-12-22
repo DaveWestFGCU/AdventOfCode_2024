@@ -6,7 +6,7 @@
 #include "Day$Solution.h"
 
 
-Day18Solution::Day$Solution(const vector<string> &puzzleInput)
+Day$Solution::Day$Solution(const vector<string> &puzzleInput)
     : title("")
 {
     this->puzzleInput = puzzleInput;
