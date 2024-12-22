@@ -14,7 +14,12 @@
 
 class Day22Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
+    vector<int> secretNumbers;
+
+    int findNextSecretNumber(int secretNumber);
+    int secretNumberEvolutionStep1(const int &secretNumber);
+    int secretNumberEvolutionStep2(const int &secretNumber);
+    int secretNumberEvolutionStep3(const int &secretNumber);
 
 public:
     explicit Day22Solution(const vector<string> &puzzleInput);

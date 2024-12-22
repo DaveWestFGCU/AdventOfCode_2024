@@ -7,23 +7,62 @@
 
 
 Day22Solution::Day22Solution(const vector<string> &puzzleInput)
-    : title("")
+    : title("--- Day 22: Monkey Market ---")
 {
-    this->puzzleInput = puzzleInput;
+    for (const auto &line : puzzleInput)
+        secretNumbers.push_back(std::stoi(line));
+}
+
+
+int Day22Solution::findNextSecretNumber(int secretNumber)
+{
+    secretNumber = secretNumberEvolutionStep1(secretNumber);
+    secretNumber = secretNumberEvolutionStep2(secretNumber);
+    return secretNumberEvolutionStep3(secretNumber);
+}
+
+
+int Day22Solution::secretNumberEvolutionStep1(const int &secretNumber)
+{
+    int value = secretNumber * 64;
+    value = value ^ secretNumber;   //  mix
+    return value % 16777216;        //  prune
+}
+
+
+int Day22Solution::secretNumberEvolutionStep2(const int &secretNumber)
+{
+    int value = secretNumber / 32;
+    value = value ^ secretNumber;   //  mix
+    return value % 16777216;        //  prune
+}
+
+
+int Day22Solution::secretNumberEvolutionStep3(const int &secretNumber)
+{
+    long long value = static_cast<long long>(secretNumber) * 2048;
+    value = value ^ secretNumber;               //  mix
+    return static_cast<int>(value % 16777216);  //  prune
 }
 
 
 string Day22Solution::oneStarSolution()
 {
-    int result {0};
+    long long secretNumberSum {0};
 
-    return std::to_string(result);
+    for (auto &secretNumber : secretNumbers)
+    {
+        for (int i = 0; i < 2000; ++i)
+            secretNumber = findNextSecretNumber(secretNumber);
+
+        secretNumberSum += secretNumber;
+    }
+
+    return std::to_string(secretNumberSum);
 }
 
 
 string Day22Solution::twoStarSolution()
 {
-    int result {0};
-
-    return std::to_string(result);
+    return "0";
 }
