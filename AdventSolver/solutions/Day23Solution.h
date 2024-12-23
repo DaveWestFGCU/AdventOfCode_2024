@@ -10,12 +10,27 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include <tuple>
+#include <set>
 
-using std::pair;
+using std::unordered_map, std::tuple, std::set;
 
 class Day23Solution : public Solution {
     string title;
-    vector<string>  puzzleInput;
+    struct Computer
+    {
+        unordered_map<string,Computer*>connections;
+    };
+    unordered_map<string, Computer> lanConnections;
+    set<tuple<string,string,string>> connectionTriplets;
+
+    void parseLanConnections(const vector<string> &puzzleInput);
+    static vector<string> split(const string &stringToParse, const char &delimiter);
+
+    void findConnectionTriplets();
+
+
 
 public:
     explicit Day23Solution(const vector<string> &puzzleInput);
