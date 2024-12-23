@@ -31,7 +31,7 @@
 
 // -------------------------------------------|    DEBUGGING SETTINGS    |------------------------------------------- //
 
-constexpr bool DEBUG = true; // Set to true for solving a single puzzle
+constexpr bool DEBUG = false; // Set to true for solving a single puzzle
 enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
 constexpr SolutionType TYPE = EXAMPLE;
 
