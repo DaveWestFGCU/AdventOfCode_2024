@@ -30,7 +30,8 @@ class Day23Solution : public Solution {
 
     void findConnectionTriplets();
 
-
+    vector<string> findMaximalClique();
+    vector<string> _findMaximalClique(vector<string> currentClique, const string &nextComputer);
 
 public:
     explicit Day23Solution(const vector<string> &puzzleInput);

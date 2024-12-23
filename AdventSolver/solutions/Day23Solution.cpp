@@ -5,6 +5,7 @@
 
 #include "Day23Solution.h"
 #include <sstream>
+#include <algorithm>
 
 Day23Solution::Day23Solution(const vector<string> &puzzleInput)
     : title("--- Day 23: LAN Party ---")
@@ -88,6 +89,60 @@ void Day23Solution::findConnectionTriplets()
 
 string Day23Solution::twoStarSolution()
 {
-    int result { 0 };
-    return std::to_string(result);
+    auto maximalClique = findMaximalClique();
+    std::ranges::sort(maximalClique);
+
+    string password;
+    for (const auto &computer : maximalClique)
+        password += computer + ",";
+
+    password = password.substr(0,password.length()-1);  //  Remove last comma
+
+    return password;
+}
+
+
+vector<string> Day23Solution::findMaximalClique()
+{
+    vector<string> maximalClique;
+    for (const auto &computer : lanConnections)
+    {
+        vector<string> currentClique;
+        currentClique = _findMaximalClique(currentClique, computer.first);
+        if (currentClique.size() > maximalClique.size())
+            maximalClique = currentClique;
+    }
+
+    return maximalClique;
+}
+
+
+vector<string> Day23Solution::_findMaximalClique(vector<string> clique, const string &nextComputer)
+{
+    //  If any element in the current clique does not exist in the next computer's connections, don't add it to the clique.
+    for (const auto &cliqueComputer : clique)
+        if (!lanConnections[nextComputer].connections.contains(cliqueComputer))
+            return clique;
+
+    //  All clique nodes connect to next node: graph is still complete.
+    clique.push_back(nextComputer);
+
+    //  Get any new connections not already in the clique
+    vector<string> newComputers;
+    for (const auto &newComputer : lanConnections[nextComputer].connections)
+    {
+        if (std::find(clique.begin(), clique.end(), newComputer.first) == clique.end())
+            newComputers.push_back(newComputer.first);
+    }
+
+    // Check new connections for larger cliques
+    for (const auto &newComputer : newComputers)
+    {
+        vector<string> newClique = _findMaximalClique(clique, newComputer);
+        if (newClique.size() > clique.size())
+            clique = newClique;
+    }
+
+    // Return largest sub-clique
+    return clique;
 }
