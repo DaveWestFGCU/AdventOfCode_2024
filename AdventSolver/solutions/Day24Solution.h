@@ -10,12 +10,25 @@
 #include "../AdventSolver.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
+using std::unordered_map;
 
 class Day24Solution : public Solution {
     string title;
     vector<string> puzzleInput;
+    unordered_map<string,bool> inputWires;
+    struct Gate
+    {
+        string inputWire1;
+        string gate;
+        string inputWire2;
+        string outputWire;
+    };
+    vector<Gate> gates;
 
+    vector<string> split(const string &stringToParse, const char &delimiter);
+    bool runGate(const Gate &gate);
 public:
     explicit Day24Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }
