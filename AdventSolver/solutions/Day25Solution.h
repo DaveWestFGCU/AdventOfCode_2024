@@ -14,7 +14,25 @@
 
 class Day25Solution : public Solution {
     string title;
-    vector<string> puzzleInput;
+
+    struct Key
+    {
+        int pin[5];
+        explicit Key(int pin[5]) : pin{pin[0],pin[1],pin[2],pin[3],pin[4]} {}
+    };
+    struct Lock
+    {
+        int pin[5];
+        explicit Lock(int pin[5]) : pin{pin[0],pin[1],pin[2],pin[3],pin[4]} {}
+    };
+    vector<Key> keys;
+    vector<Lock> locks;
+
+    void parseKeysAndLocks(const vector<string> &puzzleInput);
+    void parseKey(const vector<string> &puzzleInput, const int &startIndex);
+    void parseLock(const vector<string> &puzzleInput, const int &startIndex);
+
+    static bool tryKeyInLock(const Key &key, const Lock &lock);
 
 public:
     explicit Day25Solution(const vector<string> &puzzleInput);
