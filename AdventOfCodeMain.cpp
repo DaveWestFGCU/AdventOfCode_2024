@@ -23,6 +23,7 @@
  *       12/22/24 - Added day 22 solution.
  *       12/23/24 - Added day 23 solution.
  *       12/24/24 - Added Christmas Eve solution.
+ *       12/25/24 - Added Christmas solution.
  */
 
 #include <memory>
@@ -40,7 +41,7 @@ enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_STARS };
 constexpr SolutionDifficulty DIFFICULTY = BOTH_STARS;
 
 constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 23;
+constexpr unsigned short TODAY = 25;
 
 
 // -----------------------------------------|    FUNCTION DECLARATIONS     |----------------------------------------- //
