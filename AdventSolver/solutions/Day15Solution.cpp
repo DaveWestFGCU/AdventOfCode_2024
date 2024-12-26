@@ -70,8 +70,9 @@ void Day15Solution::printWarehouseState() const
 
 string Day15Solution::oneStarSolution()
 {
+    printWarehouseState();
     runMovementInstructions();
-
+    printWarehouseState();
     int boxGPSCoordinateSum {0};
 
     for (const auto &[x, y] : findBoxes())
@@ -84,7 +85,12 @@ string Day15Solution::oneStarSolution()
 void Day15Solution::runMovementInstructions()
 {
     for (const auto instruction : moveInstructions)
+    {
+        system("cls");
         robot.move(instruction);
+        printWarehouseState();
+        system("pause");
+    }
 }
 
 
@@ -96,7 +102,10 @@ void Day15Solution::Robot::move(const Direction &direction)
         return;
 
     if (isClear(nextPosition))
+    {
         setPosition(nextPosition);
+        return;
+    }
 
     if (pushIsClear(nextPosition, direction))
     {
@@ -133,7 +142,7 @@ bool Day15Solution::Robot::pushIsClear(const Position object, const Direction &d
 
         return pushIsClear(nextPosition, direction);
     }
-
+/*
     if (currentTile == BOX_LEFT && (direction == NORTH || direction == SOUTH))
     {
         const Position nextBoxRightPosition(nextPosition.x+1, nextPosition.y);
@@ -177,7 +186,7 @@ bool Day15Solution::Robot::pushIsClear(const Position object, const Direction &d
 
         return false;
     }
-
+*/
     return false;
 }
 
@@ -196,7 +205,7 @@ void Day15Solution::Robot::pushBox(const Position object, const Direction &direc
         (*warehouseMap)[object.y][object.x] = SPACE;
         return;
     }
-
+/*
     if (currentTile == BOX_LEFT && (direction == NORTH || direction == SOUTH))
     {
         Position boxRight(object.x+1,object.y);
@@ -233,10 +242,11 @@ void Day15Solution::Robot::pushBox(const Position object, const Direction &direc
         (*warehouseMap)[nextBoxLeftPosition.y][nextBoxLeftPosition.x] = BOX_LEFT;
         (*warehouseMap)[boxLeft.y][boxLeft.x] = SPACE;
     }
+    */
 }
 
 
-Day15Solution::Position Day15Solution::Robot::getNextPosition(const Position &startPosition,const Direction &direction)
+Day15Solution::Position Day15Solution::Robot::getNextPosition(const Position &startPosition, const Direction &direction)
 {
     switch (direction)
     {
@@ -252,6 +262,8 @@ Day15Solution::Position Day15Solution::Robot::getNextPosition(const Position &st
         case WEST:
             return {startPosition.x-1, startPosition.y};
     }
+
+    return {-1, -1};
 }
 
 
