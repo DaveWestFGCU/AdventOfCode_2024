@@ -4,7 +4,8 @@
  *  Log: 12/15/24 - Initial creation.
  *                  One-star solution added.
  *       12/16/24 - Two-star solution added. (WOO!)
- *       12/17/2024 - Refactored one and two-star solutions to return strings.
+ *       12/17/24 - Refactored one and two-star solutions to return strings.
+ *       12/26/24 - Fixed bug: Boxes getting pushed from 1 tile away.
  **/
 
 #include "Day15Solution.h"
@@ -70,9 +71,7 @@ void Day15Solution::printWarehouseState() const
 
 string Day15Solution::oneStarSolution()
 {
-    printWarehouseState();
     runMovementInstructions();
-    printWarehouseState();
     int boxGPSCoordinateSum {0};
 
     for (const auto &[x, y] : findBoxes())
@@ -85,12 +84,7 @@ string Day15Solution::oneStarSolution()
 void Day15Solution::runMovementInstructions()
 {
     for (const auto instruction : moveInstructions)
-    {
-        system("cls");
         robot.move(instruction);
-        printWarehouseState();
-        system("pause");
-    }
 }
 
 
@@ -142,7 +136,7 @@ bool Day15Solution::Robot::pushIsClear(const Position object, const Direction &d
 
         return pushIsClear(nextPosition, direction);
     }
-/*
+
     if (currentTile == BOX_LEFT && (direction == NORTH || direction == SOUTH))
     {
         const Position nextBoxRightPosition(nextPosition.x+1, nextPosition.y);
@@ -186,7 +180,7 @@ bool Day15Solution::Robot::pushIsClear(const Position object, const Direction &d
 
         return false;
     }
-*/
+
     return false;
 }
 
@@ -205,7 +199,7 @@ void Day15Solution::Robot::pushBox(const Position object, const Direction &direc
         (*warehouseMap)[object.y][object.x] = SPACE;
         return;
     }
-/*
+
     if (currentTile == BOX_LEFT && (direction == NORTH || direction == SOUTH))
     {
         Position boxRight(object.x+1,object.y);
@@ -242,7 +236,7 @@ void Day15Solution::Robot::pushBox(const Position object, const Direction &direc
         (*warehouseMap)[nextBoxLeftPosition.y][nextBoxLeftPosition.x] = BOX_LEFT;
         (*warehouseMap)[boxLeft.y][boxLeft.x] = SPACE;
     }
-    */
+
 }
 
 
@@ -284,7 +278,6 @@ string Day15Solution::twoStarSolution()
 {
     doubleWarehouseWidth();
     setRobotInitialPosition();
-
     runMovementInstructions();
 
     int boxGPSCoordinateSum {0};
