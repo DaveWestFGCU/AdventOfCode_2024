@@ -43,10 +43,6 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/Day15Solution.h
         AdventSolver/solutions/Day16Solution.cpp
         AdventSolver/solutions/Day16Solution.h
-        AdventSolver/solutions/data_structures/Graph.cpp
-        AdventSolver/solutions/data_structures/Graph.h
-        AdventSolver/solutions/data_structures/Graph.cpp
-        AdventSolver/solutions/data_structures/Graph.h
         AdventSolver/solutions/Day17Solution.cpp
         AdventSolver/solutions/Day17Solution.h
         AdventSolver/solutions/Day18Solution.cpp
