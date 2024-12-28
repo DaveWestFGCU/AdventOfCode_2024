@@ -1,6 +1,8 @@
 /** Dev: Dave West
  * Date: December 24, 2024
  * Desc: Class declarations for the AoC 2024 Christmas Eve puzzle solution and solution factory.
+ *  Log: 12/24/24 - Completed one-star solution. Started work on two-star solution.
+ *       12/28/24 - Completed two-star solution.
  */
 
 #ifndef DAY24SOLUTION_H
@@ -29,6 +31,12 @@ class Day24Solution : public Solution {
 
     vector<string> split(const string &stringToParse, const char &delimiter);
     bool runGate(const Gate &gate);
+
+    vector<string> assessRule1();
+    vector<string> assessRule2();
+    vector<string> assessRule3();
+    vector<string> assessRule4();
+
 public:
     explicit Day24Solution(const vector<string> &puzzleInput);
     [[nodiscard]] std::string getTitle() const override { return title; }

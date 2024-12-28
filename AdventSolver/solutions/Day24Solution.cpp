@@ -1,12 +1,15 @@
 /** Dev: Dave West
  * Date: December 24, 2024
  * Desc: Method definitions for the AoC 2024 day Christmas Eve puzzle.
+ *  Log: 12/24/24 - Completed one-star solution. Started work on two-star solution.
+ *       12/28/24 - Completed two-star solution.
  */
 
 #include "Day24Solution.h"
 
 #include <sstream>
 #include <cmath>
+#include <set>
 
 Day24Solution::Day24Solution(const vector<string> &puzzleInput)
     : title("--- Day 24: Crossed Wires ---")
@@ -50,10 +53,12 @@ vector<string> Day24Solution::split(const string &stringToParse, const char &del
 
 string Day24Solution::oneStarSolution()
 {
-    while (!gates.empty())
+    vector<Gate> unvisitedGates(gates);
+
+    while (!unvisitedGates.empty())
     {
-        auto end = gates.end();
-        for (auto gate = gates.begin(); gate != end; ++gate)  //  Iterate through gates, we'll need the iterator to delete executed gates later
+        auto end = unvisitedGates.end();
+        for (auto gate = unvisitedGates.begin(); gate != end; ++gate)  //  Iterate through gates, we'll need the iterator to delete executed gates later
         {
             if (!inputWires.contains(gate->inputWire1))
                 continue;
@@ -62,7 +67,7 @@ string Day24Solution::oneStarSolution()
 
             inputWires[gate->outputWire] = runGate(*gate);
 
-            gates.erase(gate);
+            unvisitedGates.erase(gate);
         }
     }
 
@@ -97,10 +102,124 @@ bool Day24Solution::runGate(const Gate &gate)
 }
 
 
+/**
+ * Rule 1: z-wires are outputs only from XORs (except the last one)
+ * @return A list of output wires that do not behave appropriately for this rule.
+ */
+vector<string> Day24Solution::assessRule1()
+{
+    vector<string> badOutputWires;
+    for (const auto &gate : gates)
+    {
+        if (gate.outputWire[0] == 'z' && gate.gate != "XOR" && gate.outputWire != "z45")
+            badOutputWires.push_back(gate.outputWire);
+    }
+
+    return badOutputWires;
+}
+
+
+/**
+ * Rule 2: Non-Z-outputs with non-X/Y-inputs cannot be XOR
+ * @return A list of output wires that do not behave appropriately for this rule.
+ */
+vector<string> Day24Solution::assessRule2()
+{
+    vector<string> badOutputWires;
+    for (const auto &gate : gates)
+    {
+        if (gate.outputWire[0] != 'z' &&
+            gate.inputWire1[0] != 'x' && gate.inputWire1[0] != 'y' &&
+            gate.inputWire2[0] != 'x' && gate.inputWire2[0] != 'y' &&
+            gate.gate == "XOR")
+            badOutputWires.push_back(gate.outputWire);
+    }
+
+    return badOutputWires;
+}
+
+
+/**
+ * Rule 3: For any XOR-gate with X- and Y-input (except the first gate), there exists an XOR-gate that uses its output as input.
+ * @return A list of output wires that do not behave appropriately for this rule.
+ */
+vector<string> Day24Solution::assessRule3()
+{
+    vector<string> badOutputWires;
+    for (const auto &gate : gates)
+    {
+        if ((gate.inputWire1 == "x00" || gate.inputWire1 == "y00") && (gate.inputWire2 == "x00" || gate.inputWire2 == "y00"))
+            continue;
+
+        if (gate.gate == "XOR" &&
+            (gate.inputWire1[0] == 'x' || gate.inputWire1[0] == 'y') &&
+            (gate.inputWire2[0] == 'x' || gate.inputWire2[0] == 'y'))
+        {
+            bool downstreamXorFound {false};
+            for (const auto &gate2 : gates)
+            {
+                if (gate2.gate == "XOR" && (gate2.inputWire1 == gate.outputWire || gate2.inputWire2 == gate.outputWire))
+                {
+                    downstreamXorFound = true;
+                }
+            }
+            if (!downstreamXorFound)
+                badOutputWires.push_back(gate.outputWire);
+        }
+    }
+    return badOutputWires;
+}
+
+
+/**
+ * For any AND-gate, there must be an OR-gate with its output as an input.
+ * @return A list of output wires that do not behave appropriately for this rule.
+ */
+vector<string> Day24Solution::assessRule4()
+{
+    vector<string> badOutputWires;
+    for (const auto &gate : gates)
+    {
+        if ((gate.inputWire1 == "x00" || gate.inputWire1 == "y00") && (gate.inputWire2 == "x00" || gate.inputWire2 == "y00"))
+            continue;
+
+        if (gate.gate == "AND")
+        {
+            bool upstreamGateFound {false};
+            for (const auto &gate2 : gates)
+            {
+                if (gate2.gate == "OR" && (gate.outputWire == gate2.inputWire1  || gate.outputWire ==  gate2.inputWire2))
+                {
+                    upstreamGateFound = true;
+                }
+            }
+            if (!upstreamGateFound)
+                badOutputWires.push_back(gate.outputWire);
+        }
+    }
+    return badOutputWires;
+}
+
 
 string Day24Solution::twoStarSolution()
 {
-    int result {0};
+    std::set<string> badOutputWires;
 
-    return std::to_string(result);
+    for (const auto &ruleViolator : assessRule1())
+        badOutputWires.insert(ruleViolator);
+
+    for (const auto &ruleViolator : assessRule2())
+        badOutputWires.insert(ruleViolator);
+
+    for (const auto &ruleViolator : assessRule3())
+        badOutputWires.insert(ruleViolator);
+
+    for (const auto &ruleViolator : assessRule4())
+        badOutputWires.insert(ruleViolator);
+
+    string badWires;
+    for ( const auto &wire : badOutputWires)
+        badWires += wire + ",";
+
+    return badWires.substr(0,badWires.length()-1);
 }
