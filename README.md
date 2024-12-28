@@ -4,7 +4,7 @@ $${\color{green}>\color{orange}o\color{green}<}$$
 $${\color{green}>\color{red}@\color{green}>\color{blue}O\color{green}<}$$
 $${\color{green}>\color{blue}O\color{green}>\color{orange}o\color{green}<\color{red}@\color{green}<}$$
 $${\color{brown}\\#\\#}$$
-### <p align="center"> Current Star Count: 47/49 </p>
+### <p align="center"> Current Star Count: 48/49 </p>
 
 All of my C++ solutions for this year are compiled into this project.
 
