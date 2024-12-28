@@ -1,8 +1,6 @@
 /** Dev: Dave West
  * Date: December 25, 2024
  * Desc: Method definitions for the AoC 2024 day 25 puzzle.
- *  Log: 12/25/24 - Completed one-star solution. Two-star requires obtaining all 49 prior stars.
- *       12/28/24 - Completed two-star solution! 50/50 stars obtained!
  */
 
 #include "Day25Solution.h"
@@ -87,6 +85,7 @@ bool Day25Solution::tryKeyInLock(const Key &key, const Lock &lock)
 
 string Day25Solution::twoStarSolution()
 {
+    int result {0};
 
-    return "[Delivered the chronicle to Santa!]";
+    return std::to_string(result);
 }

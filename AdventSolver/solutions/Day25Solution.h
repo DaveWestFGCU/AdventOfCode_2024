@@ -1,8 +1,6 @@
 /** Dev: Dave West
  * Date: December 25, 2024
  * Desc: Class declarations for the AoC 2024 day 25 puzzle solution and solution factory.
- *  Log: 12/25/24 - Completed one-star solution. Two-star requires obtaining all 49 prior stars.
- *       12/28/24 - Completed two-star solution! 50/50 stars obtained!
  */
 
 #ifndef DAY25SOLUTION_H
