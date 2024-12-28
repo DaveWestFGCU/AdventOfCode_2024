@@ -4,7 +4,7 @@
 **/
 
 #include "Day17Solution.h"
-
+#include <cmath>
 
 Day17Solution::Day17Solution(const vector<string> &puzzleInput)
     : title("--- Day 17: Chronospatial Computer ---")
@@ -209,7 +209,63 @@ void Day17Solution::Computer::cdv(const long comboOperand)
 
 string Day17Solution::twoStarSolution()
 {
-    int result {0};
+    std::cout << std::endl;
 
-    return std::to_string(result);
+    for (long long i = 0; i < 10000; ++i)
+    {
+        device.reset(i);
+        device.runInstructions();
+        printf("%lld | %o | ", i, i);
+        decToBinary(i);
+        std::cout << " | " << device.getProgram() << " | " << device.getOutput() << "\n";
+    }
+
+
+    return std::to_string(0);
+}
+
+
+void Day17Solution::decToBinary(long long n)
+{
+    // array to store binary number
+    int binaryNum[64];
+
+    // counter for binary array
+    int i = 0;
+    while (n > 0) {
+
+        // storing remainder in binary array
+        binaryNum[i] = n % 2;
+        n = n / 2;
+        i++;
+    }
+
+    // printing binary array in reverse order
+    for (int j = i - 1; j >= 0; j--)
+        std::cout << binaryNum[j];
+}
+
+
+string Day17Solution::Computer::getProgram()
+{
+    string programString;
+    for (const auto &instruction: program)
+        programString += std::to_string(instruction) + ",";
+
+    return programString.substr(0, programString.length() - 1);
+}
+
+string Day17Solution::Computer::getRegisters()
+{
+    return "A: " + std::to_string(registerA) + " | B: " + std::to_string(registerB) + " | C: " + std::to_string(registerC);
+}
+
+
+void Day17Solution::Computer::reset(const long long &registerAValue)
+{
+    registerA = registerAValue;
+    registerB = 0;
+    registerC = 0;
+    instructionPointer = 0;
+    output = "";
 }

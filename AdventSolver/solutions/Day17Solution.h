@@ -18,7 +18,7 @@ class Day17Solution : public Solution {
     string title;
     class Computer
     {
-        long registerA, registerB, registerC;
+        long long registerA, registerB, registerC;
         vector<int> program;
         int instructionPointer;
         string output;
@@ -36,15 +36,19 @@ class Day17Solution : public Solution {
 
     public:
         Computer() : registerA(0), registerB(0), registerC(0), instructionPointer(0) {}
-        Computer(const int &regA, const int &regB, const int &regC, vector<int> prog)
+        Computer(const long long &regA, const long long &regB, const long long &regC, vector<int> prog)
             : registerA(regA), registerB(regB), registerC(regC), program(std::move(prog)), instructionPointer(0) {}
 
         void runInstructions();
         string getOutput() { return output.substr(0,output.length()-1); }
+        string getProgram();
+        string getRegisters();
+        void reset(const long long &registerAValue);
     };
     Computer device;
 
     void parseDebugger(const vector<string> &puzzleInput);
+    void decToBinary(long long n);
 
 public:
     explicit Day17Solution(const vector<string> &puzzleInput);
