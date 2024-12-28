@@ -2,8 +2,8 @@
  * Date: December 17, 2024
  * Desc: Method definitions for the AoC 2024 day 17 puzzle.
  *  Log: 12/17/2024 - Completed one-star solution. Started two-star solution.
- *  Log: 12/27/2024 - Resumed two-star solution.
- *  Log: 12/28/2024 - Completed two-star solution.
+ *       12/27/2024 - Resumed two-star solution.
+ *       12/28/2024 - Completed two-star solution.
 **/
 
 #include "Day17Solution.h"

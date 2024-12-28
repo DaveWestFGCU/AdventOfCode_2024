@@ -2,6 +2,7 @@
  * Date: December 16, 2024
  * Desc: Class declarations for the AoC 2024 day 16 puzzle solution and solution factory.
  *  Log: 12/17/2024 - Refactored one and two-star solutions to return strings.
+ *       12/27/2024 - Completed two-star solution.
 **/
 
 #ifndef DAY16SOLUTION_H
