@@ -55,10 +55,6 @@ int main()
 {
     for (unsigned short dayNumber = DEBUG? TODAY : 1; dayNumber <= TODAY; ++dayNumber)
     {
-        // Day 16 is broken, skip for now.
-        if (dayNumber == 16)
-            continue;
-
         std::string inputFilepath = "../puzzle_inputs/";
         std::string inputFilename = "day" + std::to_string(dayNumber) + ".txt";
         std::unique_ptr<AdventSolver> aocSolver = getDaySolver(dayNumber);
