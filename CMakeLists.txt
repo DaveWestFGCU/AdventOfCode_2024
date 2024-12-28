@@ -29,12 +29,8 @@ add_executable(AdventOfCode_2024 AdventOfCodeMain.cpp
         AdventSolver/solutions/Day10Solution.h
         AdventSolver/solutions/Day11Solution.cpp
         AdventSolver/solutions/Day11Solution.h
-        AdventSolver/solutions/data_structures/LinkedList.cpp
-        AdventSolver/solutions/data_structures/LinkedList.h
         AdventSolver/solutions/Day12Solution.cpp
         AdventSolver/solutions/Day12Solution.h
-        AdventSolver/solutions/data_structures/Grid.cpp
-        AdventSolver/solutions/data_structures/Grid.h
         AdventSolver/solutions/Day13Solution.cpp
         AdventSolver/solutions/Day13Solution.h
         AdventSolver/solutions/Day14Solution.cpp
