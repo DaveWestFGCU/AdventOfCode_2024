@@ -4,7 +4,8 @@
 **/
 
 #include "Day17Solution.h"
-
+#include <cmath>
+#include <iomanip>
 
 Day17Solution::Day17Solution(const vector<string> &puzzleInput)
     : title("--- Day 17: Chronospatial Computer ---")
@@ -37,7 +38,14 @@ void Day17Solution::parseDebugger(const vector<string> &puzzleInput)
 string Day17Solution::oneStarSolution()
 {
     device.runInstructions();
-    return device.getOutput();
+
+    vector<int> rawOutput = device.getOutput();
+
+    string textOutput;
+    for (const auto &item : rawOutput)
+        textOutput += std::to_string(item) + ",";
+
+    return textOutput.substr(0,textOutput.length()-1);
 }
 
 
@@ -56,65 +64,57 @@ void Day17Solution::Computer::runInstructions()
 }
 
 
-long Day17Solution::Computer::combo(const long &operand) const
+void Day17Solution::Computer::runInstructions(long long registerA)
 {
-    switch(operand)
+    this->registerA = registerA;
+    registerB = 0;
+    registerC = 0;
+    instructionPointer = 0;
+    output.clear();
+
+    bool halted {false};
+    while (!halted)
     {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-            return operand;
+        int nextOperation = program[instructionPointer];
+        int nextOperand = program[instructionPointer+1];
+        runOpcode(nextOperation, nextOperand);
 
-        case 4:
-            return registerA;
-
-        case 5:
-            return registerB;
-
-        case 6:
-            return registerC;
+        if (instructionPointer >= program.size())
+            halted = true;
     }
 }
 
 
 
+long long Day17Solution::Computer::combo(const int &operand) const
+{
+    switch(operand)
+    {
+        case 0:     return 0;
+        case 1:     return 1;
+        case 2:     return 2;
+        case 3:     return 3;
+        case 4:     return registerA;
+        case 5:     return registerB;
+        case 6:     return registerC;
+        default:    return -2;
+    }
+}
 
-void Day17Solution::Computer::runOpcode(const int &opCode, const long &operand)
+
+void Day17Solution::Computer::runOpcode(const int &opCode, const int &operand)
 {
     switch (opCode)
     {
-        case 0:
-            adv(combo(operand));
-            break;
-
-        case 1:
-            bxl(operand);
-            break;
-
-        case 2:
-            bst(combo(operand));
-            break;
-
-        case 3:
-            jnz(operand);
-            break;
-
-        case 4:
-            bxc();
-            break;
-
-        case 5:
-            out(combo(operand));
-            break;
-
-        case 6:
-            bdv(combo(operand));
-            break;
-
-        case 7:
-            cdv(combo(operand));
-            break;
+        case 0:     adv(combo(operand));    break;
+        case 1:     bxl(operand);           break;
+        case 2:     bst(combo(operand));    break;
+        case 3:     jnz(operand);           break;
+        case 4:     bxc();                  break;
+        case 5:     out(combo(operand));    break;
+        case 6:     bdv(combo(operand));    break;
+        case 7:     cdv(combo(operand));    break;
+        default:    ;
     }
 
     if (opCode != 3)
@@ -126,9 +126,9 @@ void Day17Solution::Computer::runOpcode(const int &opCode, const long &operand)
  * opcode 0: adv
  * @param comboOperand
  */
-void Day17Solution::Computer::adv(const long comboOperand)
+void Day17Solution::Computer::adv(const long long &comboOperand)
 {
-    registerA = static_cast<long>(registerA / std::pow(2, comboOperand));
+    registerA = static_cast<long long>(registerA / std::pow(2, comboOperand));
 }
 
 
@@ -136,7 +136,7 @@ void Day17Solution::Computer::adv(const long comboOperand)
  * opcode 1: bxl
  * @param operand
  */
-void Day17Solution::Computer::bxl(const long operand)
+void Day17Solution::Computer::bxl(const int &operand)
 {
     registerB = registerB ^ operand;
 }
@@ -146,7 +146,7 @@ void Day17Solution::Computer::bxl(const long operand)
  * opcode 2: bst
  * @param comboOperand
  */
-void Day17Solution::Computer::bst(const long comboOperand)
+void Day17Solution::Computer::bst(const long long &comboOperand)
 {
     registerB = comboOperand % 8;
 }
@@ -156,7 +156,7 @@ void Day17Solution::Computer::bst(const long comboOperand)
  * opcode 3: jnz
  * @param operand
  */
-void Day17Solution::Computer::jnz(const long operand)
+void Day17Solution::Computer::jnz(const int &operand)
 {
     if (registerA == 0)
     {
@@ -181,9 +181,9 @@ void Day17Solution::Computer::bxc()
  * opcode 5: out
  * @param comboOperand
  */
-void Day17Solution::Computer::out(const long comboOperand)
+void Day17Solution::Computer::out(const long long &comboOperand)
 {
-    output += std::to_string(comboOperand % 8) + ",";
+    output.push_back(comboOperand % 8);
 }
 
 
@@ -191,9 +191,9 @@ void Day17Solution::Computer::out(const long comboOperand)
  * opcode 6: bdv
  * @param comboOperand
  */
-void Day17Solution::Computer::bdv(const long comboOperand)
+void Day17Solution::Computer::bdv(const long long &comboOperand)
 {
-    registerB = static_cast<int>(registerA / std::pow(2, comboOperand));
+    registerB = static_cast<long long>(registerA / std::pow(2, comboOperand));
 }
 
 
@@ -201,15 +201,48 @@ void Day17Solution::Computer::bdv(const long comboOperand)
  * opcode 7: cdv
  * @param comboOperand
  */
-void Day17Solution::Computer::cdv(const long comboOperand)
+void Day17Solution::Computer::cdv(const long long &comboOperand)
 {
-    registerC = static_cast<long>(registerA / std::pow(2, comboOperand));
+    registerC = static_cast<long long>(registerA / std::pow(2, comboOperand));
 }
 
 
 string Day17Solution::twoStarSolution()
 {
-    int result {0};
-
-    return std::to_string(result);
+    return std::to_string(findOriginalRegisterA());
 }
+
+
+long long Day17Solution::findOriginalRegisterA()
+{
+    long long originalRegisterA { 0 };
+    findDigit(0, device.getProgram().size()-1, originalRegisterA);
+    return originalRegisterA;
+}
+
+
+bool Day17Solution::findDigit(const long long &n, const int &digit, long long &foundRegisterA)
+{
+    // BASE CASE: All digits have been found
+    if (digit < 0)
+    {
+        foundRegisterA = n;
+        return true;
+    }
+
+    // RECURSIVE CASE: Find the next digit.
+    for (int digitValue = 0; digitValue < 8; digitValue++)
+    {
+        long long registerA = n + digitValue * std::pow(8,digit);
+        device.runInstructions(registerA);
+
+        if (device.getOutput()[digit] == device.getProgram()[digit])
+        {
+            if (findDigit(registerA, digit-1, foundRegisterA))
+                return true;
+        }
+    }
+
+    return false;
+}
+

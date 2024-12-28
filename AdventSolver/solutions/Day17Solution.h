@@ -18,33 +18,38 @@ class Day17Solution : public Solution {
     string title;
     class Computer
     {
-        long registerA, registerB, registerC;
+        long long registerA, registerB, registerC;
         vector<int> program;
         int instructionPointer;
-        string output;
+        vector<int> output;
 
-        [[nodiscard]] long combo(const long &operand) const;
-        void runOpcode(const int &opCode, const long &operand);
-        void adv(long comboOperand); //  opcode 0
-        void bxl(long operand);      //  opcode 1
-        void bst(long comboOperand); //  opcode 2
-        void jnz(long operand);      //  opcode 3
-        void bxc();                  //  opcode 4
-        void out(long comboOperand); //  opcode 5
-        void bdv(long comboOperand); //  opcode 6
-        void cdv(long comboOperand); //  opcode 7
+        [[nodiscard]] long long combo(const int &operand) const;
+        void runOpcode(const int &opCode, const int &operand);
+        void adv(const long long &comboOperand); //  opcode 0
+        void bxl(const int &operand);      //  opcode 1
+        void bst(const long long &comboOperand); //  opcode 2
+        void jnz(const int &operand);      //  opcode 3
+        void bxc();                       //  opcode 4
+        void out(const long long &comboOperand); //  opcode 5
+        void bdv(const long long &comboOperand); //  opcode 6
+        void cdv(const long long &comboOperand); //  opcode 7
 
     public:
         Computer() : registerA(0), registerB(0), registerC(0), instructionPointer(0) {}
-        Computer(const int &regA, const int &regB, const int &regC, vector<int> prog)
+        Computer(const long long &regA, const long long &regB, const long long &regC, vector<int> prog)
             : registerA(regA), registerB(regB), registerC(regC), program(std::move(prog)), instructionPointer(0) {}
 
         void runInstructions();
-        string getOutput() { return output.substr(0,output.length()-1); }
+        void runInstructions(long long registerA);
+        vector<int> getOutput() { return output; }
+        vector<int> getProgram() { return program; }
     };
     Computer device;
 
     void parseDebugger(const vector<string> &puzzleInput);
+
+    long long findOriginalRegisterA();
+    bool findDigit(const long long &n, const int &digit, long long &foundRegisterA);
 
 public:
     explicit Day17Solution(const vector<string> &puzzleInput);
