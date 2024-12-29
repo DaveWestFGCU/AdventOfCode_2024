@@ -26,7 +26,6 @@ Concepts/Tools I have implemented include:
 - Linear Algebra/[Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule): Day 13 (Received the high-level concept from the [AoC subreddit](https://www.reddit.com/r/adventofcode/), implemented it myself).
 - [Chinese Remainder Theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem): Day 14 (Initially solved myself, but without knowing how to evaluate two modulus equations for equality, I needed to brute-force some values to find a solution. Later learned about the chinese remainder theorem and inverse mod from Reddit user [i_have_no_biscuits](https://www.reddit.com/r/adventofcode/comments/1he0asr/comment/m1zzfsh/) and implemented the optimized solution.
 - [Maximal Cliques](https://en.wikipedia.org/wiki/Clique_problem): Day 23
-- 
 
   
 Notes:
