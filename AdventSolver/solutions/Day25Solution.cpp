@@ -85,7 +85,5 @@ bool Day25Solution::tryKeyInLock(const Key &key, const Lock &lock)
 
 string Day25Solution::twoStarSolution()
 {
-    int result {0};
-
-    return std::to_string(result);
+    return "[Delivered the chronicle to Santa!]";;
 }
