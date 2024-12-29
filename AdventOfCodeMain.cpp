@@ -24,6 +24,8 @@
  *       12/23/24 - Added day 23 solution.
  *       12/24/24 - Added Christmas Eve solution.
  *       12/25/24 - Added Christmas solution.
+ *       12/29/24 - Refactored solver switch case to map.
+ *                  Refactored debugging to use preprocessor macros.
  */
 
 #include <memory>
@@ -33,95 +35,47 @@
 
 // -------------------------------------------|    DEBUGGING SETTINGS    |------------------------------------------- //
 
-constexpr bool DEBUG = false; // Set to true for solving a single puzzle
-enum SolutionType { EXAMPLE, PUZZLE, BOTH_TYPES };
-constexpr SolutionType TYPE = BOTH_TYPES;
-
-enum SolutionDifficulty { ONE_STAR, TWO_STAR, BOTH_STARS };
-constexpr SolutionDifficulty DIFFICULTY = BOTH_STARS;
-
-constexpr bool VERBOSE_INPUT = false;
-constexpr unsigned short TODAY = 25;
+#define DEBUG false      // True: Display only today's puzzle.
+#define ONE_STAR true   // True: Solve the one-star problem.
+#define TWO_STAR true   // True: Solve the two-star problem.
+#define EXAMPLE true    // True: Solve example problems.
+#define PUZZLE true     // True: Solve given input problem.
+constexpr bool VERBOSE_INPUT = false;   // True: Display puzzle input when loading.
+constexpr unsigned short TODAY = 25;    // If DEBUG, day to display. Else display from day 1 to TODAY.
 
 
 // -----------------------------------------|    FUNCTION DECLARATIONS     |----------------------------------------- //
 
 std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber);
+void solvePuzzle(const AdventSolver *solver, const std::string &inputFilepath, const std::string &inputFilename, bool isDebugging = false);
+void handleDebugging(const AdventSolver *solver, const std::string &inputFilepath, const std::string &inputFilename);
 
 
 // --------------------------------------------------|    MAIN    |-------------------------------------------------- //
 
 int main()
 {
-    for (unsigned short dayNumber = DEBUG? TODAY : 1; dayNumber <= TODAY; ++dayNumber)
+#if DEBUG
+    unsigned short startDayNumber = TODAY;
+#else
+    unsigned short startDayNumber = 1;
+#endif
+
+    for (int dayNumber = startDayNumber; dayNumber <= TODAY; ++dayNumber)
     {
         std::string inputFilepath = "../puzzle_inputs/";
         std::string inputFilename = "day" + std::to_string(dayNumber) + ".txt";
-        std::unique_ptr<AdventSolver> aocSolver = getDaySolver(dayNumber);
 
-        if (aocSolver == nullptr)   // Guard clause for Day##Solution class not found.
+        std::unique_ptr<AdventSolver> aocSolver = getDaySolver(dayNumber);
+        if (aocSolver == nullptr)
             return 1;
 
-        if constexpr (!DEBUG)
-        {       // Only shows answers to puzzle input.
-            std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + inputFilename);
-            auto solution = aocSolver->create_solution(puzzleInput);
+#if DEBUG
+        handleDebugging(aocSolver.get(), inputFilepath, inputFilename);
+#else
+        solvePuzzle(aocSolver.get(), inputFilepath, inputFilename);
+#endif
 
-            std::cout << std::endl
-                      << solution->getTitle() << std::endl
-                      << "  * Answer: " << solution->oneStarSolution() << std::endl
-                      << " ** Answer: " << solution->twoStarSolution() << std::endl;
-        }
-        else
-        {       // Debugging Output (shows example answers as well)
-                // Solution on example puzzle
-            string exampleFilepath =  inputFilepath + "example/" + inputFilename;
-            std::vector<std::string> puzzleInput = AdventSolver::getInput(exampleFilepath, VERBOSE_INPUT?VERBOSE:SILENT);
-            auto exampleSolution = aocSolver->create_solution(puzzleInput);
-
-            std::cout << std::endl << exampleSolution->getTitle() << std::endl;
-
-            switch(TYPE)
-            {
-                case EXAMPLE:
-                case BOTH_TYPES:
-                    switch(DIFFICULTY)
-                    {
-                        case ONE_STAR:
-                        case BOTH_STARS:
-                            std::cout << "  * Example Answer: " << exampleSolution->oneStarSolution() << std::endl;
-                        if constexpr (DIFFICULTY == ONE_STAR)
-                            break;
-
-                        case TWO_STAR:
-                            std::cout << " ** Example Answer: " << exampleSolution->twoStarSolution() << std::endl;
-                        break;
-                    }
-                    if constexpr (TYPE == EXAMPLE)
-                        break;
-                    else
-                        std::cout << std::endl;
-
-                case PUZZLE:
-                    // Solution on real puzzle
-                    inputFilepath += inputFilename;
-                    puzzleInput = AdventSolver::getInput(inputFilepath, VERBOSE_INPUT?VERBOSE:SILENT);
-                    auto solution = aocSolver->create_solution(puzzleInput);
-
-                    switch(DIFFICULTY)
-                    {
-                        case ONE_STAR:
-                        case BOTH_STARS:
-                            std::cout << "  * Answer: " << solution->oneStarSolution() << std::endl;
-                        if constexpr (DIFFICULTY == ONE_STAR)
-                            break;
-
-                        case TWO_STAR:
-                            std::cout << " ** Answer: " << solution->twoStarSolution() << std::endl;
-                    }
-                    break;
-            }
-        }
     }
 
     return 0;
@@ -130,11 +84,10 @@ int main()
 
 // ---------------------------------------------| FUNCTION DEFINITIONS |--------------------------------------------- //
 
-
 /**
- * Pairs the day's number with a lambda function to create that day's factory.
+ * Pairs the day's number with a lambda function to create that day's solver.
  */
-std::map<short, std::function<std::unique_ptr<AdventSolver>()>> solverMap =
+std::map<unsigned short, std::function<std::unique_ptr<AdventSolver>()>> solverMap =
 {
     {1,  []() { return std::make_unique<Day1Creator>();  }},
     {2,  []() { return std::make_unique<Day2Creator>();  }},
@@ -169,7 +122,7 @@ std::map<short, std::function<std::unique_ptr<AdventSolver>()>> solverMap =
  * @param dayNumber The AoC day number to solve.
  * @return A pointer to the day's product object, created by the day's factory.
  */
-std::unique_ptr<AdventSolver> getDaySolver(const short &dayNumber)
+std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 {
     auto iterator = solverMap.find(dayNumber);
     if (iterator != solverMap.end()) {
@@ -179,91 +132,58 @@ std::unique_ptr<AdventSolver> getDaySolver(const short &dayNumber)
     std::cout << "No solution available for day " << dayNumber << "." << std::endl;
     return nullptr;
 }
-/*
-std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
+
+
+/**
+ * Solves the problem and displays the solution to console.
+ * @param solver Creator for the day.
+ * @param inputFilepath Relative path to the input file's directory.
+ * @param inputFilename Input file name.
+ * @param isDebugging True to not display puzzle title (will have already been displayed).
+ */
+void solvePuzzle(const AdventSolver *solver, const std::string& inputFilepath, const std::string& inputFilename, const bool isDebugging)
 {
-    switch(dayNumber)
-    {
-        case 1:
-            return std::make_unique<Day1Creator>();
+    std::vector<std::string> puzzleInput = AdventSolver::getInput(inputFilepath + inputFilename);
+    std::unique_ptr<Solution> solution = solver->create_solution(puzzleInput);
 
-        case 2:
-            return std::make_unique<Day2Creator>();
+    if (!isDebugging)
+        std::cout << "\n" << solution->getTitle() << std::endl;
 
-        case 3:
-            return std::make_unique<Day3Creator>();
-
-        case 4:
-            return std::make_unique<Day4Creator>();
-
-        case 5:
-            return std::make_unique<Day5Creator>();
-
-        case 6:
-            return std::make_unique<Day6Creator>();
-
-        case 7:
-            return std::make_unique<Day7Creator>();
-
-        case 8:
-            return std::make_unique<Day8Creator>();
-
-        case 9:
-            return std::make_unique<Day9Creator>();
-
-        case 10:
-            return std::make_unique<Day10Creator>();
-
-        case 11:
-            return std::make_unique<Day11Creator>();
-
-        case 12:
-            return std::make_unique<Day12Creator>();
-
-        case 13:
-            return std::make_unique<Day13Creator>();
-
-        case 14:
-            return std::make_unique<Day14Creator>();
-
-        case 15:
-            return std::make_unique<Day15Creator>();
-
-        case 16:
-            return std::make_unique<Day16Creator>();
-
-        case 17:
-            return std::make_unique<Day17Creator>();
-
-        case 18:
-            return std::make_unique<Day18Creator>();
-
-        case 19:
-            return std::make_unique<Day19Creator>();
-
-        case 20:
-            return std::make_unique<Day20Creator>();
-
-        case 21:
-            return std::make_unique<Day21Creator>();
-
-        case 22:
-            return std::make_unique<Day22Creator>();
-
-        case 23:
-            return std::make_unique<Day23Creator>();
-
-        case 24:
-            return std::make_unique<Day24Creator>();
-
-        case 25:
-            return std::make_unique<Day25Creator>();
-
-        default:
-            std::cout << "No solution available for day " << dayNumber << "." << std::endl;
-            return nullptr;
-    }
-
+#if ONE_STAR
+    std::cout << "  * " << "Answer: " << solution->oneStarSolution() << std::endl;
+#endif
+#if TWO_STAR
+    std::cout << " ** " << "Answer: " << solution->twoStarSolution() << std::endl;
+#endif
 }
-*/
 
+
+/**
+ * Solves and displays example prompts.
+ * @param solver Day product creator.
+ * @param inputFilepath Relative path to the input file's directory.
+ * @param inputFilename Input file name.
+ */
+void handleDebugging(const AdventSolver *solver, const std::string& inputFilepath, const std::string& inputFilename)
+{
+    std::string exampleFilepath = inputFilepath + "example/" + inputFilename;
+    std::vector<std::string> puzzleInput = AdventSolver::getInput(exampleFilepath, static_cast<consoleOutput>(VERBOSE_INPUT));
+    auto exampleSolution = solver->create_solution(puzzleInput);
+
+    std::cout << "\n" << exampleSolution->getTitle() << std::endl;
+
+#if EXAMPLE
+    #if ONE_STAR
+    std::cout << "  * Example Answer: " << exampleSolution->oneStarSolution() << std::endl;
+    #endif ONE_STAR
+
+    #if TWO_STAR
+    std::cout << " ** Example Answer: " << exampleSolution->twoStarSolution() << std::endl;
+    #endif
+#endif
+
+#if PUZZLE
+    std::cout << "\n";
+    solvePuzzle(solver, inputFilepath, inputFilename, true);
+#endif
+}
