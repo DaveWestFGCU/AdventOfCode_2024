@@ -11,7 +11,7 @@ public:
     static inline std::vector<std::string> getInput(std::string const& filepath, consoleOutput output = SILENT);
 
     virtual ~AdventSolver() = default;
-    virtual std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const = 0;
+    [[nodiscard]] virtual std::unique_ptr<Solution> create_solution(const std::vector<std::string> & puzzleInput) const = 0;
 };
 
 
