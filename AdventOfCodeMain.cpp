@@ -130,6 +130,56 @@ int main()
 
 // ---------------------------------------------| FUNCTION DEFINITIONS |--------------------------------------------- //
 
+
+/**
+ * Pairs the day's number with a lambda function to create that day's factory.
+ */
+std::map<short, std::function<std::unique_ptr<AdventSolver>()>> solverMap =
+{
+    {1,  []() { return std::make_unique<Day1Creator>();  }},
+    {2,  []() { return std::make_unique<Day2Creator>();  }},
+    {3,  []() { return std::make_unique<Day3Creator>();  }},
+    {4,  []() { return std::make_unique<Day4Creator>();  }},
+    {5,  []() { return std::make_unique<Day5Creator>();  }},
+    {6,  []() { return std::make_unique<Day6Creator>();  }},
+    {7,  []() { return std::make_unique<Day7Creator>();  }},
+    {8,  []() { return std::make_unique<Day8Creator>();  }},
+    {9,  []() { return std::make_unique<Day9Creator>();  }},
+    {10, []() { return std::make_unique<Day10Creator>(); }},
+    {11, []() { return std::make_unique<Day11Creator>(); }},
+    {12, []() { return std::make_unique<Day12Creator>(); }},
+    {13, []() { return std::make_unique<Day13Creator>(); }},
+    {14, []() { return std::make_unique<Day14Creator>(); }},
+    {15, []() { return std::make_unique<Day15Creator>(); }},
+    {16, []() { return std::make_unique<Day16Creator>(); }},
+    {17, []() { return std::make_unique<Day17Creator>(); }},
+    {18, []() { return std::make_unique<Day18Creator>(); }},
+    {19, []() { return std::make_unique<Day19Creator>(); }},
+    {20, []() { return std::make_unique<Day20Creator>(); }},
+    {21, []() { return std::make_unique<Day21Creator>(); }},
+    {22, []() { return std::make_unique<Day22Creator>(); }},
+    {23, []() { return std::make_unique<Day23Creator>(); }},
+    {24, []() { return std::make_unique<Day24Creator>(); }},
+    {25, []() { return std::make_unique<Day25Creator>(); }}
+};
+
+
+/**
+ * Creates a pointer to a given AoC day for solving. Requires the day's puzzle in a /puzzle_inputs/ directory.
+ * @param dayNumber The AoC day number to solve.
+ * @return A pointer to the day's product object, created by the day's factory.
+ */
+std::unique_ptr<AdventSolver> getDaySolver(const short &dayNumber)
+{
+    auto iterator = solverMap.find(dayNumber);
+    if (iterator != solverMap.end()) {
+        return iterator->second();  //  Invoke the function that creates the solver
+    }
+
+    std::cout << "No solution available for day " << dayNumber << "." << std::endl;
+    return nullptr;
+}
+/*
 std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
 {
     switch(dayNumber)
@@ -213,6 +263,7 @@ std::unique_ptr<AdventSolver> getDaySolver(const unsigned short &dayNumber)
             std::cout << "No solution available for day " << dayNumber << "." << std::endl;
             return nullptr;
     }
-}
 
+}
+*/
 
