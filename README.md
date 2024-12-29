@@ -11,8 +11,24 @@ All of my C++ solutions for this year are compiled into this project.
 Solutions are my own unless otherwise noted.
 
 Concepts/Tools I have implemented include:
-[Building a list]
 
+- Factory method design pattern: Each day's solution is a derived class from a parent Solution class, which has their own similarly derived factory/creator. The main() function loops through days, creating an instance of the day's solution class and executing a oneStarSolution() and twoStarSolution() member function, which imports the day's input file, finds the solution, and returns it as a string.
+- Object Oriented Programming: Days 6, 14 (Classes were used for almost every solution, but these almost exclusively used member functions to solve the puzzle).
+- Regular Expressions: Days 3, 4
+- Rotating 2D Arrays: Day 4
+- Recursion: Days 7, 10, 11, 15, 17, 18, 19, 21, 23
+- Operator Overloading: Days 8, 12, 16, 20, 22
+- Graph Data Structures: Days 10, 16
+- Depth First Search: Days 10, 
+- Breadth First Search (Queue Implementation): Days 16, 18
+- Dynamic Programming / Memoization: Days 11, 15, 19, 21
+- [Flood Fill Algorithm](https://en.wikipedia.org/wiki/Flood_fill): Days 12, 18 (Came up with it on my own on day 12, later found it had a name)
+- Linear Algebra/[Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule): Day 13 (Received the high-level concept from the [AoC subreddit](https://www.reddit.com/r/adventofcode/), implemented it myself).
+- [Chinese Remainder Theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem): Day 14 (Initially solved myself, but without knowing how to evaluate two modulus equations for equality, I needed to brute-force some values to find a solution. Later learned about the chinese remainder theorem and inverse mod from Reddit user [i_have_no_biscuits](https://www.reddit.com/r/adventofcode/comments/1he0asr/comment/m1zzfsh/) and implemented the optimized solution.
+- [Maximal Cliques](https://en.wikipedia.org/wiki/Clique_problem): Day 23
+- 
+
+  
 Notes:
 
 - C++'s regex library is well known to be cumbersome and slows compilation significantly. Google has a regex library, RE2, which is supposed to be a much better implementaiton and I may refactor to it later.
