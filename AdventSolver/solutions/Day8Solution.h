@@ -23,10 +23,6 @@ class Day8Solution : public Solution {
         bool operator==(const Pos &position2) const {   // Unordered sets disallow duplicates
             return x == position2.x && y == position2.y;
         }
-        inline bool isAbove(  const Pos &position) const { return y < position.y; }
-        inline bool isBelow(  const Pos &position) const { return y > position.y; }
-        inline bool isLeftOf( const Pos &position) const { return x < position.x; }
-        inline bool isRightOf(const Pos &position) const { return x > position.x; }
     };
     struct PosHash  // Hash function for unordered set
     {
